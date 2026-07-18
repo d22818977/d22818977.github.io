@@ -1,4 +1,5 @@
 ---
+import Countdown from '@/components/Countdown.astro'
 import PostList from '@/components/PostList.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
@@ -17,6 +18,12 @@ const postsByYear = await getPostsByYear(currentLang)
 ---
 
 <Layout>
+  <Countdown
+    label="FREE, KIND OF"
+    target="2029-09-17T21:00:00+08:00"
+    targetLabel="2029 年 9 月 17 日 21:00 · 北京时间"
+  />
+
   <!-- Pinned Posts -->
   {pinnedPosts.length > 0 && (
     <section class="mb-7.5">

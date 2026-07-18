@@ -1,0 +1,222 @@
+---
+interface Props {
+  label: string
+  target: string
+  targetLabel: string
+}
+
+const { label, target, targetLabel } = Astro.props
+---
+
+<section
+  class="countdown-shell c-primary"
+  data-countdown
+  data-target={target}
+  aria-label={`${label}，目标时间：${targetLabel}`}
+>
+  <div class="countdown-content">
+    <p class="countdown-title font-title">{label}</p>
+
+    <div class="countdown-grid" aria-hidden="true">
+      <div class="countdown-unit countdown-unit-days">
+        <span class="countdown-number font-time" data-countdown-part="days">0000</span>
+        <span class="countdown-unit-label">天</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number font-time" data-countdown-part="hours">00</span>
+        <span class="countdown-unit-label">时</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number font-time" data-countdown-part="minutes">00</span>
+        <span class="countdown-unit-label">分</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-number font-time" data-countdown-part="seconds">00</span>
+        <span class="countdown-unit-label">秒</span>
+      </div>
+    </div>
+
+    <p class="countdown-target c-secondary">
+      <time datetime={target}>{targetLabel}</time>
+    </p>
+    <p class="countdown-expired" data-countdown-expired hidden>时间到了。</p>
+  </div>
+</section>
+
+<script>
+  function initializeCountdown(root: HTMLElement) {
+    if (root.dataset.initialized === 'true')
+      return
+
+    const targetTime = Date.parse(root.dataset.target ?? '')
+    if (Number.isNaN(targetTime))
+      return
+
+    root.dataset.initialized = 'true'
+
+    const days = root.querySelector<HTMLElement>('[data-countdown-part="days"]')
+    const hours = root.querySelector<HTMLElement>('[data-countdown-part="hours"]')
+    const minutes = root.querySelector<HTMLElement>('[data-countdown-part="minutes"]')
+    const seconds = root.querySelector<HTMLElement>('[data-countdown-part="seconds"]')
+    const expired = root.querySelector<HTMLElement>('[data-countdown-expired]')
+
+    if (!days || !hours || !minutes || !seconds || !expired)
+      return
+
+    let timer: number | undefined
+
+    const update = () => {
+      const remaining = Math.max(0, targetTime - Date.now())
+      const totalSeconds = Math.floor(remaining / 1000)
+
+      days.textContent = String(Math.floor(totalSeconds / 86400))
+      hours.textContent = String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0')
+      minutes.textContent = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0')
+      seconds.textContent = String(totalSeconds % 60).padStart(2, '0')
+
+      if (remaining > 0)
+        return
+
+      expired.hidden = false
+      if (timer !== undefined)
+        window.clearInterval(timer)
+    }
+
+    update()
+    if (targetTime > Date.now())
+      timer = window.setInterval(update, 1000)
+
+    document.addEventListener('astro:before-swap', () => {
+      if (timer !== undefined)
+        window.clearInterval(timer)
+    }, { once: true })
+  }
+
+  function initializeCountdowns() {
+    document
+      .querySelectorAll<HTMLElement>('[data-countdown]')
+      .forEach(initializeCountdown)
+  }
+
+  initializeCountdowns()
+  document.addEventListener('astro:page-load', initializeCountdowns)
+</script>
+
+<style>
+  .countdown-shell {
+    position: relative;
+    margin-bottom: 3.25rem;
+    overflow: hidden;
+    border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.14);
+    border-radius: 0.75rem;
+    background:
+      linear-gradient(
+        135deg,
+        oklch(var(--un-preset-theme-colors-secondary) / 0.1),
+        oklch(var(--un-preset-theme-colors-secondary) / 0.025)
+      );
+    box-shadow: 0 1.5rem 4rem oklch(var(--un-preset-theme-colors-secondary) / 0.07);
+  }
+
+  .countdown-shell::before,
+  .countdown-shell::after {
+    position: absolute;
+    border-radius: 999px;
+    background: oklch(var(--un-preset-theme-colors-highlight) / 0.48);
+    content: '';
+    filter: blur(1px);
+    pointer-events: none;
+  }
+
+  .countdown-shell::before {
+    top: -4rem;
+    right: -2.5rem;
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .countdown-shell::after {
+    bottom: -5.5rem;
+    left: -3rem;
+    width: 11rem;
+    height: 11rem;
+    opacity: 0.6;
+  }
+
+  .countdown-content {
+    position: relative;
+    z-index: 1;
+    padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 5vw, 2.25rem);
+    text-align: center;
+  }
+
+  .countdown-title {
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(2.1rem, 8vw, 4rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.035em;
+    text-wrap: balance;
+  }
+
+  .countdown-grid {
+    display: grid;
+    grid-template-columns: 1.28fr repeat(3, 1fr);
+    gap: clamp(0.4rem, 2vw, 1rem);
+  }
+
+  .countdown-unit {
+    min-width: 0;
+    padding: clamp(0.75rem, 2.5vw, 1.2rem) 0.25rem;
+    border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.1);
+    border-radius: 0.45rem;
+    background: oklch(var(--un-preset-theme-colors-background) / 0.62);
+    backdrop-filter: blur(8px);
+  }
+
+  .countdown-number {
+    display: block;
+    overflow: hidden;
+    font-size: clamp(1.55rem, 7vw, 3.65rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 0.95;
+    white-space: nowrap;
+  }
+
+  .countdown-unit-days .countdown-number {
+    font-size: clamp(1.45rem, 6.5vw, 3.45rem);
+  }
+
+  .countdown-unit-label {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: clamp(0.68rem, 2.5vw, 0.82rem);
+    letter-spacing: 0.18em;
+    opacity: 0.62;
+  }
+
+  .countdown-target {
+    margin-top: clamp(1.15rem, 3vw, 1.75rem);
+    font-size: clamp(0.72rem, 2.7vw, 0.9rem);
+    letter-spacing: 0.08em;
+    opacity: 0.72;
+  }
+
+  .countdown-expired {
+    margin-top: 1rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 1024px) {
+    .countdown-shell {
+      margin-bottom: 4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .countdown-shell {
+      box-shadow: none;
+    }
+  }
+</style>
