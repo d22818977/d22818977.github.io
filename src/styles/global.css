@@ -11,6 +11,16 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+button,
+input,
+textarea,
+select,
+code,
+pre,
+kbd,
+samp {
+  font-family: inherit;
+}
 body::selection {
   --at-apply: 'bg-highlight';
 }

@@ -12,12 +12,12 @@
         <style type="text/css">
         /* Basic styles */
         html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-        body{margin:0;font-family:ui-sans-serif,system-ui,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';font-size:16px;line-height:1.5;word-wrap:break-word;color:oklch(25% 0.005 298)}
+        body{margin:0;font-family:'Avenir Next',Avenir,'Helvetica Neue','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;font-size:16px;line-height:1.5;word-wrap:break-word;color:oklch(25% 0.005 298)}
         *{box-sizing:border-box}
         p{margin-top:0;margin-bottom:16px}
-        strong{font-weight:600}
+        strong{font-weight:500}
         small{font-size:90%}
-        h1,h2,h3,h4,h5,h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}
+        h1,h2,h3,h4,h5,h6{margin-top:24px;margin-bottom:16px;font-weight:500;line-height:1.25}
         h1{padding-bottom:.3em;font-size:2em;border-bottom:1px solid #E0DFE3}
         h2{padding-bottom:.3em;font-size:1.5em;border-bottom:1px solid #E0DFE3}
         h3{font-size:1.25em;margin-top:0;margin-bottom:0}

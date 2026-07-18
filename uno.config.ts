@@ -10,6 +10,15 @@ import presetTheme from 'unocss-preset-theme'
 import { themeConfig } from './src/config.ts'
 
 const { light, dark } = themeConfig.color
+const unifiedFontFamily = [
+  'Avenir Next',
+  'Avenir',
+  'Helvetica Neue',
+  'PingFang SC',
+  'Hiragino Sans GB',
+  'Microsoft YaHei',
+  'sans-serif',
+]
 
 export default defineConfig({
   presets: [
@@ -40,11 +49,19 @@ export default defineConfig({
       caution: 'oklch(50.5% 0.213 27.518 / 0.8)', // red-700
     },
     fontFamily: {
-      apple: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      title: ['Snell-Black', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      navbar: ['STIX-Italic', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      time: ['Snell-Bold', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      serif: ['STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+      unified: unifiedFontFamily,
+      sans: unifiedFontFamily,
+      serif: unifiedFontFamily,
+      mono: unifiedFontFamily,
+      title: unifiedFontFamily,
+      navbar: unifiedFontFamily,
+      time: unifiedFontFamily,
+    },
+    fontWeight: {
+      normal: '400',
+      medium: '500',
+      semibold: '500',
+      bold: '500',
     },
   },
   rules: [
