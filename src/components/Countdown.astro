@@ -15,7 +15,7 @@ const { label, target, targetLabel } = Astro.props
   aria-label={`${label}，目标时间：${targetLabel}`}
 >
   <div class="countdown-content">
-    <p class="countdown-title font-title">{label}</p>
+    <p class="countdown-title font-apple">{label}</p>
 
     <div class="countdown-grid" aria-hidden="true">
       <div class="countdown-unit countdown-unit-days">
@@ -36,9 +36,6 @@ const { label, target, targetLabel } = Astro.props
       </div>
     </div>
 
-    <p class="countdown-target c-secondary">
-      <time datetime={target}>{targetLabel}</time>
-    </p>
     <p class="countdown-expired" data-countdown-expired hidden>时间到了。</p>
   </div>
 </section>
@@ -152,10 +149,10 @@ const { label, target, targetLabel } = Astro.props
 
   .countdown-title {
     margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
-    font-size: clamp(2.1rem, 8vw, 4rem);
+    font-size: 2rem;
     font-weight: 700;
-    line-height: 1;
-    letter-spacing: 0.035em;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
     text-wrap: balance;
   }
 
@@ -196,13 +193,6 @@ const { label, target, targetLabel } = Astro.props
     opacity: 0.62;
   }
 
-  .countdown-target {
-    margin-top: clamp(1.15rem, 3vw, 1.75rem);
-    font-size: clamp(0.72rem, 2.7vw, 0.9rem);
-    letter-spacing: 0.08em;
-    opacity: 0.72;
-  }
-
   .countdown-expired {
     margin-top: 1rem;
     font-weight: 700;
@@ -211,6 +201,10 @@ const { label, target, targetLabel } = Astro.props
   @media (min-width: 1024px) {
     .countdown-shell {
       margin-bottom: 4rem;
+    }
+
+    .countdown-title {
+      font-size: 2.25rem;
     }
   }
 
