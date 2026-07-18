@@ -6,12 +6,12 @@
 
 /* Global Styles */
 .heti {
-  --at-apply: 'break-words leading-normal hyphens-auto cjk:tracking-wide';
+  --at-apply: 'break-words text-4 font-normal leading-normal font-unified hyphens-auto cjk:tracking-wide';
 }
 
 /* Customized Post Title */
 .heti .post-title {
-  --at-apply: 'mb-2 mt-0 text-8.5 font-bold lg:text-9';
+  --at-apply: 'mb-2 mt-0 text-8 font-medium lg:text-9';
 }
 
 /* Headings */
