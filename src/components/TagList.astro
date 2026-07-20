@@ -1,6 +1,7 @@
 ---
 import type { Language } from '@/i18n/config'
 import { getTagPath } from '@/i18n/path'
+import { isPostPage } from '@/utils/page'
 
 interface Props {
   tags: string[]
@@ -9,9 +10,15 @@ interface Props {
 }
 
 const { tags, currentTag = '', lang } = Astro.props
+const isPost = isPostPage(Astro.url.pathname)
 ---
 
-<div class="no-heti mb-10.5 flex flex-wrap gap-x-3 gap-y-3.2">
+<div
+  class:list={[
+    'no-heti mb-10.5 flex flex-wrap gap-x-3 gap-y-3.2',
+    isPost ? 'post-tags' : '',
+  ]}
+>
   {tags.map(tag => (
     <a
       href={getTagPath(tag, lang)}

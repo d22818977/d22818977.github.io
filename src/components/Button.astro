@@ -4,7 +4,7 @@ import LanguageSwitcherIcon from '@/assets/icons/language-switcher.svg'
 import ThemeToggleIcon from '@/assets/icons/theme-toggle.svg'
 import { moreLocales, themeConfig } from '@/config'
 import { getNextGlobalLangPath, getNextSupportedLangPath } from '@/i18n/path'
-import { isHomePage } from '@/utils/page'
+import { isHomePage, isPostPage } from '@/utils/page'
 
 interface Props {
   supportedLangs: Language[]
@@ -18,6 +18,7 @@ const {
 const { supportedLangs } = Astro.props
 const currentPath = Astro.url.pathname
 const isHome = isHomePage(currentPath)
+const isPost = isPostPage(currentPath)
 
 // Check if there are other languages to switch
 const showLanguageSwitcher = moreLocales.length > 0
@@ -32,6 +33,7 @@ const nextUrl = supportedLangs.length > 0
     'site-controls absolute right-7.25vw top-14.6 flex gap-6 min-[823px]:max-lg:right-[calc(50vw-22rem)]',
     'lg:(fixed bottom-[min(10.27rem+1.92vw,12rem)] right-[max(5rem,calc(50vw-35rem))] top-auto w-14rem)',
     isHome ? 'site-controls--home' : '',
+    isPost ? 'site-controls--post' : '',
   ]}
 >
   <!-- Language Switcher -->

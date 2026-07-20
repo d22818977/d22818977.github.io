@@ -86,38 +86,38 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postSlug={post.id}
   supportedLangs={supportedLangs}
 >
-  <article class="heti text-4 font-normal font-unified">
-    <div class="relative">
-      <!-- Go Back Button On Desktop -->
-      <BackButton />
-      <!-- Title -->
-      <h1 class="post-title">
-        <span
-          transition:name={`post-${slug}${currentLang ? `-${currentLang}` : ''}`}
-          data-disable-theme-toggle-transition
-        >
-          {post.data.title}
-        </span>
-      </h1>
-    </div>
+  <article class="post-article heti text-4 font-normal font-unified">
+    <header class="post-article-header">
+      <div class="post-title-row relative">
+        <h1 class="post-title">
+          <span
+            class="post-title-text"
+            transition:name={`post-${slug}${currentLang ? `-${currentLang}` : ''}`}
+            data-disable-theme-toggle-transition
+          >
+            {post.data.title}
+          </span>
+        </h1>
+        <BackButton />
+      </div>
 
-    <!-- Date -->
-    <div
-      id="post-date"
-      class="mb-17.2 block text-3.5 c-primary font-unified lg:text-3.65"
-      transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
-      data-disable-theme-toggle-transition
-    >
-      <PostDate
-        date={post.data.published}
-        updatedDate={post.data.updated}
-        minutes={remarkPluginFrontmatter.minutes}
-      />
-    </div>
+      <div
+        id="post-date"
+        class="post-date block font-unified"
+        transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
+        data-disable-theme-toggle-transition
+      >
+        <PostDate
+          date={post.data.published}
+          updatedDate={post.data.updated}
+          minutes={remarkPluginFrontmatter.minutes}
+        />
+      </div>
+    </header>
     <!-- TOC -->
     {post.data.toc && <TOC headings={headings} />}
     <!-- Content -->
-    <div id="post-content">
+    <div id="post-content" class="post-content">
       <Content />
       <!-- Copyright -->
       <div id="post-copyright" />
