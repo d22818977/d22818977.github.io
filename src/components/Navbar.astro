@@ -10,6 +10,12 @@ const isTagActive = isTag
 const isAboutActive = isAbout
 
 function getNavItemClass(isActive: boolean) {
+  if (isHome) {
+    return isActive
+      ? 'home-nav-link home-nav-link--active'
+      : 'home-nav-link'
+  }
+
   return isActive
     ? 'highlight-static c-primary font-bold after:bottom-0.7em'
     : 'highlight-hover transition-[colors,font-weight] after:bottom-0.7em hover:(c-primary font-bold)'
@@ -39,6 +45,7 @@ const navItems = [
   class:list={[
     'mb-10.5 text-3.6 font-semibold leading-2.45em font-navbar',
     'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)]) cjk:tracking-wide',
+    isHome ? 'home-navbar' : '',
     isPost ? 'hidden lg:block' : '',
   ]}
 >
