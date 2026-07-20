@@ -102,11 +102,13 @@ const { label, target, targetLabel } = Astro.props
 <style>
   .countdown-shell {
     margin-bottom: 3rem;
-    border-bottom: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.16);
+    border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.12);
+    border-radius: 0.45rem;
+    background: oklch(var(--un-preset-theme-colors-secondary) / 0.045);
   }
 
   .countdown-content {
-    padding-bottom: 1rem;
+    padding: 1.25rem 1rem;
   }
 
   .countdown-title {
@@ -137,16 +139,6 @@ const { label, target, targetLabel } = Astro.props
 
   .countdown-unit:not(:last-child) {
     border-right: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.16);
-  }
-
-  .countdown-unit-days::after {
-    position: absolute;
-    right: 0.5rem;
-    bottom: -1rem;
-    left: 0.5rem;
-    height: 2px;
-    background: oklch(var(--un-preset-theme-colors-highlight) / 0.96);
-    content: '';
   }
 
   .countdown-number {
@@ -184,7 +176,7 @@ const { label, target, targetLabel } = Astro.props
       display: grid;
       grid-template-columns: minmax(10rem, 0.8fr) minmax(27rem, 2.2fr);
       align-items: center;
-      padding-bottom: 1rem;
+      padding: 1.2rem 1.5rem;
     }
 
     .countdown-title {
@@ -203,12 +195,6 @@ const { label, target, targetLabel } = Astro.props
 
     .countdown-unit:first-child {
       padding-left: 0;
-    }
-
-    .countdown-unit-days::after {
-      right: 0.75rem;
-      bottom: -1rem;
-      left: 0;
     }
 
     .countdown-number,
