@@ -115,10 +115,10 @@ const { label, target, targetLabel } = Astro.props
   .countdown-title {
     margin: 0 0 0.55rem;
     color: var(--editorial-accent-strong);
-    font-size: 0.68rem;
+    font-size: 0.92rem;
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.035em;
     text-align: center;
   }
 
@@ -148,7 +148,7 @@ const { label, target, targetLabel } = Astro.props
     min-width: 0;
     overflow: hidden;
     color: oklch(var(--un-preset-theme-colors-primary));
-    font-size: clamp(0.94rem, 4.2vw, 1.08rem);
+    font-size: 0.92rem;
     font-variant-numeric: tabular-nums;
     font-weight: 400;
     line-height: 1;
@@ -156,7 +156,7 @@ const { label, target, targetLabel } = Astro.props
   }
 
   .countdown-unit-days .countdown-number {
-    font-size: clamp(0.88rem, 3.9vw, 1.02rem);
+    font-size: 0.92rem;
   }
 
   .countdown-unit-label {
@@ -181,9 +181,10 @@ const { label, target, targetLabel } = Astro.props
       padding-left: 0.45rem;
     }
 
+    .countdown-title,
     .countdown-number,
     .countdown-unit-days .countdown-number {
-      font-size: 0.86rem;
+      font-size: 0.82rem;
     }
 
     .countdown-unit-label {
@@ -197,20 +198,14 @@ const { label, target, targetLabel } = Astro.props
     }
 
     .countdown-content {
-      display: grid;
-      grid-template-columns: minmax(10.5rem, 0.85fr) minmax(27rem, 2.4fr);
-      align-items: baseline;
-      min-height: 0;
-      padding: 0.9rem 2rem;
+      padding: 1rem 2rem;
     }
 
     .countdown-title {
-      align-self: baseline;
-      margin: 0;
-      font-size: 0.84rem;
-      line-height: 1;
-      letter-spacing: 0.2em;
-      text-align: left;
+      margin: 0 0 0.7rem;
+      font-size: 1.2rem;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
     }
 
     .countdown-grid {
@@ -219,15 +214,14 @@ const { label, target, targetLabel } = Astro.props
 
     .countdown-unit {
       min-width: 0;
-      min-height: 0;
-      align-self: baseline;
+      min-height: 2rem;
       gap: 0.28rem;
       padding: 0.1rem 1rem;
     }
 
     .countdown-number,
     .countdown-unit-days .countdown-number {
-      font-size: 1.48rem;
+      font-size: 1.2rem;
     }
 
     .countdown-unit-label {
@@ -236,19 +230,51 @@ const { label, target, targetLabel } = Astro.props
     }
   }
 
-  @media (min-width: 1100px) {
+  @media (min-width: 1024px) {
     .countdown-content {
-      grid-template-columns: minmax(13rem, 1fr) minmax(34rem, 2.8fr);
-      padding: 1.05rem 2.8rem;
+      display: grid;
+      grid-template-columns: minmax(21.5rem, 1.25fr) minmax(27rem, 2.75fr);
+      align-items: baseline;
+      min-height: 0;
+      padding: 1rem 2.25rem;
     }
 
     .countdown-title {
-      font-size: 0.9rem;
+      align-self: baseline;
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .countdown-unit {
+      min-height: 0;
+      align-self: baseline;
+      padding-right: 0.85rem;
+      padding-left: 0.85rem;
     }
 
     .countdown-number,
     .countdown-unit-days .countdown-number {
-      font-size: 1.65rem;
+      font-size: 1.35rem;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .countdown-content {
+      grid-template-columns: minmax(21.5rem, 1.25fr) minmax(27rem, 2.75fr);
+      padding: 1.05rem 2.8rem;
+    }
+
+    .countdown-title {
+      font-size: 1.4rem;
+    }
+
+    .countdown-number,
+    .countdown-unit-days .countdown-number {
+      font-size: 1.4rem;
     }
   }
 </style>
