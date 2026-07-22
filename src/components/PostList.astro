@@ -31,6 +31,20 @@ const isHome = isHomePage(Astro.url.pathname)
             href={getPostPath(slug, lang)}
             aria-label={`阅读《${post.data.title}》`}
           >
+            <div
+              class="home-post-date font-time"
+              transition:name={`time-${slug}${lang ? `-${lang}` : ''}`}
+              data-disable-theme-toggle-transition
+            >
+              <PostDate
+                date={post.data.published}
+                minutes={post.remarkPluginFrontmatter.minutes}
+                showReadingTime={false}
+              />
+            </div>
+
+            <span class="home-post-timeline" aria-hidden="true" />
+
             <div class="home-post-copy">
               <h3 class="home-post-heading c-primary">
                 <span
@@ -48,17 +62,6 @@ const isHome = isHomePage(Astro.url.pathname)
                   />
                 )}
               </h3>
-
-              <div
-                class="home-post-meta font-time"
-                transition:name={`time-${slug}${lang ? `-${lang}` : ''}`}
-                data-disable-theme-toggle-transition
-              >
-                <PostDate
-                  date={post.data.published}
-                  minutes={post.remarkPluginFrontmatter.minutes}
-                />
-              </div>
 
               <p class="home-post-description heti">
                 {getPostDescription(post, 'list')}

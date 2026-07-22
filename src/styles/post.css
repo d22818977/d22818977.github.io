@@ -1,78 +1,120 @@
 .site-shell--post {
   width: 100% !important;
   max-width: none !important;
+  min-height: 100vh !important;
   margin: 0 !important;
-  padding: 2.5rem 1.5rem 3rem !important;
+  padding: 1.75rem 1.5rem 2.25rem !important;
+}
+
+.site-shell--post .site-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'brand controls'
+    'nav nav';
+  align-items: start;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid var(--editorial-rule);
 }
 
 .site-shell--post .post-header {
-  margin-bottom: 1rem !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  grid-area: brand;
+  width: auto !important;
+  margin: 0 !important;
 }
 
 .site-shell--post .post-header h2 {
-  width: calc(100% - 4.5rem) !important;
-  margin: 0 0 0.45rem !important;
+  width: calc(100% - 3.75rem) !important;
+  margin: 0 0 0.25rem !important;
   color: oklch(var(--un-preset-theme-colors-primary)) !important;
-  font-size: 2.5rem !important;
+  font-size: 2rem !important;
   font-weight: 500 !important;
-  line-height: 1.2 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.035em;
 }
 
 .site-shell--post .post-header > div {
-  width: calc(100% - 4.5rem) !important;
+  width: calc(100% - 3.75rem) !important;
   color: oklch(var(--un-preset-theme-colors-secondary)) !important;
-  font-size: 1rem !important;
+  font-size: 0.86rem !important;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
   opacity: 1 !important;
 }
 
 .site-shell--post .post-navbar {
-  margin-bottom: 2.75rem !important;
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.16);
-  font-size: 1rem !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  grid-area: nav;
+  width: auto !important;
+  margin: 1rem 0 0 !important;
+  font-size: 0.84rem !important;
   font-weight: 400 !important;
-  line-height: normal !important;
+  line-height: 1 !important;
 }
 
 .site-shell--post .post-navbar ul {
   display: flex;
   align-items: center;
-  gap: clamp(2rem, 11vw, 3rem);
-}
-
-.site-shell--post .post-main {
-  min-width: 0;
-  margin-bottom: 3rem;
+  gap: 1.8rem;
 }
 
 .site-controls--post {
-  top: 2.15rem !important;
+  position: absolute !important;
+  top: 1.65rem !important;
   right: 1.5rem !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
 }
 
 .site-controls--post .site-control-button {
   display: grid;
-  width: 3rem;
-  height: 3rem;
+  width: 2.7rem;
+  height: 2.7rem;
   place-items: center;
-  border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.22);
+  border: 1px solid transparent;
   border-radius: 0.65rem;
+  background: var(--editorial-surface);
+  color: oklch(var(--un-preset-theme-colors-secondary));
   transition: border-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
 }
 
 .site-controls--post .site-control-button:hover,
 .site-controls--post .site-control-button:focus-visible {
-  border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
-  color: oklch(var(--un-preset-theme-colors-primary));
+  border-color: var(--editorial-rule);
+  color: var(--editorial-accent-strong);
+}
+
+.site-controls--post .site-control-button:focus-visible {
+  outline: 2px solid var(--editorial-accent);
+  outline-offset: 0.2rem;
 }
 
 .site-controls--post .site-control-button svg {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.site-shell--post .post-main {
+  width: 100%;
+  min-width: 0;
+  margin: 2.35rem 0 3rem !important;
 }
 
 .post-article {
   width: 100%;
   max-width: 48rem;
+  margin: 0 auto;
   color: oklch(var(--un-preset-theme-colors-secondary));
   font-size: 1rem;
   font-weight: 400;
@@ -80,9 +122,9 @@
 }
 
 .post-article-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.75rem;
-  border-bottom: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.16);
+  margin-bottom: 2.2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--editorial-rule);
 }
 
 .post-title-row {
@@ -93,60 +135,55 @@
   margin: 0 !important;
   padding-right: 3.5rem;
   color: oklch(var(--un-preset-theme-colors-primary));
-  font-size: clamp(1.75rem, 7vw, 2.25rem) !important;
+  font-size: clamp(1.7rem, 7vw, 2.25rem) !important;
   font-weight: 500 !important;
   line-height: 1.35 !important;
+  letter-spacing: -0.018em;
   text-wrap: balance;
 }
 
 .post-back-button {
   position: absolute;
-  top: 0;
+  top: -0.2rem;
   right: 0;
   display: grid;
-  width: 2.5rem;
-  height: 2.75rem;
+  width: 2.65rem;
+  height: 2.65rem;
   place-items: center;
-  color: oklch(var(--un-preset-theme-colors-secondary) / 0.78);
-  transition: color 160ms ease-out, transform 160ms ease-out;
-}
-
-.post-back-button::after {
-  position: absolute;
-  right: 0;
-  bottom: 0.25rem;
-  width: 2.25rem;
-  height: 2px;
-  background: oklch(var(--un-preset-theme-colors-highlight) / 0.9);
-  content: '';
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: var(--editorial-surface);
+  color: var(--editorial-accent-strong);
+  transition: border-color 160ms ease-out, color 160ms ease-out, transform 160ms ease-out;
 }
 
 .post-back-button:hover,
 .post-back-button:focus-visible {
+  border-color: var(--editorial-rule);
   color: oklch(var(--un-preset-theme-colors-primary));
-  transform: translateX(-0.2rem);
+  transform: translateX(-0.15rem);
 }
 
 .post-back-button:focus-visible {
-  border-radius: 0.2rem;
-  outline: 2px solid oklch(var(--un-preset-theme-colors-highlight) / 0.96);
-  outline-offset: 0.25rem;
+  outline: 2px solid var(--editorial-accent);
+  outline-offset: 0.2rem;
 }
 
 .post-back-button svg {
-  width: 1rem;
-  height: 1rem;
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .post-article .post-date {
-  margin: 0.9rem 0 0 !important;
-  color: oklch(var(--un-preset-theme-colors-secondary));
-  font-size: 0.8125rem !important;
+  margin: 0.95rem 0 0 !important;
+  color: var(--editorial-accent-strong);
+  font-size: 0.75rem !important;
   line-height: 1.5;
 }
 
 .post-content {
-  max-width: 44rem;
+  width: 100%;
+  max-width: 46rem;
 }
 
 .post-content :where(p:not(.no-heti):not(.no-heti *)) {
@@ -162,16 +199,16 @@
 
 .post-content :where(h2, h3) {
   position: relative;
-  padding-bottom: 0.35rem;
+  padding-bottom: 0.4rem;
 }
 
 .post-content :where(h2, h3)::after {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 2.5rem;
+  width: 2.3rem;
   height: 2px;
-  background: oklch(var(--un-preset-theme-colors-highlight) / 0.92);
+  background: var(--editorial-accent);
   content: '';
 }
 
@@ -184,7 +221,16 @@
 }
 
 .site-shell--post .post-footer {
-  font-size: 0.82rem;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--editorial-rule);
+  color: oklch(var(--un-preset-theme-colors-secondary));
+  font-size: 0.72rem;
   line-height: 1.65;
 }
 
@@ -192,93 +238,86 @@
   display: none;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .site-shell--post {
-    min-height: 100vh !important;
-    padding: 0 !important;
+    padding: 2.5rem clamp(2.5rem, 5vw, 4rem) 3rem !important;
   }
 
-  .site-shell--post::before {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 19.25rem;
-    width: 1px;
-    background: oklch(var(--un-preset-theme-colors-secondary) / 0.16);
-    content: '';
-  }
-
-  .site-shell--post .post-header,
-  .site-shell--post .post-navbar,
-  .site-shell--post .post-footer,
-  .site-controls--post {
-    position: fixed !important;
-    right: auto !important;
-    left: 3rem !important;
-    width: 13rem !important;
-  }
-
-  .site-shell--post .post-header {
-    top: 4.75rem !important;
-    margin: 0 !important;
+  .site-shell--post .site-masthead {
+    grid-template-columns: minmax(13rem, 1fr) auto;
+    grid-template-areas: 'brand nav';
+    align-items: center;
+    min-height: 5.25rem;
+    padding-bottom: 1.15rem;
   }
 
   .site-shell--post .post-header h2 {
     width: 100% !important;
-    font-size: 2.25rem !important;
-    line-height: 1.3 !important;
+    font-size: 2.35rem !important;
   }
 
   .site-shell--post .post-header > div {
     width: 100% !important;
-    font-size: 1rem !important;
+    margin-top: 0.3rem;
+    font-size: 0.88rem !important;
   }
 
   .site-shell--post .post-navbar {
-    top: 13.25rem !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    border: 0;
+    margin: 0 4.5rem 0 0 !important;
   }
 
   .site-shell--post .post-navbar ul {
-    display: block;
-  }
-
-  .site-shell--post .post-navbar li + li {
-    margin-top: 0.35rem;
+    gap: 2.6rem;
   }
 
   .site-controls--post {
-    top: 25.5rem !important;
-    bottom: auto !important;
-  }
-
-  .site-shell--post .post-footer {
-    bottom: 4.5rem !important;
+    top: 3.05rem !important;
+    right: clamp(2.5rem, 5vw, 4rem) !important;
   }
 
   .site-shell--post .post-main {
-    min-height: 100vh;
-    margin: 0 4.5rem 0 19.25rem;
-    padding: 5rem 0 4.5rem 4.75rem;
-  }
-
-  .post-article {
-    max-width: 50rem;
+    margin-top: 3rem !important;
   }
 
   .post-article-header {
-    margin-bottom: 2.25rem;
-    padding-bottom: 2rem;
+    margin-bottom: 2.65rem;
+    padding-bottom: 1.9rem;
   }
 
   .post-article .post-title {
-    font-size: 2rem !important;
+    font-size: clamp(2rem, 3.2vw, 2.75rem) !important;
   }
 
-  .post-content {
-    max-width: 46rem;
+  .post-article .post-date {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .site-shell--post {
+    padding: 3rem clamp(4rem, 6vw, 6.5rem) 3rem !important;
+  }
+
+  .site-shell--post .site-masthead {
+    min-height: 5.75rem;
+    padding-bottom: 1.35rem;
+  }
+
+  .site-shell--post .post-header h2 {
+    font-size: 2.65rem !important;
+  }
+
+  .site-shell--post .post-header > div {
+    font-size: 0.92rem !important;
+  }
+
+  .site-controls--post {
+    top: 3.7rem !important;
+    right: clamp(4rem, 6vw, 6.5rem) !important;
+  }
+
+  .site-shell--post .post-main {
+    margin-top: 3.6rem !important;
   }
 }
 

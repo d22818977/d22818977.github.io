@@ -32,25 +32,25 @@ export const themeConfig: ThemeConfig = {
       // primary color
       // used for title, hover, etc
       // oklch color picker: https://oklch.com/
-      primary: 'oklch(25% 0.005 298)',
+      primary: 'oklch(24% 0.012 325)',
       // secondary color
       // used for post text
-      secondary: 'oklch(40% 0.005 298)',
+      secondary: 'oklch(43% 0.018 325)',
       // background color
-      background: 'oklch(96% 0.005 298)',
+      background: 'oklch(98% 0.008 350)',
       // highlight color
       // used for navbar, selected text, etc
-      highlight: 'oklch(0.93 0.195089 103.2532 / 0.5)', // rgba(255,235,0,0.5)
+      highlight: 'oklch(56% 0.085 350)',
     },
     dark: {
       // primary color
-      primary: 'oklch(92% 0.005 298)',
+      primary: 'oklch(92% 0.012 330)',
       // secondary color
-      secondary: 'oklch(77% 0.005 298)',
+      secondary: 'oklch(76% 0.025 330)',
       // background color
-      background: 'oklch(22% 0.005 298)',
+      background: 'oklch(19% 0.018 330)',
       // highlight color
-      highlight: 'oklch(0.93 0.195089 103.2532 / 0.2)', // rgba(255,235,0,0.2)
+      highlight: 'oklch(69% 0.08 350)',
     },
   },
   // COLOR SETTINGS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> END
