@@ -2,15 +2,16 @@
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, isHome, isPost, isTag, isAbout, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isTag, isAbout, isProduct, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 const isPostActive = isHome || isPost
 const isTagActive = isTag
 const isAboutActive = isAbout
+const isProductActive = isProduct
 
 function getNavItemClass(isActive: boolean) {
-  if (isHome || isPost) {
+  if (isHome || isPost || isProduct) {
     return isActive
       ? 'home-nav-link home-nav-link--active'
       : 'home-nav-link'
@@ -37,6 +38,11 @@ const navItems = [
     label: currentUI.about,
     className: getNavItemClass(isAboutActive),
   },
+  {
+    href: '/product/',
+    label: currentLang === 'zh-tw' ? '產品' : currentLang === 'zh' ? '产品' : 'Product',
+    className: getNavItemClass(isProductActive),
+  },
 ]
 ---
 
@@ -45,7 +51,7 @@ const navItems = [
   class:list={[
     'mb-10.5 text-3.6 font-semibold leading-2.45em font-navbar',
     'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)]) cjk:tracking-wide',
-    isHome ? 'home-navbar' : '',
+    isHome || isProduct ? 'home-navbar' : '',
     isPost ? 'post-navbar' : '',
   ]}
 >

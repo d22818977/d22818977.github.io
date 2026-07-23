@@ -3,7 +3,7 @@ import { themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, getLocalizedPath, isHome, isPost } = getPageInfo(Astro.url.pathname)
+const { currentLang, getLocalizedPath, isHome, isPost, isProduct } = getPageInfo(Astro.url.pathname)
 const { title, subtitle, i18nTitle } = themeConfig.site
 
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
@@ -17,7 +17,7 @@ const SubtitleTag = isPost ? 'div' : 'h2'
 <header
   class:list={[
     'lg:(uno-desktop-column top-20) cjk:tracking-wide',
-    isHome ? 'home-header' : '',
+    isHome || isProduct ? 'home-header' : '',
     isPost ? 'post-header' : '',
     isPost
     ? 'mb-10.8'
