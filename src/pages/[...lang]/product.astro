@@ -111,6 +111,7 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             aria-selected="true"
             aria-controls="feature-detail"
             data-feature-tab
+            data-feature-kind="fiber"
             data-index="01"
             data-label="全光接入"
             data-title="光纤延伸到业务现场"
@@ -127,6 +128,7 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             aria-selected="false"
             aria-controls="feature-detail"
             data-feature-tab
+            data-feature-kind="wifi"
             data-index="02"
             data-label="无线覆盖"
             data-title="Wi-Fi 7 融入一体化网关"
@@ -143,6 +145,7 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             aria-selected="false"
             aria-controls="feature-detail"
             data-feature-tab
+            data-feature-kind="video"
             data-index="03"
             data-label="视频存储"
             data-title="NVR 与本地存储直接融合"
@@ -159,6 +162,7 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             aria-selected="false"
             aria-controls="feature-detail"
             data-feature-tab
+            data-feature-kind="storage"
             data-index="04"
             data-label="弹性容量"
             data-title="4T 与 8T 两种存储配置"
@@ -171,9 +175,46 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
         </div>
 
         <div id="feature-detail" class="feature-detail" role="tabpanel" aria-live="polite">
-          <div class="feature-orbit" aria-hidden="true">
-            <span class="feature-orbit-core">B896</span>
-            <span class="feature-orbit-dot"></span>
+          <div class="feature-media" data-feature-media data-active-feature="fiber" aria-hidden="true">
+            <img
+              src="/images/product/huawei-optixstar-b896-u6.webp"
+              width="2357"
+              height="2054"
+              alt=""
+              loading="lazy"
+            />
+            <div class="feature-media-shade"></div>
+
+            <div class="feature-visual feature-visual--fiber">
+              <span class="fiber-path fiber-path--one"></span>
+              <span class="fiber-path fiber-path--two"></span>
+              <span class="fiber-path fiber-path--three"></span>
+              <span class="fiber-node fiber-node--one"></span>
+              <span class="fiber-node fiber-node--two"></span>
+              <span class="fiber-node fiber-node--three"></span>
+              <span class="fiber-node fiber-node--core">B896</span>
+            </div>
+
+            <div class="feature-visual feature-visual--wifi">
+              <span class="wifi-core"></span>
+              <span class="wifi-wave wifi-wave--one"></span>
+              <span class="wifi-wave wifi-wave--two"></span>
+              <span class="wifi-wave wifi-wave--three"></span>
+            </div>
+
+            <div class="feature-visual feature-visual--video">
+              <span class="video-frame video-frame--one"></span>
+              <span class="video-frame video-frame--two"></span>
+              <span class="video-frame video-frame--three"></span>
+              <span class="video-rec"></span>
+              <span class="video-focus"></span>
+            </div>
+
+            <div class="feature-visual feature-visual--storage">
+              <span class="storage-drive storage-drive--four"><b>4T</b></span>
+              <span class="storage-drive storage-drive--eight"><b>8T</b></span>
+              <span class="storage-pulse"></span>
+            </div>
           </div>
           <div class="feature-detail-copy">
             <p data-feature-index>01 / 04 · 全光接入</p>
@@ -289,6 +330,7 @@ function initProductPage() {
   const featureIndex = page.querySelector<HTMLElement>('[data-feature-index]')
   const featureTitle = page.querySelector<HTMLElement>('[data-feature-title]')
   const featureCopy = page.querySelector<HTMLElement>('[data-feature-copy]')
+  const featureMedia = page.querySelector<HTMLElement>('[data-feature-media]')
 
   featureTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -304,6 +346,8 @@ function initProductPage() {
         featureTitle.textContent = tab.dataset.title ?? ''
       if (featureCopy)
         featureCopy.textContent = tab.dataset.copy ?? ''
+      if (featureMedia)
+        featureMedia.dataset.activeFeature = tab.dataset.featureKind ?? 'fiber'
     })
   })
 
@@ -705,52 +749,311 @@ initProductPage()
       var(--product-surface);
   }
 
-  .feature-orbit {
+  .feature-media {
     position: absolute;
-    top: 2.5rem;
-    left: 50%;
-    width: 11.5rem;
-    height: 11.5rem;
-    border: 1px solid var(--product-rule);
-    border-radius: 50%;
-    transform: translateX(-50%);
+    inset: 0 0 auto;
+    height: 64%;
+    overflow: hidden;
+    background: oklch(18% 0.025 340);
+    isolation: isolate;
   }
 
-  .feature-orbit::before,
-  .feature-orbit::after {
+  .feature-media img {
     position: absolute;
-    inset: 1.5rem;
-    border: 1px solid var(--product-rule);
-    border-radius: 50%;
-    content: '';
+    inset: -4% -4% auto;
+    width: 108%;
+    max-width: none;
+    height: 112%;
+    object-fit: cover;
+    object-position: 55% 68%;
+    filter: grayscale(0.2) contrast(1.05) brightness(0.72);
+    opacity: 0.88;
+    transition: filter 500ms ease, object-position 700ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  .feature-orbit::after {
-    inset: 3.25rem;
-    background: color-mix(in oklch, var(--product-accent) 14%, transparent);
+  .feature-media[data-active-feature="fiber"] img {
+    object-position: 48% 18%;
+    transform: scale(1.08) translateY(2%);
   }
 
-  .feature-orbit-core {
+  .feature-media[data-active-feature="wifi"] img {
+    object-position: 58% 12%;
+    transform: scale(1.04);
+  }
+
+  .feature-media[data-active-feature="video"] img {
+    object-position: 67% 82%;
+    transform: scale(1.12) translateY(-1%);
+  }
+
+  .feature-media[data-active-feature="storage"] img {
+    object-position: 77% 90%;
+    transform: scale(1.16) translate(-2%, -1%);
+  }
+
+  .feature-media-shade {
     position: absolute;
     z-index: 1;
     inset: 0;
-    display: grid;
-    place-items: center;
-    color: var(--product-accent-strong);
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+    background:
+      linear-gradient(to bottom, transparent 28%, color-mix(in oklch, var(--product-surface) 45%, transparent) 68%, var(--product-surface) 100%),
+      linear-gradient(90deg, oklch(16% 0.03 340 / 0.2), transparent 62%);
+    pointer-events: none;
   }
 
-  .feature-orbit-dot {
+  .feature-visual {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.55rem;
-    height: 0.55rem;
+    z-index: 2;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms ease;
+  }
+
+  .feature-media[data-active-feature="fiber"] .feature-visual--fiber,
+  .feature-media[data-active-feature="wifi"] .feature-visual--wifi,
+  .feature-media[data-active-feature="video"] .feature-visual--video,
+  .feature-media[data-active-feature="storage"] .feature-visual--storage {
+    opacity: 1;
+  }
+
+  .fiber-path {
+    position: absolute;
+    right: 18%;
+    width: 48%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--product-accent), oklch(90% 0.035 350));
+    box-shadow: 0 0 0.9rem color-mix(in oklch, var(--product-accent) 70%, transparent);
+    transform-origin: right;
+  }
+
+  .fiber-path--one {
+    top: 25%;
+    transform: rotate(8deg);
+  }
+
+  .fiber-path--two {
+    top: 40%;
+    transform: rotate(-3deg);
+  }
+
+  .fiber-path--three {
+    top: 55%;
+    transform: rotate(-14deg);
+  }
+
+  .fiber-node {
+    position: absolute;
+    right: 15%;
+    width: 0.45rem;
+    height: 0.45rem;
+    border: 1px solid oklch(90% 0.035 350);
     border-radius: 50%;
     background: var(--product-accent);
-    box-shadow: 0 0 1.2rem var(--product-accent);
-    animation: orbit 5s linear infinite;
+    box-shadow: 0 0 1rem var(--product-accent);
+  }
+
+  .fiber-node--one {
+    top: calc(25% - 0.2rem);
+  }
+
+  .fiber-node--two {
+    top: calc(40% - 0.2rem);
+  }
+
+  .fiber-node--three {
+    top: calc(55% - 0.2rem);
+  }
+
+  .fiber-node--core {
+    right: auto;
+    top: 36%;
+    left: 12%;
+    display: grid;
+    width: 3.3rem;
+    height: 3.3rem;
+    place-items: center;
+    border-color: var(--product-accent);
+    background: oklch(18% 0.03 340 / 0.82);
+    color: oklch(92% 0.02 350);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .wifi-core {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: oklch(92% 0.025 350);
+    box-shadow: 0 0 1.5rem var(--product-accent);
+    transform: translate(-50%, -50%);
+  }
+
+  .wifi-wave {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    border: 1px solid color-mix(in oklch, var(--product-accent) 84%, white);
+    border-radius: 50%;
+    box-shadow: inset 0 0 1.5rem color-mix(in oklch, var(--product-accent) 18%, transparent);
+    transform: translate(-50%, -50%);
+    animation: wifi-breathe 3s ease-in-out infinite;
+  }
+
+  .wifi-wave--one {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  .wifi-wave--two {
+    width: 8rem;
+    height: 8rem;
+    animation-delay: 0.35s;
+  }
+
+  .wifi-wave--three {
+    width: 12rem;
+    height: 12rem;
+    animation-delay: 0.7s;
+  }
+
+  .video-frame {
+    position: absolute;
+    border: 1px solid color-mix(in oklch, var(--product-accent) 72%, white);
+    border-radius: 0.35rem;
+    background: oklch(18% 0.025 340 / 0.12);
+    box-shadow: inset 0 0 1.5rem oklch(18% 0.03 340 / 0.18);
+  }
+
+  .video-frame--one {
+    top: 13%;
+    left: 8%;
+    width: 35%;
+    height: 34%;
+  }
+
+  .video-frame--two {
+    top: 13%;
+    right: 8%;
+    width: 43%;
+    height: 34%;
+  }
+
+  .video-frame--three {
+    top: 50%;
+    left: 8%;
+    width: 84%;
+    height: 26%;
+  }
+
+  .video-rec {
+    position: absolute;
+    top: 18%;
+    right: 12%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--product-accent);
+    box-shadow: 0 0 1rem var(--product-accent);
+    animation: rec-pulse 1.6s ease-in-out infinite;
+  }
+
+  .video-focus {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid oklch(92% 0.02 350 / 0.7);
+    transform: translate(-50%, -50%);
+  }
+
+  .video-focus::before,
+  .video-focus::after {
+    position: absolute;
+    background: oklch(92% 0.02 350 / 0.7);
+    content: '';
+  }
+
+  .video-focus::before {
+    top: 50%;
+    left: -1rem;
+    width: calc(100% + 2rem);
+    height: 1px;
+  }
+
+  .video-focus::after {
+    top: -1rem;
+    left: 50%;
+    width: 1px;
+    height: calc(100% + 2rem);
+  }
+
+  .storage-drive {
+    position: absolute;
+    top: 18%;
+    display: grid;
+    width: 34%;
+    height: 48%;
+    place-items: end start;
+    padding: 0.8rem;
+    border: 1px solid color-mix(in oklch, var(--product-accent) 72%, white);
+    border-radius: 0.65rem;
+    background:
+      linear-gradient(135deg, oklch(31% 0.035 340 / 0.88), oklch(18% 0.03 340 / 0.94)),
+      var(--product-surface);
+    box-shadow: 0.8rem 1.1rem 1.7rem oklch(12% 0.025 340 / 0.28);
+  }
+
+  .storage-drive::after {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--product-accent);
+    box-shadow: 0 0 0.8rem var(--product-accent);
+    content: '';
+  }
+
+  .storage-drive b {
+    color: oklch(92% 0.02 350);
+    font-size: 1.2rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  .storage-drive--four {
+    left: 14%;
+    transform: rotate(-4deg);
+  }
+
+  .storage-drive--eight {
+    right: 14%;
+    transform: rotate(4deg) translateY(0.7rem);
+  }
+
+  .storage-pulse {
+    position: absolute;
+    right: 8%;
+    bottom: 17%;
+    left: 8%;
+    height: 1px;
+    overflow: hidden;
+    background: var(--product-rule);
+  }
+
+  .storage-pulse::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, var(--product-accent), transparent);
+    content: '';
+    animation: storage-flow 2.6s linear infinite;
+    transform: translateX(-100%);
   }
 
   .feature-detail-copy {
@@ -925,12 +1228,6 @@ initProductPage()
       padding: 2rem;
     }
 
-    .feature-orbit {
-      top: 3rem;
-      width: 15rem;
-      height: 15rem;
-    }
-
     .flow-diagram {
       grid-template-columns: repeat(4, 1fr);
       gap: clamp(0.75rem, 2vw, 1.5rem);
@@ -1059,29 +1356,37 @@ initProductPage()
     }
   }
 
-  @keyframes orbit {
-    from {
-      transform: rotate(0deg) translateX(5.75rem) rotate(0deg);
+  @keyframes wifi-breathe {
+    0%,
+    100% {
+      opacity: 0.32;
+      transform: translate(-50%, -50%) scale(0.94);
     }
+    50% {
+      opacity: 0.88;
+      transform: translate(-50%, -50%) scale(1.04);
+    }
+  }
+
+  @keyframes rec-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes storage-flow {
     to {
-      transform: rotate(360deg) translateX(5.75rem) rotate(-360deg);
+      transform: translateX(100%);
     }
   }
 
   @keyframes flow-signal {
     to {
       transform: translateX(100%);
-    }
-  }
-
-  @media (min-width: 768px) {
-    @keyframes orbit {
-      from {
-        transform: rotate(0deg) translateX(7.5rem) rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg) translateX(7.5rem) rotate(-360deg);
-      }
     }
   }
 
@@ -1094,12 +1399,16 @@ initProductPage()
 
     .signal-ring,
     .product-scroll-line::after,
-    .feature-orbit-dot,
+    .wifi-wave,
+    .video-rec,
+    .storage-pulse::after,
     .flow-line::after {
       animation: none;
     }
 
     .product-stage img,
+    .feature-media img,
+    .feature-visual,
     .feature-tab,
     .flow-node {
       transition: none;
