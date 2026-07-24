@@ -1325,6 +1325,8 @@ initProductPage()
     }
 
     .product-visual {
+      width: min(100%, 34rem);
+      justify-self: end;
       margin-top: 0;
     }
 
@@ -1333,19 +1335,19 @@ initProductPage()
     }
 
     .product-stage {
-      min-height: clamp(30rem, 52vw, 46rem);
+      min-height: clamp(24rem, 36vw, 28rem);
     }
 
     .product-stage img {
-      right: -19%;
-      bottom: -6%;
-      width: 128%;
+      right: -9%;
+      bottom: -8%;
+      width: 112%;
     }
 
     .product-problem-grid {
       grid-template-columns: minmax(16rem, 0.85fr) minmax(24rem, 1.15fr);
       gap: clamp(3rem, 8vw, 8rem);
-      align-items: center;
+      align-items: start;
     }
 
     .compare-column {
