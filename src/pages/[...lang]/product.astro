@@ -21,8 +21,8 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
           FIBER × VIDEO × WI-FI 7
         </p>
         <h1 id="product-title">
-          Huawei OptiXstar
-          <span>B896-U6</span>
+          <span class="product-name">Huawei OptiXstar</span>
+          <span class="product-model">B896-U6</span>
         </h1>
         <p class="product-intro">
           把全光网络、无线覆盖与视频存储，收进同一台融合网关。
@@ -80,17 +80,30 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
           </p>
         </div>
 
-        <div class="product-compare" data-reveal aria-label="传统部署与融合部署对比">
-          <div class="compare-column compare-column--before">
-            <span>传统部署</span>
-            <strong>4</strong>
-            <p>多套设备 · 多套布线 · 多个入口</p>
-          </div>
-          <div class="compare-arrow" aria-hidden="true">→</div>
-          <div class="compare-column compare-column--after">
-            <span>融合部署</span>
-            <strong>1</strong>
-            <p>一台网关 · 一套架构 · 集中管理</p>
+        <div class="product-problem-side" data-reveal>
+          <figure class="problem-visual">
+            <img
+              src="/images/product/feature-fiber.webp"
+              width="1600"
+              height="900"
+              alt="光纤连接企业网络设备的特写"
+              loading="lazy"
+            />
+            <figcaption>更少的中间节点，更清晰的基础设施。</figcaption>
+          </figure>
+
+          <div class="product-compare" aria-label="传统部署与融合部署对比">
+            <div class="compare-column compare-column--before">
+              <span>传统部署</span>
+              <strong>4</strong>
+              <p>多套设备 · 多套布线 · 多个入口</p>
+            </div>
+            <div class="compare-arrow" aria-hidden="true">→</div>
+            <div class="compare-column compare-column--after">
+              <span>融合部署</span>
+              <strong>1</strong>
+              <p>一台网关 · 一套架构 · 集中管理</p>
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +129,8 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             data-label="全光接入"
             data-title="光纤延伸到业务现场"
             data-copy="以 FTTO 架构承载园区连接，减少中间有源节点和冗余铜缆，让网络部署更清爽，也为后续扩展预留更长生命周期。"
+            data-image="/images/product/feature-fiber.webp"
+            data-image-alt="光纤连接企业网络设备的特写"
           >
             <span>01</span>
             <strong>全光接入</strong>
@@ -133,6 +148,8 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             data-label="无线覆盖"
             data-title="Wi-Fi 7 融入一体化网关"
             data-copy="无线接入能力直接融入融合网关，减少额外设备堆叠，为高密终端、办公协作和移动业务提供统一的无线入口。"
+            data-image="/images/product/feature-wifi.webp"
+            data-image-alt="具备连续无线覆盖的现代办公空间"
           >
             <span>02</span>
             <strong>无线覆盖</strong>
@@ -150,6 +167,8 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             data-label="视频存储"
             data-title="NVR 与本地存储直接融合"
             data-copy="视频录像、硬盘存储与网络接入共享同一设备形态，简化摄像机回传、录像留存与日常维护之间的链路。"
+            data-image="/images/product/feature-video.webp"
+            data-image-alt="视频安防监控摄像机与监控画面"
           >
             <span>03</span>
             <strong>视频存储</strong>
@@ -167,6 +186,8 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
             data-label="弹性容量"
             data-title="4T 与 8T 两种存储配置"
             data-copy="根据门店、办公室与小型园区的视频留存需求选择对应容量。部署规模更贴合实际，避免过度配置。"
+            data-image="/images/product/feature-storage.webp"
+            data-image-alt="企业本地存储硬盘与设备仓"
           >
             <span>04</span>
             <strong>弹性容量</strong>
@@ -175,46 +196,16 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
         </div>
 
         <div id="feature-detail" class="feature-detail" role="tabpanel" aria-live="polite">
-          <div class="feature-media" data-feature-media data-active-feature="fiber" aria-hidden="true">
+          <div class="feature-media" data-feature-media data-active-feature="fiber">
             <img
-              src="/images/product/huawei-optixstar-b896-u6.webp"
-              width="2357"
-              height="2054"
-              alt=""
+              src="/images/product/feature-fiber.webp"
+              width="1600"
+              height="900"
+              alt="光纤连接企业网络设备的特写"
               loading="lazy"
+              data-feature-image
             />
             <div class="feature-media-shade"></div>
-
-            <div class="feature-visual feature-visual--fiber">
-              <span class="fiber-path fiber-path--one"></span>
-              <span class="fiber-path fiber-path--two"></span>
-              <span class="fiber-path fiber-path--three"></span>
-              <span class="fiber-node fiber-node--one"></span>
-              <span class="fiber-node fiber-node--two"></span>
-              <span class="fiber-node fiber-node--three"></span>
-              <span class="fiber-node fiber-node--core">B896</span>
-            </div>
-
-            <div class="feature-visual feature-visual--wifi">
-              <span class="wifi-core"></span>
-              <span class="wifi-wave wifi-wave--one"></span>
-              <span class="wifi-wave wifi-wave--two"></span>
-              <span class="wifi-wave wifi-wave--three"></span>
-            </div>
-
-            <div class="feature-visual feature-visual--video">
-              <span class="video-frame video-frame--one"></span>
-              <span class="video-frame video-frame--two"></span>
-              <span class="video-frame video-frame--three"></span>
-              <span class="video-rec"></span>
-              <span class="video-focus"></span>
-            </div>
-
-            <div class="feature-visual feature-visual--storage">
-              <span class="storage-drive storage-drive--four"><b>4T</b></span>
-              <span class="storage-drive storage-drive--eight"><b>8T</b></span>
-              <span class="storage-pulse"></span>
-            </div>
           </div>
           <div class="feature-detail-copy">
             <p data-feature-index>01 / 04 · 全光接入</p>
@@ -237,18 +228,22 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
         <div class="flow-line" aria-hidden="true"></div>
         <button type="button" class="flow-node is-active" data-flow-node data-flow-copy="园区光网络将高带宽连接延伸到业务现场。">
           <span>01</span>
+          <img src="/images/product/feature-fiber.webp" width="1600" height="900" alt="" loading="lazy" />
           <strong>FTTO 光纤</strong>
         </button>
         <button type="button" class="flow-node" data-flow-node data-flow-copy="B896-U6 汇聚网络、无线和录像能力。">
           <span>02</span>
+          <img src="/images/product/huawei-optixstar-b896-u6.webp" width="2357" height="2054" alt="" loading="lazy" />
           <strong>融合网关</strong>
         </button>
         <button type="button" class="flow-node" data-flow-node data-flow-copy="摄像机与办公终端接入同一套基础设施。">
           <span>03</span>
+          <img src="/images/product/feature-wifi.webp" width="1600" height="900" alt="" loading="lazy" />
           <strong>业务终端</strong>
         </button>
         <button type="button" class="flow-node" data-flow-node data-flow-copy="录像就地保存，日常查看与维护更集中。">
           <span>04</span>
+          <img src="/images/product/feature-storage.webp" width="1600" height="900" alt="" loading="lazy" />
           <strong>本地存储</strong>
         </button>
       </div>
@@ -260,16 +255,19 @@ const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 
     <section class="product-facts" aria-label="产品关键信息">
       <div class="fact-card" data-reveal>
         <span>01</span>
+        <img src="/images/product/feature-video.webp" width="1600" height="900" alt="" loading="lazy" />
         <strong>FTTO + NVR</strong>
         <p>网络与视频安防能力融合</p>
       </div>
       <div class="fact-card" data-reveal>
         <span>02</span>
+        <img src="/images/product/feature-wifi.webp" width="1600" height="900" alt="" loading="lazy" />
         <strong>Wi-Fi 7</strong>
         <p>面向新一代无线终端</p>
       </div>
       <div class="fact-card" data-reveal>
         <span>03</span>
+        <img src="/images/product/feature-storage.webp" width="1600" height="900" alt="" loading="lazy" />
         <strong>4T / 8T</strong>
         <p>两种本地存储配置</p>
       </div>
@@ -331,6 +329,12 @@ function initProductPage() {
   const featureTitle = page.querySelector<HTMLElement>('[data-feature-title]')
   const featureCopy = page.querySelector<HTMLElement>('[data-feature-copy]')
   const featureMedia = page.querySelector<HTMLElement>('[data-feature-media]')
+  const featureImage = page.querySelector<HTMLImageElement>('[data-feature-image]')
+
+  featureTabs.forEach((tab) => {
+    if (tab.dataset.image)
+      new Image().src = tab.dataset.image
+  })
 
   featureTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -346,8 +350,17 @@ function initProductPage() {
         featureTitle.textContent = tab.dataset.title ?? ''
       if (featureCopy)
         featureCopy.textContent = tab.dataset.copy ?? ''
-      if (featureMedia)
+      if (featureMedia) {
         featureMedia.dataset.activeFeature = tab.dataset.featureKind ?? 'fiber'
+        featureMedia.classList.add('is-changing')
+      }
+      if (featureImage && tab.dataset.image) {
+        window.setTimeout(() => {
+          featureImage.src = tab.dataset.image ?? ''
+          featureImage.alt = tab.dataset.imageAlt ?? ''
+          featureMedia?.classList.remove('is-changing')
+        }, reduceMotion ? 0 : 140)
+      }
     })
   })
 
@@ -424,16 +437,24 @@ initProductPage()
   }
 
   .product-hero h1 {
-    max-width: 12ch;
+    max-width: 15ch;
     margin: 0;
-    font-size: clamp(2.75rem, 8vw, 7.2rem);
+    font-size: clamp(2.45rem, 4.6vw, 4.25rem);
     font-weight: 500;
-    line-height: 0.94;
-    letter-spacing: -0.055em;
+    line-height: 0.98;
+    letter-spacing: -0.05em;
   }
 
-  .product-hero h1 span {
+  .product-hero h1 .product-name,
+  .product-hero h1 .product-model {
     display: block;
+  }
+
+  .product-hero h1 .product-name {
+    color: var(--product-ink);
+  }
+
+  .product-hero h1 .product-model {
     margin-top: 0.12em;
     color: var(--product-accent-strong);
   }
@@ -588,21 +609,22 @@ initProductPage()
   .product-problem,
   .product-capabilities,
   .product-flow {
-    padding: clamp(5.5rem, 11vw, 10rem) 0;
+    padding: clamp(4.75rem, 9vw, 8rem) 0;
     border-bottom: 1px solid var(--product-rule);
   }
 
   .product-section-heading {
-    max-width: 52rem;
+    max-width: 68rem;
   }
 
   .product-section-heading h2 {
-    max-width: 14ch;
+    max-width: none;
     margin: 0;
-    font-size: clamp(2rem, 5.4vw, 4.8rem);
+    font-size: clamp(1.8rem, 3.8vw, 3.4rem);
     font-weight: 500;
-    line-height: 1.08;
-    letter-spacing: -0.045em;
+    line-height: 1.14;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
   }
 
   .product-problem-grid {
@@ -624,6 +646,48 @@ initProductPage()
 
   .product-problem-copy p + p {
     margin-top: 1.3rem;
+  }
+
+  .product-problem-side {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .problem-visual {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--product-rule);
+    border-radius: 1rem;
+    background: var(--product-surface);
+  }
+
+  .problem-visual img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: brightness(0.86) saturate(0.82);
+  }
+
+  .problem-visual::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, oklch(16% 0.025 340 / 0.78), transparent 54%);
+    content: '';
+    pointer-events: none;
+  }
+
+  .problem-visual figcaption {
+    position: absolute;
+    z-index: 1;
+    right: 1rem;
+    bottom: 0.85rem;
+    left: 1rem;
+    color: oklch(91% 0.018 350);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
   }
 
   .product-compare {
@@ -653,7 +717,7 @@ initProductPage()
   .compare-column strong {
     display: block;
     margin: 1.4rem 0 0.75rem;
-    font-size: clamp(2.6rem, 6vw, 5.5rem);
+    font-size: clamp(2.25rem, 4.2vw, 4rem);
     font-variant-numeric: tabular-nums;
     font-weight: 400;
     line-height: 0.85;
@@ -1056,6 +1120,24 @@ initProductPage()
     transform: translateX(-100%);
   }
 
+  .feature-media img,
+  .feature-media[data-active-feature] img {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.78) saturate(0.82) contrast(1.03);
+    opacity: 1;
+    transform: scale(1.001);
+    transition: opacity 280ms ease, transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .feature-media.is-changing img {
+    opacity: 0.14;
+    transform: scale(1.025);
+  }
+
   .feature-detail-copy {
     position: relative;
     z-index: 1;
@@ -1071,7 +1153,7 @@ initProductPage()
 
   .feature-detail-copy h3 {
     margin: 0;
-    font-size: clamp(1.35rem, 3vw, 2.25rem);
+    font-size: clamp(1.25rem, 2.4vw, 1.85rem);
     font-weight: 500;
     letter-spacing: -0.025em;
   }
@@ -1099,8 +1181,10 @@ initProductPage()
     position: relative;
     z-index: 1;
     display: grid;
-    min-height: 8.5rem;
-    align-content: space-between;
+    min-height: 11rem;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.8rem;
+    align-content: stretch;
     padding: 1rem;
     border: 1px solid var(--product-rule);
     border-radius: 0.85rem;
@@ -1131,8 +1215,39 @@ initProductPage()
     font-variant-numeric: tabular-nums;
   }
 
+  .flow-node img {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 0.55rem;
+    object-fit: cover;
+    filter: brightness(0.74) saturate(0.72);
+    opacity: 0.78;
+    transition: filter 220ms ease, opacity 220ms ease, transform 300ms ease;
+  }
+
+  .flow-node:nth-of-type(2) img {
+    object-fit: contain;
+    padding: 0.75rem;
+    background:
+      linear-gradient(var(--product-rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--product-rule) 1px, transparent 1px),
+      var(--product-surface);
+    background-size: 1.6rem 1.6rem;
+  }
+
+  .flow-node:hover img,
+  .flow-node:focus-visible img,
+  .flow-node.is-active img {
+    filter: brightness(0.9) saturate(0.88);
+    opacity: 1;
+    transform: scale(1.015);
+  }
+
   .flow-node strong {
-    font-size: 0.86rem;
+    font-size: 0.82rem;
     font-weight: 500;
   }
 
@@ -1152,6 +1267,8 @@ initProductPage()
   }
 
   .fact-card {
+    position: relative;
+    overflow: hidden;
     padding: 1.25rem;
     border: 1px solid var(--product-rule);
     border-radius: 0.9rem;
@@ -1159,14 +1276,27 @@ initProductPage()
   }
 
   .fact-card span {
+    position: relative;
+    z-index: 1;
     color: var(--product-accent-strong);
     font-size: 0.66rem;
   }
 
+  .fact-card img {
+    display: block;
+    width: 100%;
+    margin: 1rem 0 1.25rem;
+    aspect-ratio: 16 / 7;
+    border-radius: 0.6rem;
+    object-fit: cover;
+    filter: brightness(0.7) saturate(0.68);
+    opacity: 0.82;
+  }
+
   .fact-card strong {
     display: block;
-    margin-top: 2.75rem;
-    font-size: clamp(1.65rem, 4vw, 3rem);
+    margin-top: 0;
+    font-size: clamp(1.45rem, 3vw, 2.35rem);
     font-weight: 500;
     letter-spacing: -0.035em;
   }
@@ -1198,6 +1328,10 @@ initProductPage()
       margin-top: 0;
     }
 
+    .product-hero h1 .product-name {
+      white-space: nowrap;
+    }
+
     .product-stage {
       min-height: clamp(30rem, 52vw, 46rem);
     }
@@ -1211,7 +1345,7 @@ initProductPage()
     .product-problem-grid {
       grid-template-columns: minmax(16rem, 0.85fr) minmax(24rem, 1.15fr);
       gap: clamp(3rem, 8vw, 8rem);
-      align-items: end;
+      align-items: center;
     }
 
     .compare-column {
@@ -1254,7 +1388,7 @@ initProductPage()
     }
 
     .flow-node {
-      min-height: 10.5rem;
+      min-height: 12.5rem;
       padding: 1.25rem;
     }
 
@@ -1264,7 +1398,7 @@ initProductPage()
     }
 
     .fact-card {
-      min-height: 14rem;
+      min-height: 17rem;
       padding: 1.5rem;
     }
   }
