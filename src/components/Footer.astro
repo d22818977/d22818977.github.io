@@ -2,7 +2,7 @@
 import { themeConfig } from '@/config'
 import { getLangFromPath } from '@/i18n/lang'
 import { getLocalizedPath } from '@/i18n/path'
-import { isHomePage, isPostPage, isProductPage, isUsagePage } from '@/utils/page'
+import { isPostPage } from '@/utils/page'
 
 const { author } = themeConfig.site
 const { links, startYear } = themeConfig.footer
@@ -13,10 +13,7 @@ const year = Number(startYear) === currentYear
   : `${startYear}-${currentYear}`
 
 const currentLang = getLangFromPath(Astro.url.pathname)
-const isHome = isHomePage(Astro.url.pathname)
 const isPost = isPostPage(Astro.url.pathname)
-const isProduct = isProductPage(Astro.url.pathname)
-const isUsage = isUsagePage(Astro.url.pathname)
 const socialLinks = links.map(({ name, url }) => {
   const isRSS = url === '/atom.xml' || url === '/rss.xml'
   const isEmail = /^[\w.-]+@[\w.-]+\.[a-z]{2,}$/i.test(url)
@@ -59,7 +56,7 @@ const socialLinks = links.map(({ name, url }) => {
 <footer
   class:list={[
     'text-3 leading-1.25em font-navbar',
-    isHome || isProduct || isUsage ? 'home-footer' : '',
+    !isPost ? 'home-footer' : '',
     isPost ? 'post-footer' : '',
   ]}
   lg="uno-desktop-column bottom-20 text-3.5"
@@ -79,7 +76,7 @@ const socialLinks = links.map(({ name, url }) => {
 
   <p
     class:list={[
-      isHome || isProduct || isUsage ? 'home-footer-powered' : '',
+      !isPost ? 'home-footer-powered' : '',
       isPost ? 'post-footer-powered' : '',
     ]}
   >
