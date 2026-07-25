@@ -46,6 +46,10 @@ export function isProductPage(path: string) {
   return matchPageType(path, 'product')
 }
 
+export function isUsagePage(path: string) {
+  return matchPageType(path, 'usage')
+}
+
 // Returns page context with language, page types and localization helper
 export function getPageInfo(path: string) {
   const currentLang = getLangFromPath(path)
@@ -54,6 +58,7 @@ export function getPageInfo(path: string) {
   const isTag = isTagPage(path)
   const isAbout = isAboutPage(path)
   const isProduct = isProductPage(path)
+  const isUsage = isUsagePage(path)
 
   return {
     currentLang,
@@ -62,6 +67,7 @@ export function getPageInfo(path: string) {
     isTag,
     isAbout,
     isProduct,
+    isUsage,
     getLocalizedPath: (targetPath: string) =>
       getLocalizedPath(targetPath, currentLang),
   }

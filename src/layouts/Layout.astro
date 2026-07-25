@@ -29,7 +29,7 @@ interface Props {
 }
 
 const { postTitle, postDescription, postSlug, supportedLangs = [] } = Astro.props
-const { isHome, isPost, isProduct } = getPageInfo(Astro.url.pathname)
+const { isHome, isPost, isProduct, isUsage } = getPageInfo(Astro.url.pathname)
 const fontStyle = themeConfig.global.fontStyle === 'serif' ? 'font-serif' : 'font-sans'
 const MarginBottom = isPost && themeConfig.comment.enabled
   ? 'mb-10' // Post page with comment
@@ -48,19 +48,19 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     <div
       class:list={[
         'site-shell mx-auto max-w-205.848 min-h-vh w-full min-h-dvh',
-        isHome || isProduct ? 'site-shell--home' : isPost ? 'site-shell--post' : '',
-        isProduct ? 'site-shell--product' : '',
+        isHome || isProduct || isUsage ? 'site-shell--home' : isPost ? 'site-shell--post' : '',
+        isProduct || isUsage ? 'site-shell--product' : '',
       ]}
       p="x-[min(7.25vw,3.731rem)] y-10"
       lg="mx-[max(5.75rem,calc(50vw-34.25rem))] my-20 max-w-[min(calc(75vw-16rem),44rem)] min-h-full p-0"
     >
-      {(isHome || isPost || isProduct) && (
+      {(isHome || isPost || isProduct || isUsage) && (
         <div class="site-masthead">
           <Header />
           <Navbar />
         </div>
       )}
-      {!isHome && !isPost && !isProduct && (
+      {!isHome && !isPost && !isProduct && !isUsage && (
         <>
           <Header />
           <Navbar />
@@ -69,8 +69,8 @@ const MarginBottom = isPost && themeConfig.comment.enabled
       <main
         class:list={[
           MarginBottom,
-          isHome || isProduct ? 'home-main' : isPost ? 'post-main' : '',
-          isProduct ? 'product-main' : '',
+          isHome || isProduct || isUsage ? 'home-main' : isPost ? 'post-main' : '',
+          isProduct || isUsage ? 'product-main' : '',
         ]}
       >
         <slot />

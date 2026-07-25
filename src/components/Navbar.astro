@@ -2,16 +2,17 @@
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, isHome, isPost, isTag, isAbout, isProduct, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isTag, isAbout, isProduct, isUsage, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 const isPostActive = isHome || isPost
 const isTagActive = isTag
 const isAboutActive = isAbout
 const isProductActive = isProduct
+const isUsageActive = isUsage
 
 function getNavItemClass(isActive: boolean) {
-  if (isHome || isPost || isProduct) {
+  if (isHome || isPost || isProduct || isUsage) {
     return isActive
       ? 'home-nav-link home-nav-link--active'
       : 'home-nav-link'
@@ -43,6 +44,11 @@ const navItems = [
     label: currentLang === 'zh-tw' ? '產品' : currentLang === 'zh' ? '产品' : 'Product',
     className: getNavItemClass(isProductActive),
   },
+  {
+    href: '/usage/',
+    label: currentLang === 'zh-tw' ? '用量' : currentLang === 'zh' ? '用量' : 'Usage',
+    className: getNavItemClass(isUsageActive),
+  },
 ]
 ---
 
@@ -51,7 +57,7 @@ const navItems = [
   class:list={[
     'mb-10.5 text-3.6 font-semibold leading-2.45em font-navbar',
     'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)]) cjk:tracking-wide',
-    isHome || isProduct ? 'home-navbar' : '',
+    isHome || isProduct || isUsage ? 'home-navbar' : '',
     isPost ? 'post-navbar' : '',
   ]}
 >

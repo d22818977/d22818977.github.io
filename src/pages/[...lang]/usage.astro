@@ -1,0 +1,789 @@
+---
+import { readFile } from 'node:fs/promises'
+import { allLocales } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+interface DailyUsage {
+  date: string
+  inputTokens: number
+  cachedInputTokens: number
+  freshInputTokens: number
+  outputTokens: number
+  reasoningTokens: number
+  totalTokens: number
+}
+
+interface TokenUsage {
+  generatedAt: string
+  timezone: string
+  notice: string
+  privacy: string
+  summary: {
+    sessionCount: number
+    activeDays: number
+    inputTokens: number
+    cachedInputTokens: number
+    freshInputTokens: number
+    outputTokens: number
+    reasoningTokens: number
+    totalTokens: number
+    cacheHitRate: number
+  }
+  daily: DailyUsage[]
+}
+
+const dataUrl = new URL('../../../public/data/token-usage.json', import.meta.url)
+const tokenUsage = JSON.parse(await readFile(dataUrl, 'utf8')) as TokenUsage
+const compactNumber = new Intl.NumberFormat('zh-CN', {
+  notation: 'compact',
+  maximumFractionDigits: 2,
+})
+const fullNumber = new Intl.NumberFormat('zh-CN')
+const updatedAt = new Intl.DateTimeFormat('zh-CN', {
+  timeZone: tokenUsage.timezone,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(new Date(tokenUsage.generatedAt))
+const latestDay = tokenUsage.daily.at(-1)
+const pageTitle = 'Codex Token 用量'
+const pageDescription = '按日期查看本地 Codex 会话的 Token 输入、缓存与输出统计。'
+---
+
+<Layout postTitle={pageTitle} postDescription={pageDescription}>
+  <article
+    class="usage-page"
+    data-usage-page
+    data-usage={JSON.stringify(tokenUsage)}
+  >
+    <header class="usage-hero">
+      <p class="usage-kicker">TOKEN LEDGER · LOCAL CODEX</p>
+      <div class="usage-hero-grid">
+        <div>
+          <h1>我的 Codex，<br />用掉了多少 Token？</h1>
+          <p class="usage-intro">
+            一份只保留数字、不读取对话内容的本地使用记录。
+            输入、缓存与输出，被整理成可以持续更新的时间线。
+          </p>
+        </div>
+        <div class="usage-live">
+          <span class="usage-live-dot" aria-hidden="true"></span>
+          <div>
+            <strong>LOCAL LOGS</strong>
+            <p>更新于 {updatedAt}</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="usage-summary" aria-label="Token 用量概要">
+      <article class="usage-stat usage-stat--primary">
+        <span>累计 Token</span>
+        <strong>{compactNumber.format(tokenUsage.summary.totalTokens)}</strong>
+        <p>{fullNumber.format(tokenUsage.summary.totalTokens)} tokens</p>
+      </article>
+      <article class="usage-stat">
+        <span>输入 Token</span>
+        <strong>{compactNumber.format(tokenUsage.summary.inputTokens)}</strong>
+        <p>{tokenUsage.summary.activeDays} 个活跃日期</p>
+      </article>
+      <article class="usage-stat">
+        <span>输出 Token</span>
+        <strong>{compactNumber.format(tokenUsage.summary.outputTokens)}</strong>
+        <p>含 {compactNumber.format(tokenUsage.summary.reasoningTokens)} 推理输出</p>
+      </article>
+      <article class="usage-stat">
+        <span>缓存复用率</span>
+        <strong>{(tokenUsage.summary.cacheHitRate * 100).toFixed(1)}%</strong>
+        <p>{tokenUsage.summary.sessionCount} 个本地会话</p>
+      </article>
+    </section>
+
+    <section class="usage-chart-section" aria-labelledby="daily-usage-title">
+      <div class="usage-section-heading">
+        <div>
+          <p>DAILY ACTIVITY</p>
+          <h2 id="daily-usage-title">每日 Token 流量</h2>
+        </div>
+        <div class="usage-ranges" role="group" aria-label="图表时间范围">
+          <button type="button" data-range="7">7天</button>
+          <button type="button" data-range="30">30天</button>
+          <button type="button" data-range="all" class="is-active">全部</button>
+        </div>
+      </div>
+
+      <div class="usage-legend" aria-label="图例">
+        <span><i class="legend-fresh"></i>新输入</span>
+        <span><i class="legend-cache"></i>缓存输入</span>
+        <span><i class="legend-output"></i>输出</span>
+      </div>
+
+      <div class="usage-chart" data-usage-chart>
+        <svg
+          data-usage-svg
+          viewBox="0 0 960 360"
+          role="img"
+          aria-labelledby="chart-title chart-description"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <title id="chart-title">每日 Token 使用量柱状图</title>
+          <desc id="chart-description">按日期展示新输入、缓存输入与输出 Token。</desc>
+        </svg>
+        <div class="usage-tooltip" data-usage-tooltip hidden></div>
+      </div>
+    </section>
+
+    <section class="usage-detail-grid">
+      <article class="usage-latest">
+        <p>LATEST ACTIVE DAY</p>
+        <strong>{latestDay?.date ?? '—'}</strong>
+        <span>{latestDay ? compactNumber.format(latestDay.totalTokens) : '0'} tokens</span>
+      </article>
+
+      <div class="usage-table-wrap">
+        <table>
+          <caption>所选范围内最近的活跃日期</caption>
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>总量</th>
+              <th>新输入</th>
+              <th>缓存</th>
+              <th>输出</th>
+            </tr>
+          </thead>
+          <tbody data-usage-table></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="usage-note">
+      <span>PRIVACY FIRST</span>
+      <p>
+        统计仅来自本机保留的 Codex <code>token_count</code> 记录，不包含提示词、回复内容或文件信息。
+        此页面反映本地会话日志，不等同于服务商账单。
+      </p>
+    </footer>
+  </article>
+</Layout>
+
+<script>
+interface DailyUsage {
+  date: string
+  inputTokens: number
+  cachedInputTokens: number
+  freshInputTokens: number
+  outputTokens: number
+  totalTokens: number
+}
+
+interface UsageData {
+  daily: DailyUsage[]
+}
+
+function initUsagePage() {
+  const page = document.querySelector<HTMLElement>('[data-usage-page]')
+  if (!page || page.dataset.initialized === 'true')
+    return
+
+  const svg = page.querySelector<SVGSVGElement>('[data-usage-svg]')
+  const tableBody = page.querySelector<HTMLTableSectionElement>('[data-usage-table]')
+  const tooltip = page.querySelector<HTMLElement>('[data-usage-tooltip]')
+  const rangeButtons = Array.from(page.querySelectorAll<HTMLButtonElement>('[data-range]'))
+  if (!svg || !tableBody || !tooltip)
+    return
+
+  const chartSvg = svg
+  const detailTable = tableBody
+  const chartTooltip = tooltip
+  page.dataset.initialized = 'true'
+  const usage = JSON.parse(page.dataset.usage ?? '{"daily":[]}') as UsageData
+  const compact = new Intl.NumberFormat('zh-CN', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  })
+  const full = new Intl.NumberFormat('zh-CN')
+  const width = 960
+  const height = 360
+  const padding = { top: 24, right: 20, bottom: 58, left: 76 }
+
+  function render(range: string) {
+    const count = range === 'all' ? usage.daily.length : Number(range)
+    const records = usage.daily.slice(-count)
+    const chartWidth = width - padding.left - padding.right
+    const chartHeight = height - padding.top - padding.bottom
+    const maxValue = Math.max(...records.map(item => item.totalTokens), 1)
+    const slot = chartWidth / Math.max(records.length, 1)
+    const barWidth = Math.min(44, slot * 0.58)
+
+    const grid = Array.from({ length: 5 }, (_, index) => {
+      const ratio = index / 4
+      const y = padding.top + chartHeight * ratio
+      const value = maxValue * (1 - ratio)
+      return `
+        <line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" class="chart-grid" />
+        <text x="${padding.left - 14}" y="${y + 4}" text-anchor="end" class="chart-axis">${compact.format(value)}</text>
+      `
+    }).join('')
+
+    const bars = records.map((item, index) => {
+      const x = padding.left + slot * index + (slot - barWidth) / 2
+      const outputHeight = Math.max((item.outputTokens / maxValue) * chartHeight, 2)
+      const freshHeight = (item.freshInputTokens / maxValue) * chartHeight
+      const cacheHeight = (item.cachedInputTokens / maxValue) * chartHeight
+      const baseY = padding.top + chartHeight
+      const freshY = baseY - outputHeight - freshHeight
+      const cacheY = freshY - cacheHeight
+      const label = item.date.slice(5).replace('-', '/')
+
+      return `
+        <g class="chart-day" data-index="${index}" tabindex="0" role="button" aria-label="${item.date}，${full.format(item.totalTokens)} Token">
+          <rect x="${x}" y="${cacheY}" width="${barWidth}" height="${cacheHeight}" rx="5" class="bar-cache" />
+          <rect x="${x}" y="${freshY}" width="${barWidth}" height="${freshHeight}" class="bar-fresh" />
+          <rect x="${x}" y="${baseY - outputHeight}" width="${barWidth}" height="${outputHeight}" rx="2" class="bar-output" />
+          <rect x="${x - slot * 0.2}" y="${padding.top}" width="${barWidth + slot * 0.4}" height="${chartHeight}" class="bar-hit" />
+          <text x="${x + barWidth / 2}" y="${height - 25}" text-anchor="middle" class="chart-date">${label}</text>
+        </g>
+      `
+    }).join('')
+
+    chartSvg.innerHTML = `
+      <title>每日 Token 使用量柱状图</title>
+      <desc>按日期展示新输入、缓存输入与输出 Token。</desc>
+      ${grid}
+      ${bars}
+    `
+
+    detailTable.innerHTML = records
+      .slice(-8)
+      .reverse()
+      .map(item => `
+        <tr>
+          <td>${item.date}</td>
+          <td>${compact.format(item.totalTokens)}</td>
+          <td>${compact.format(item.freshInputTokens)}</td>
+          <td>${compact.format(item.cachedInputTokens)}</td>
+          <td>${compact.format(item.outputTokens)}</td>
+        </tr>
+      `)
+      .join('')
+
+    const dayGroups = Array.from(chartSvg.querySelectorAll<SVGGElement>('[data-index]'))
+    dayGroups.forEach((group) => {
+      const index = Number(group.dataset.index)
+      const item = records[index]
+      const showTooltip = (event: Event) => {
+        const pointer = event as PointerEvent
+        const chartRect = chartSvg.getBoundingClientRect()
+        chartTooltip.innerHTML = `
+          <strong>${item.date}</strong>
+          <span>总量 ${full.format(item.totalTokens)}</span>
+          <span>新输入 ${full.format(item.freshInputTokens)}</span>
+          <span>缓存 ${full.format(item.cachedInputTokens)}</span>
+          <span>输出 ${full.format(item.outputTokens)}</span>
+        `
+        chartTooltip.hidden = false
+        const x = 'clientX' in pointer && pointer.clientX
+          ? pointer.clientX - chartRect.left
+          : chartRect.width / 2
+        chartTooltip.style.left = `${Math.min(Math.max(x, 90), chartRect.width - 90)}px`
+      }
+      group.addEventListener('pointerenter', showTooltip)
+      group.addEventListener('pointermove', showTooltip)
+      group.addEventListener('focus', showTooltip)
+      group.addEventListener('pointerleave', () => {
+        chartTooltip.hidden = true
+      })
+      group.addEventListener('blur', () => {
+        chartTooltip.hidden = true
+      })
+    })
+  }
+
+  rangeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      rangeButtons.forEach(item => item.classList.toggle('is-active', item === button))
+      render(button.dataset.range ?? 'all')
+    })
+  })
+
+  render('all')
+}
+
+document.addEventListener('astro:page-load', initUsagePage)
+initUsagePage()
+</script>
+
+<style>
+  .usage-page {
+    --usage-ink: oklch(var(--un-preset-theme-colors-primary));
+    --usage-muted: oklch(var(--un-preset-theme-colors-secondary));
+    --usage-surface: var(--editorial-surface);
+    --usage-surface-strong: var(--editorial-surface-strong);
+    --usage-accent: var(--editorial-accent);
+    --usage-accent-strong: var(--editorial-accent-strong);
+    --usage-rule: var(--editorial-rule);
+    max-width: 90rem;
+    margin: 0 auto;
+    overflow: clip;
+    color: var(--usage-ink);
+  }
+
+  .usage-page :global(*) {
+    box-sizing: border-box;
+  }
+
+  .usage-hero {
+    padding: clamp(4.5rem, 9vw, 8rem) 0 clamp(4rem, 8vw, 7rem);
+    border-bottom: 1px solid var(--usage-rule);
+  }
+
+  .usage-kicker,
+  .usage-section-heading > div > p,
+  .usage-latest > p {
+    margin: 0 0 1.1rem;
+    color: var(--usage-accent-strong);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+  }
+
+  .usage-hero-grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .usage-hero h1 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(2.45rem, 6vw, 4.25rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.055em;
+  }
+
+  .usage-intro {
+    max-width: 38rem;
+    margin: 2rem 0 0;
+    color: var(--usage-muted);
+    font-size: clamp(0.98rem, 1.6vw, 1.15rem);
+    line-height: 1.85;
+  }
+
+  .usage-live {
+    display: flex;
+    gap: 0.85rem;
+    align-self: end;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--usage-rule);
+    border-radius: 0.9rem;
+    background: color-mix(in oklch, var(--usage-surface) 72%, transparent);
+  }
+
+  .usage-live-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-top: 0.22rem;
+    border-radius: 50%;
+    background: var(--usage-accent-strong);
+    box-shadow: 0 0 1rem color-mix(in oklch, var(--usage-accent) 72%, transparent);
+  }
+
+  .usage-live strong {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .usage-live p {
+    margin: 0.35rem 0 0;
+    color: var(--usage-muted);
+    font-size: 0.7rem;
+  }
+
+  .usage-summary {
+    display: grid;
+    gap: 0.75rem;
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    border-bottom: 1px solid var(--usage-rule);
+  }
+
+  .usage-stat {
+    min-height: 11rem;
+    padding: 1.25rem;
+    border: 1px solid var(--usage-rule);
+    border-radius: 1rem;
+    background: color-mix(in oklch, var(--usage-surface) 55%, transparent);
+  }
+
+  .usage-stat--primary {
+    background:
+      radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--usage-accent) 24%, transparent), transparent 44%),
+      var(--usage-surface-strong);
+  }
+
+  .usage-stat > span {
+    color: var(--usage-accent-strong);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+  }
+
+  .usage-stat strong {
+    display: block;
+    margin-top: 2.1rem;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+
+  .usage-stat p {
+    margin: 0.7rem 0 0;
+    color: var(--usage-muted);
+    font-size: 0.72rem;
+  }
+
+  .usage-chart-section {
+    padding: clamp(4.75rem, 9vw, 8rem) 0;
+    border-bottom: 1px solid var(--usage-rule);
+  }
+
+  .usage-section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .usage-section-heading h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3.8vw, 3.4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+  }
+
+  .usage-ranges {
+    display: inline-flex;
+    gap: 0.3rem;
+    padding: 0.3rem;
+    border: 1px solid var(--usage-rule);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--usage-surface) 70%, transparent);
+  }
+
+  .usage-ranges button {
+    min-width: 3.4rem;
+    padding: 0.55rem 0.8rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--usage-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.7rem;
+    transition: color 180ms ease, background-color 180ms ease;
+  }
+
+  .usage-ranges button:hover,
+  .usage-ranges button:focus-visible,
+  .usage-ranges button.is-active {
+    background: var(--usage-surface-strong);
+    color: var(--usage-ink);
+  }
+
+  .usage-ranges button:focus-visible {
+    outline: 2px solid var(--usage-accent);
+    outline-offset: 0.15rem;
+  }
+
+  .usage-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+    color: var(--usage-muted);
+    font-size: 0.7rem;
+  }
+
+  .usage-legend span {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  .usage-legend i {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 0.15rem;
+  }
+
+  .legend-fresh {
+    background: oklch(67% 0.065 350);
+  }
+
+  .legend-cache {
+    background: oklch(43% 0.045 335);
+  }
+
+  .legend-output {
+    background: oklch(84% 0.035 350);
+  }
+
+  .usage-chart {
+    position: relative;
+    margin-top: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--usage-rule);
+    border-radius: 1.15rem;
+    background:
+      radial-gradient(circle at 82% 10%, color-mix(in oklch, var(--usage-accent) 12%, transparent), transparent 36%),
+      color-mix(in oklch, var(--usage-surface) 62%, transparent);
+  }
+
+  .usage-chart svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 20rem;
+  }
+
+  .usage-chart :global(.chart-grid) {
+    stroke: var(--usage-rule);
+    stroke-width: 1;
+  }
+
+  .usage-chart :global(.chart-axis),
+  .usage-chart :global(.chart-date) {
+    fill: var(--usage-muted);
+    font-size: 12px;
+    opacity: 0.76;
+  }
+
+  .usage-chart :global(.bar-cache) {
+    fill: oklch(43% 0.045 335);
+  }
+
+  .usage-chart :global(.bar-fresh) {
+    fill: oklch(67% 0.065 350);
+  }
+
+  .usage-chart :global(.bar-output) {
+    fill: oklch(84% 0.035 350);
+  }
+
+  .usage-chart :global(.bar-hit) {
+    fill: transparent;
+    cursor: crosshair;
+  }
+
+  .usage-chart :global(.chart-day) {
+    outline: none;
+  }
+
+  .usage-chart :global(.chart-day:hover .bar-cache),
+  .usage-chart :global(.chart-day:focus .bar-cache) {
+    fill: oklch(50% 0.055 335);
+  }
+
+  .usage-tooltip {
+    position: absolute;
+    z-index: 3;
+    top: 1.1rem;
+    display: grid;
+    min-width: 10rem;
+    gap: 0.25rem;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--usage-accent);
+    border-radius: 0.75rem;
+    background: color-mix(in oklch, var(--usage-surface-strong) 96%, transparent);
+    box-shadow: 0 1rem 2rem oklch(12% 0.02 335 / 0.18);
+    color: var(--usage-muted);
+    font-size: 0.68rem;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .usage-tooltip strong {
+    margin-bottom: 0.15rem;
+    color: var(--usage-ink);
+    font-weight: 500;
+  }
+
+  .usage-detail-grid {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(4rem, 8vw, 7rem) 0;
+    border-bottom: 1px solid var(--usage-rule);
+  }
+
+  .usage-latest {
+    display: grid;
+    min-height: 13rem;
+    align-content: space-between;
+    padding: 1.35rem;
+    border: 1px solid var(--usage-rule);
+    border-radius: 1rem;
+    background: var(--usage-surface);
+  }
+
+  .usage-latest strong {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+  }
+
+  .usage-latest span {
+    color: var(--usage-muted);
+    font-size: 0.78rem;
+  }
+
+  .usage-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--usage-rule);
+    border-radius: 1rem;
+  }
+
+  .usage-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .usage-table-wrap caption {
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--usage-rule);
+    color: var(--usage-muted);
+    font-size: 0.72rem;
+    text-align: left;
+  }
+
+  .usage-table-wrap th,
+  .usage-table-wrap td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--usage-rule);
+    white-space: nowrap;
+    font-size: 0.72rem;
+    text-align: right;
+  }
+
+  .usage-table-wrap th {
+    color: var(--usage-accent-strong);
+    font-weight: 500;
+  }
+
+  .usage-table-wrap th:first-child,
+  .usage-table-wrap td:first-child {
+    text-align: left;
+  }
+
+  .usage-table-wrap td {
+    color: var(--usage-muted);
+  }
+
+  .usage-table-wrap tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .usage-note {
+    display: grid;
+    gap: 1rem;
+    padding: 2.5rem 0 3rem;
+  }
+
+  .usage-note > span {
+    color: var(--usage-accent-strong);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+  }
+
+  .usage-note p {
+    max-width: 52rem;
+    margin: 0;
+    color: var(--usage-muted);
+    font-size: 0.72rem;
+    line-height: 1.8;
+  }
+
+  .usage-note code {
+    color: var(--usage-ink);
+    font-family: inherit;
+  }
+
+  @media (min-width: 768px) {
+    .usage-hero-grid {
+      grid-template-columns: minmax(24rem, 1fr) auto;
+      align-items: end;
+    }
+
+    .usage-summary {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .usage-stat {
+      min-height: 13rem;
+      padding: 1.5rem;
+    }
+
+    .usage-detail-grid {
+      grid-template-columns: minmax(15rem, 0.65fr) minmax(30rem, 1.35fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .usage-page {
+      padding-right: clamp(2rem, 4vw, 5rem);
+      padding-left: clamp(2rem, 4vw, 5rem);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .usage-hero h1 {
+      max-width: 12ch;
+    }
+
+    .usage-ranges {
+      width: 100%;
+    }
+
+    .usage-ranges button {
+      flex: 1;
+    }
+
+    .usage-chart {
+      margin-right: -0.5rem;
+      margin-left: -0.5rem;
+    }
+
+    .usage-chart svg {
+      min-width: 44rem;
+    }
+
+    .usage-chart {
+      overflow-x: auto;
+    }
+
+    .usage-tooltip {
+      position: sticky;
+      left: 50%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .usage-ranges button {
+      transition: none;
+    }
+  }
+</style>
