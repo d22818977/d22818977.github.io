@@ -1,0 +1,949 @@
+.product-dossier,
+html:has(.product-dossier) {
+  scrollbar-width: none;
+}
+
+html:has(.product-dossier) {
+  scroll-behavior: smooth;
+}
+
+body.hero-home-body:has(.product-dossier) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #061118;
+}
+
+html:has(.product-dossier)::-webkit-scrollbar,
+.product-dossier::-webkit-scrollbar {
+  display: none;
+}
+
+.product-dossier {
+  --dossier-line: rgba(255, 255, 255, 0.2);
+  --dossier-line-strong: rgba(255, 255, 255, 0.48);
+  --dossier-muted: rgba(255, 255, 255, 0.62);
+  --dossier-soft: rgba(255, 255, 255, 0.08);
+
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: visible;
+  isolation: isolate;
+  background: #061118;
+  color: #fff;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.product-dossier *,
+.product-dossier *::before,
+.product-dossier *::after {
+  box-sizing: border-box;
+}
+
+.product-dossier-video,
+.product-dossier-scrim {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.product-dossier-video {
+  z-index: -3;
+  object-fit: cover;
+  filter: saturate(0.86) contrast(1.06) brightness(0.78);
+}
+
+.product-dossier-scrim {
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(2, 8, 12, 0.5) 0, rgba(2, 8, 12, 0.28) 26rem, rgba(2, 8, 12, 0.82) 61rem, rgba(2, 8, 12, 0.95) 100%),
+    linear-gradient(90deg, rgba(2, 8, 12, 0.42), transparent 42%, rgba(2, 8, 12, 0.2));
+}
+
+.product-dossier-content {
+  position: relative;
+  width: min(100% - 3rem, 85rem);
+  margin: 0 auto;
+}
+
+.product-dossier-header {
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 50%;
+  width: min(100% - 3rem, 85rem);
+  padding-bottom: 1rem;
+  background: transparent;
+  transform: translateX(-50%);
+  isolation: isolate;
+  transition: background 220ms ease;
+}
+
+.product-dossier-header::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 -2rem -1.5rem;
+  background: linear-gradient(180deg, rgba(2, 8, 12, 0.86), rgba(2, 8, 12, 0));
+  content: '';
+  pointer-events: none;
+  transition: background 220ms ease;
+}
+
+.product-dossier.is-scrolled .product-dossier-header::before {
+  background: linear-gradient(180deg, rgba(2, 8, 12, 0.97) 0, rgba(2, 8, 12, 0.86) 62%, rgba(2, 8, 12, 0) 100%);
+}
+
+.product-dossier.is-scrolled .product-dossier-header {
+  background: rgba(2, 8, 12, 0.985);
+}
+
+.product-chapters {
+  position: fixed;
+  z-index: 4;
+  top: clamp(10.5rem, 20vh, 13.5rem);
+  left: max(1.5rem, calc(50vw - 42.5rem));
+  width: 5.75rem;
+}
+
+.product-chapters::after {
+  position: absolute;
+  top: 0.2rem;
+  right: 0;
+  bottom: 0.25rem;
+  width: 1px;
+  background: var(--dossier-line-strong);
+  content: '';
+}
+
+.product-chapters ol {
+  display: grid;
+  gap: 1.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-chapters a {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  padding-right: 1.4rem;
+  color: rgba(255, 255, 255, 0.46);
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.product-chapters a::after {
+  position: absolute;
+  z-index: 1;
+  top: 0.35rem;
+  right: -0.22rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 50%;
+  background: #071117;
+  content: '';
+  opacity: 0;
+  transition: opacity 180ms ease, background-color 180ms ease;
+}
+
+.product-chapters a:hover,
+.product-chapters a:focus-visible,
+.product-chapters a.is-active {
+  color: #fff;
+  transform: translateX(0.15rem);
+}
+
+.product-chapters a.is-active::after {
+  background: #fff;
+  opacity: 1;
+}
+
+.product-chapters a:focus-visible,
+.capability-tab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 0.35rem;
+}
+
+.product-chapters span {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.product-chapters small {
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.product-dossier-main {
+  width: min(calc(100% - 12rem), 67.5rem);
+  margin-left: auto;
+  padding-bottom: 5rem;
+}
+
+.product-overview {
+  display: grid;
+  min-height: min(46rem, 100vh);
+  grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  padding: 9rem 0 4rem;
+  border-bottom: 1px solid var(--dossier-line-strong);
+}
+
+.product-overview-copy {
+  min-width: 0;
+}
+
+.product-file-label,
+.dossier-section-heading > p,
+.capability-copy > p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product-kicker {
+  margin: 2rem 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.19em;
+}
+
+.product-overview h1 {
+  max-width: 16ch;
+  margin: 1rem 0 0;
+  font-size: clamp(2.25rem, 4.2vw, 3.55rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.28);
+}
+
+.product-lead {
+  max-width: 28rem;
+  margin: 1.65rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.72;
+}
+
+.product-key-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 2.6rem 0 0;
+}
+
+.product-key-facts div {
+  min-width: 0;
+  padding: 0 1.2rem;
+  border-left: 1px solid var(--dossier-line-strong);
+}
+
+.product-key-facts div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.product-key-facts dt {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.product-key-facts dd {
+  margin: 0.55rem 0 0;
+  color: var(--dossier-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.product-overview-visual {
+  position: relative;
+  display: grid;
+  min-height: 24rem;
+  place-items: center;
+  margin: 0;
+}
+
+.product-overview-visual::before {
+  position: absolute;
+  inset: 16% 2% 5%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  content: '';
+  filter: blur(3.5rem);
+}
+
+.product-overview-visual img {
+  position: relative;
+  width: min(100%, 31rem);
+  height: auto;
+  filter: drop-shadow(0 2rem 2.3rem rgba(0, 0, 0, 0.42));
+  transform-origin: 54% 65%;
+  transition: transform 240ms ease-out;
+}
+
+.dossier-section {
+  scroll-margin-top: 7rem;
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+  border-bottom: 1px solid var(--dossier-line);
+}
+
+.dossier-section-heading h2 {
+  max-width: 30ch;
+  margin: 1.2rem 0 0;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.integration-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: end;
+  margin-top: 3.25rem;
+}
+
+.integration-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  color: var(--dossier-muted);
+  font-size: 0.88rem;
+  line-height: 1.85;
+}
+
+.integration-copy p {
+  margin: 0;
+}
+
+.deployment-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: center;
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+  border-left: 1px solid var(--dossier-line);
+}
+
+.deployment-side {
+  min-width: 0;
+}
+
+.deployment-side p {
+  margin: 0;
+  color: var(--dossier-muted);
+  font-size: 0.72rem;
+}
+
+.deployment-side strong {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.deployment-side span {
+  display: block;
+  margin-top: 0.85rem;
+  color: var(--dossier-muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.deployment-connector {
+  display: grid;
+  width: clamp(2.8rem, 4.5vw, 4.4rem);
+  place-items: center;
+  align-self: stretch;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: clamp(2.35rem, 4vw, 3.75rem);
+  font-weight: 300;
+  line-height: 1;
+  transform: translateX(-40px);
+}
+
+.capability-explorer {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  margin-top: 3rem;
+  border: 1px solid var(--dossier-line);
+  background: rgba(3, 9, 13, 0.36);
+  box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.16);
+}
+
+.capability-tabs {
+  display: grid;
+  border-right: 1px solid var(--dossier-line);
+}
+
+.capability-tab {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 0.55rem;
+  align-items: center;
+  width: 100%;
+  padding: 1.2rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--dossier-line);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.58);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.capability-tab:last-child {
+  border-bottom: 0;
+}
+
+.capability-tab:hover,
+.capability-tab.is-active {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+.capability-tab span,
+.capability-tab small {
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.capability-tab strong {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.capability-tab small {
+  color: var(--dossier-muted);
+}
+
+.capability-panel {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.25fr) minmax(13rem, 0.75fr);
+}
+
+.capability-media {
+  min-height: 22rem;
+  overflow: hidden;
+}
+
+.capability-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.76) saturate(0.72);
+  transition: opacity 180ms ease, transform 500ms ease;
+}
+
+.capability-media img.is-changing {
+  opacity: 0;
+  transform: scale(1.015);
+}
+
+.capability-copy {
+  display: grid;
+  align-content: center;
+  padding: clamp(1.6rem, 3.2vw, 3rem);
+  border-left: 1px solid var(--dossier-line);
+}
+
+.capability-copy h3 {
+  margin: 1rem 0 0;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+}
+
+.capability-copy > p:last-child {
+  margin: 1.35rem 0 0;
+  color: var(--dossier-muted);
+  font-size: 0.84rem;
+  line-height: 1.78;
+}
+
+.signal-path {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.signal-path::before {
+  position: absolute;
+  top: 0.33rem;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--dossier-line-strong);
+  content: '';
+}
+
+.signal-path li {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem 0 0;
+}
+
+.signal-path li::before {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 0.72rem;
+  height: 0.72rem;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background: #0b1418;
+  content: '';
+}
+
+.signal-path span {
+  color: var(--dossier-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.signal-path strong {
+  font-size: 0.94rem;
+  font-weight: 500;
+}
+
+.signal-path small {
+  color: var(--dossier-muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+.spec-table-wrap {
+  margin-top: 3rem;
+  overflow: hidden;
+  border: 1px solid var(--dossier-line);
+  background: rgba(3, 9, 13, 0.34);
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 1rem 1.1rem;
+  border-right: 1px solid var(--dossier-line);
+  border-bottom: 1px solid var(--dossier-line);
+  text-align: left;
+}
+
+.spec-table tr:last-child th,
+.spec-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.spec-table th:last-child,
+.spec-table td:last-child {
+  border-right: 0;
+}
+
+.spec-table th {
+  width: 12%;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 400;
+}
+
+.spec-table td {
+  width: 38%;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.product-note {
+  margin: 2rem 0 0;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  line-height: 1.65;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 650ms ease, transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1100px) {
+  .product-dossier-main {
+    width: calc(100% - 8.5rem);
+  }
+
+  .product-chapters {
+    left: 1.5rem;
+  }
+
+  .product-overview {
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.8fr);
+    gap: 2rem;
+  }
+
+  .capability-panel {
+    grid-template-columns: minmax(0, 1.1fr) minmax(12rem, 0.9fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .product-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .product-overview-visual {
+    min-height: 18rem;
+  }
+
+  .product-overview-visual img {
+    width: min(72%, 28rem);
+  }
+
+  .integration-layout,
+  .capability-explorer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .deployment-compare,
+  .capability-copy {
+    border-left: 0;
+  }
+
+  .capability-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-right: 0;
+    border-bottom: 1px solid var(--dossier-line);
+  }
+
+  .capability-tab:nth-child(odd) {
+    border-right: 1px solid var(--dossier-line);
+  }
+
+  .capability-panel {
+    grid-template-columns: minmax(0, 1.15fr) minmax(14rem, 0.85fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .product-dossier {
+    --mobile-header-height: 8.45rem;
+  }
+
+  .product-dossier-content {
+    width: calc(100% - 2rem);
+  }
+
+  .product-dossier-header {
+    width: calc(100% - 2rem);
+    gap: 1rem;
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+    padding-bottom: 0.85rem;
+  }
+
+  .product-dossier-header::before {
+    inset: 0 -1rem -0.75rem;
+    background: linear-gradient(180deg, rgba(2, 8, 12, 0.96), rgba(2, 8, 12, 0.72) 72%, rgba(2, 8, 12, 0));
+  }
+
+  .product-chapters {
+    top: calc(var(--mobile-header-height) - 0.75rem);
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    padding: 0.6rem 0 0.7rem;
+    background: linear-gradient(180deg, rgba(2, 8, 12, 0.74), rgba(2, 8, 12, 0));
+    transition: background 220ms ease;
+  }
+
+  .product-dossier.is-scrolled .product-chapters {
+    background: rgba(2, 8, 12, 0.96);
+  }
+
+  .product-chapters::after {
+    top: auto;
+    right: 0;
+    bottom: 0.2rem;
+    left: 0;
+    width: auto;
+    height: 1px;
+    background: var(--dossier-line);
+  }
+
+  .product-chapters ol {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.3rem;
+  }
+
+  .product-chapters a {
+    gap: 0.18rem;
+    justify-items: center;
+    padding: 0;
+    text-align: center;
+  }
+
+  .product-chapters a::after {
+    top: auto;
+    right: 50%;
+    bottom: -0.9rem;
+    transform: translateX(50%);
+  }
+
+  .product-chapters a:hover,
+  .product-chapters a:focus-visible,
+  .product-chapters a.is-active {
+    transform: none;
+  }
+
+  .product-chapters span {
+    font-size: 0.68rem;
+  }
+
+  .product-chapters small {
+    font-size: 0.62rem;
+  }
+
+  .product-dossier-main {
+    width: 100%;
+    margin: 0;
+    padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  }
+
+  .product-overview {
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    padding: calc(var(--mobile-header-height) + 4.5rem) 0 3rem;
+  }
+
+  .product-file-label,
+  .dossier-section-heading > p,
+  .capability-copy > p {
+    font-size: 0.64rem;
+  }
+
+  .product-kicker {
+    margin-top: 1.5rem;
+    font-size: 0.6rem;
+  }
+
+  .product-overview h1 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 10vw, 2.7rem);
+    line-height: 1.03;
+  }
+
+  .product-lead {
+    max-width: 21rem;
+    margin-top: 1.25rem;
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
+
+  .product-key-facts {
+    gap: 0;
+    margin-top: 2rem;
+  }
+
+  .product-key-facts div {
+    padding: 0 0.65rem;
+  }
+
+  .product-key-facts dt {
+    font-size: 0.8rem;
+  }
+
+  .product-key-facts dd {
+    font-size: 0.62rem;
+  }
+
+  .product-overview-visual {
+    min-height: 13rem;
+  }
+
+  .product-overview-visual img {
+    width: min(78%, 19rem);
+  }
+
+  .dossier-section {
+    scroll-margin-top: calc(var(--mobile-header-height) + 5rem);
+    padding: 3.75rem 0;
+  }
+
+  .dossier-section-heading h2 {
+    margin-top: 0.9rem;
+    font-size: clamp(1.75rem, 8.3vw, 2.25rem);
+    line-height: 1.18;
+  }
+
+  .integration-layout {
+    gap: 2.2rem;
+    margin-top: 2.25rem;
+  }
+
+  .integration-copy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    font-size: 0.84rem;
+  }
+
+  .deployment-compare {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid var(--dossier-line);
+  }
+
+  .deployment-side strong {
+    font-size: 2.75rem;
+  }
+
+  .deployment-side span {
+    font-size: 0.62rem;
+  }
+
+  .deployment-connector {
+    width: 2.4rem;
+    font-size: 2.2rem;
+  }
+
+  .capability-explorer {
+    margin-top: 2.25rem;
+  }
+
+  .capability-tabs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .capability-tab:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .capability-tab:last-child {
+    border-bottom: 0;
+  }
+
+  .capability-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .capability-media {
+    min-height: 13.5rem;
+  }
+
+  .capability-copy {
+    padding: 1.5rem;
+    border-top: 1px solid var(--dossier-line);
+  }
+
+  .capability-copy h3 {
+    font-size: 1.45rem;
+  }
+
+  .signal-path {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.4rem;
+    margin-top: 2.75rem;
+    padding-left: 1.75rem;
+  }
+
+  .signal-path::before {
+    top: 0;
+    bottom: 0;
+    left: 0.34rem;
+    width: 1px;
+    height: auto;
+  }
+
+  .signal-path li {
+    gap: 0.32rem;
+    padding: 0 0 0 0.5rem;
+  }
+
+  .signal-path li::before {
+    top: 0.1rem;
+    left: -1.75rem;
+  }
+
+  .spec-table-wrap {
+    margin-top: 2.25rem;
+    overflow-x: auto;
+  }
+
+  .spec-table {
+    min-width: 38rem;
+  }
+
+  .spec-table th,
+  .spec-table td {
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-key-facts dd {
+    display: none;
+  }
+
+  .product-key-facts div {
+    min-height: 1.4rem;
+  }
+
+  .deployment-side span {
+    line-height: 1.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-dossier {
+    scroll-behavior: auto;
+  }
+
+  html:has(.product-dossier) {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .product-overview-visual img,
+  .capability-media img,
+  .product-chapters a,
+  .capability-tab {
+    transition: none;
+  }
+}

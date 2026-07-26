@@ -1,0 +1,107 @@
+---
+import GoBackIcon from '@/assets/icons/go-back.svg'
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
+import { getPostPath } from '@/i18n/path'
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByYear } from '@/utils/content'
+import { getPostDescription } from '@/utils/description'
+import { getPageInfo } from '@/utils/page'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const { currentLang, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const postsByYear = await getPostsByYear(currentLang)
+
+function formatMonthDay(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date).replace('/', '.')
+}
+---
+
+<Layout
+  postTitle="文章"
+  postDescription="沿途写下的故事。"
+  immersive
+>
+  <section class="article-index wandor-hero" aria-labelledby="article-index-title">
+    <video
+      class="wandor-hero-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="wandor-hero-scrim article-index-scrim" aria-hidden="true"></div>
+
+    <div class="wandor-hero-content article-index-content">
+      <header class="wandor-hero-header article-index-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar variant="overlay" />
+        </div>
+      </header>
+
+      <main class="article-index-main">
+        <header class="article-index-intro">
+          <h1 id="article-index-title">文章</h1>
+          <p>沿途写下的故事</p>
+        </header>
+
+        <div class="article-index-archive">
+          {Array.from(postsByYear).map(([year, posts]) => (
+            <section class="article-year" aria-labelledby={`article-year-${year}`}>
+              <h2 id={`article-year-${year}`} class="article-year-label">{year}</h2>
+              <div class="article-year-timeline" aria-hidden="true"></div>
+
+              <ol class="article-year-list">
+                {posts.map((post) => {
+                  const slug = post.data.abbrlink || post.id
+
+                  return (
+                    <li class="article-card-item">
+                      <a
+                        class="article-card"
+                        href={getPostPath(slug, currentLang)}
+                        aria-label={`阅读《${post.data.title}》`}
+                      >
+                        <time
+                          class="article-card-date"
+                          datetime={post.data.published.toISOString().split('T')[0]}
+                        >
+                          {formatMonthDay(post.data.published)}
+                        </time>
+
+                        <span class="article-card-divider" aria-hidden="true"></span>
+
+                        <span class="article-card-copy">
+                          <span class="article-card-title">{post.data.title}</span>
+                          <span class="article-card-description">
+                            {getPostDescription(post, 'list')}
+                          </span>
+                        </span>
+
+                        <span class="article-card-meta">
+                          <GoBackIcon aria-hidden="true" fill="currentColor" />
+                        </span>
+                      </a>
+                    </li>
+                  )
+                })}
+              </ol>
+            </section>
+          ))}
+        </div>
+      </main>
+    </div>
+  </section>
+</Layout>

@@ -1,8 +1,10 @@
 ---
 import { readFile } from 'node:fs/promises'
-import { allLocales } from '@/config'
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
 import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
+import { getPageInfo } from '@/utils/page'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -23,14 +25,10 @@ interface DailyUsage {
 interface TokenUsage {
   generatedAt: string
   timezone: string
-  notice: string
-  privacy: string
   summary: {
     sessionCount: number
     activeDays: number
     inputTokens: number
-    cachedInputTokens: number
-    freshInputTokens: number
     outputTokens: number
     reasoningTokens: number
     totalTokens: number
@@ -46,140 +44,137 @@ const compactNumber = new Intl.NumberFormat('zh-CN', {
   maximumFractionDigits: 2,
 })
 const fullNumber = new Intl.NumberFormat('zh-CN')
-const updatedAt = new Intl.DateTimeFormat('zh-CN', {
+const dateParts = new Intl.DateTimeFormat('zh-CN', {
   timeZone: tokenUsage.timezone,
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
   hour: '2-digit',
   minute: '2-digit',
-}).format(new Date(tokenUsage.generatedAt))
+  hour12: false,
+}).formatToParts(new Date(tokenUsage.generatedAt))
+const datePart = (type: Intl.DateTimeFormatPartTypes) => dateParts.find(part => part.type === type)?.value ?? ''
+const updatedAt = `${datePart('year')}/${datePart('month')}/${datePart('day')} ${datePart('hour')}:${datePart('minute')}`
 const latestDay = tokenUsage.daily.at(-1)
+const latestWan = latestDay ? `${(latestDay.totalTokens / 10000).toFixed(2)}万` : '0'
 const pageTitle = 'Codex Token 用量'
 const pageDescription = '按日期查看本地 Codex 会话的 Token 输入、缓存与输出统计。'
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
 ---
 
-<Layout postTitle={pageTitle} postDescription={pageDescription}>
-  <article
-    class="usage-page"
-    data-usage-page
-    data-usage={JSON.stringify(tokenUsage)}
-  >
-    <header class="usage-hero">
-      <p class="usage-kicker">TOKEN LEDGER · LOCAL CODEX</p>
-      <div class="usage-hero-grid">
-        <div>
-          <h1>我的 Codex，<br />用掉了多少 Token？</h1>
-          <p class="usage-intro">
-            一份只保留数字、不读取对话内容的本地使用记录。
-            输入、缓存与输出，被整理成可以持续更新的时间线。
-          </p>
+<Layout postTitle={pageTitle} postDescription={pageDescription} immersive>
+  <section class="usage-observatory" aria-labelledby="usage-title" data-usage-page data-usage={JSON.stringify(tokenUsage)}>
+    <video
+      class="usage-observatory-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="usage-observatory-scrim" aria-hidden="true"></div>
+
+    <div class="usage-observatory-content">
+      <header class="wandor-hero-header usage-observatory-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar variant="overlay" />
         </div>
-        <div class="usage-live">
-          <span class="usage-live-dot" aria-hidden="true"></span>
-          <div>
-            <strong>LOCAL LOGS</strong>
-            <p>更新于 {updatedAt}</p>
+      </header>
+
+      <main class="usage-observatory-main">
+        <div class="usage-intro-row">
+          <header class="usage-intro">
+            <h1 id="usage-title">Token用量</h1>
+            <p>一份只保留数字、不读取对话内容的本地使用记录。</p>
+          </header>
+          <p class="usage-update"><span>LOCAL LOGS</span> · 更新于 {updatedAt}</p>
+        </div>
+
+        <section class="usage-total" aria-label="累计 Token">
+          <span>累计 Token</span>
+          <strong>{compactNumber.format(tokenUsage.summary.totalTokens)}</strong>
+          <p>{fullNumber.format(tokenUsage.summary.totalTokens)} tokens</p>
+        </section>
+
+        <section class="usage-chart-panel" aria-labelledby="usage-chart-title">
+          <div class="usage-chart-head">
+            <div>
+              <h2 id="usage-chart-title">每日 Token 流量</h2>
+              <div class="usage-legend" aria-label="图例">
+                <span><i class="legend-fresh"></i>新输入</span>
+                <span><i class="legend-cache"></i>缓存输入</span>
+                <span><i class="legend-output"></i>输出</span>
+              </div>
+            </div>
+
+            <div class="usage-chart-controls">
+              <div class="usage-ranges" role="group" aria-label="图表时间范围">
+                <button type="button" data-range="7">7天</button>
+                <button type="button" data-range="30">30天</button>
+                <button type="button" data-range="all" class="is-active">全部</button>
+              </div>
+              <p class="usage-latest-callout">
+                <span>{latestDay?.date ?? '—'}</span>
+                <b>·</b>
+                <strong data-latest-value>{latestWan} tokens</strong>
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
-    </header>
 
-    <section class="usage-summary" aria-label="Token 用量概要">
-      <article class="usage-stat usage-stat--primary">
-        <span>累计 Token</span>
-        <strong>{compactNumber.format(tokenUsage.summary.totalTokens)}</strong>
-        <p>{fullNumber.format(tokenUsage.summary.totalTokens)} tokens</p>
-      </article>
-      <article class="usage-stat">
-        <span>输入 Token</span>
-        <strong>{compactNumber.format(tokenUsage.summary.inputTokens)}</strong>
-        <p>{tokenUsage.summary.activeDays} 个活跃日期</p>
-      </article>
-      <article class="usage-stat">
-        <span>输出 Token</span>
-        <strong>{compactNumber.format(tokenUsage.summary.outputTokens)}</strong>
-        <p>含 {compactNumber.format(tokenUsage.summary.reasoningTokens)} 推理输出</p>
-      </article>
-      <article class="usage-stat">
-        <span>缓存复用率</span>
-        <strong>{(tokenUsage.summary.cacheHitRate * 100).toFixed(1)}%</strong>
-        <p>{tokenUsage.summary.sessionCount} 个本地会话</p>
-      </article>
-    </section>
+          <div class="usage-chart-scroll">
+            <div class="usage-chart" data-usage-chart>
+              <svg
+                data-usage-svg
+                viewBox="0 0 1200 270"
+                role="img"
+                aria-labelledby="chart-title chart-description"
+                preserveAspectRatio="none"
+              >
+                <title id="chart-title">每日 Token 使用量柱状图</title>
+                <desc id="chart-description">按日期展示新输入、缓存输入与输出 Token。</desc>
+              </svg>
+              <div class="usage-tooltip" data-usage-tooltip hidden></div>
+            </div>
+          </div>
+        </section>
 
-    <section class="usage-chart-section" aria-labelledby="daily-usage-title">
-      <div class="usage-section-heading">
-        <div>
-          <p>DAILY ACTIVITY</p>
-          <h2 id="daily-usage-title">每日 Token 流量</h2>
-        </div>
-        <div class="usage-ranges" role="group" aria-label="图表时间范围">
-          <button type="button" data-range="7">7天</button>
-          <button type="button" data-range="30">30天</button>
-          <button type="button" data-range="all" class="is-active">全部</button>
-        </div>
-      </div>
+        <section class="usage-summary" aria-label="Token 用量概要">
+          <article class="usage-stat">
+            <span>输入 Token</span>
+            <strong>{compactNumber.format(tokenUsage.summary.inputTokens)}</strong>
+          </article>
+          <article class="usage-stat">
+            <span>输出 Token</span>
+            <strong>{compactNumber.format(tokenUsage.summary.outputTokens)}</strong>
+          </article>
+          <article class="usage-stat">
+            <span>推理输出</span>
+            <strong>{compactNumber.format(tokenUsage.summary.reasoningTokens)}</strong>
+          </article>
+          <article class="usage-stat">
+            <span>缓存复用率</span>
+            <strong>{(tokenUsage.summary.cacheHitRate * 100).toFixed(1)}%</strong>
+          </article>
+          <div class="usage-activity">
+            <p><strong>{tokenUsage.summary.activeDays}</strong> 个活跃日期</p>
+            <p><strong>{tokenUsage.summary.sessionCount}</strong> 个本地会话</p>
+          </div>
+        </section>
 
-      <div class="usage-legend" aria-label="图例">
-        <span><i class="legend-fresh"></i>新输入</span>
-        <span><i class="legend-cache"></i>缓存输入</span>
-        <span><i class="legend-output"></i>输出</span>
-      </div>
-
-      <div class="usage-chart" data-usage-chart>
-        <svg
-          data-usage-svg
-          viewBox="0 0 960 360"
-          role="img"
-          aria-labelledby="chart-title chart-description"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <title id="chart-title">每日 Token 使用量柱状图</title>
-          <desc id="chart-description">按日期展示新输入、缓存输入与输出 Token。</desc>
-        </svg>
-        <div class="usage-tooltip" data-usage-tooltip hidden></div>
-      </div>
-    </section>
-
-    <section class="usage-detail-grid">
-      <article class="usage-latest">
-        <p>LATEST ACTIVE DAY</p>
-        <strong>{latestDay?.date ?? '—'}</strong>
-        <span>{latestDay ? compactNumber.format(latestDay.totalTokens) : '0'} tokens</span>
-      </article>
-
-      <div class="usage-table-wrap">
-        <table>
-          <caption>所选范围内最近的活跃日期</caption>
-          <thead>
-            <tr>
-              <th>日期</th>
-              <th>总量</th>
-              <th>新输入</th>
-              <th>缓存</th>
-              <th>输出</th>
-            </tr>
-          </thead>
-          <tbody data-usage-table></tbody>
-        </table>
-      </div>
-    </section>
-
-    <footer class="usage-note">
-      <span>PRIVACY FIRST</span>
-      <p>
-        统计仅来自本机保留的 Codex <code>token_count</code> 记录，不包含提示词、回复内容或文件信息。
-        此页面反映本地会话日志，不等同于服务商账单。
-      </p>
-    </footer>
-  </article>
+        <footer class="usage-note">
+          <span aria-hidden="true">◇</span>
+          <p>仅统计本机 <code>token_count</code>，不包含提示词、回复内容或文件信息。</p>
+        </footer>
+      </main>
+    </div>
+  </section>
 </Layout>
 
 <script>
 interface DailyUsage {
   date: string
-  inputTokens: number
   cachedInputTokens: number
   freshInputTokens: number
   outputTokens: number
@@ -196,62 +191,72 @@ function initUsagePage() {
     return
 
   const svg = page.querySelector<SVGSVGElement>('[data-usage-svg]')
-  const tableBody = page.querySelector<HTMLTableSectionElement>('[data-usage-table]')
   const tooltip = page.querySelector<HTMLElement>('[data-usage-tooltip]')
   const rangeButtons = Array.from(page.querySelectorAll<HTMLButtonElement>('[data-range]'))
-  if (!svg || !tableBody || !tooltip)
+  if (!svg || !tooltip)
     return
 
   const chartSvg = svg
-  const detailTable = tableBody
   const chartTooltip = tooltip
-  page.dataset.initialized = 'true'
   const usage = JSON.parse(page.dataset.usage ?? '{"daily":[]}') as UsageData
-  const compact = new Intl.NumberFormat('zh-CN', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  })
+  const latestValue = page.querySelector<HTMLElement>('[data-latest-value]')
+  const latestRecord = usage.daily.at(-1)
+  if (latestValue && latestRecord) {
+    const roundedWan = Math.round(latestRecord.totalTokens / 100) / 100
+    latestValue.textContent = `${roundedWan.toFixed(2)}万 tokens`
+  }
   const full = new Intl.NumberFormat('zh-CN')
-  const width = 960
-  const height = 360
-  const padding = { top: 24, right: 20, bottom: 58, left: 76 }
+  const chartWidth = 1200
+  const chartHeight = 270
+  const padding = { top: 25, right: 18, bottom: 44, left: 50 }
 
   function render(range: string) {
     const count = range === 'all' ? usage.daily.length : Number(range)
     const records = usage.daily.slice(-count)
-    const chartWidth = width - padding.left - padding.right
-    const chartHeight = height - padding.top - padding.bottom
-    const maxValue = Math.max(...records.map(item => item.totalTokens), 1)
-    const slot = chartWidth / Math.max(records.length, 1)
-    const barWidth = Math.min(44, slot * 0.58)
+    const innerWidth = chartWidth - padding.left - padding.right
+    const innerHeight = chartHeight - padding.top - padding.bottom
+    const highest = Math.max(...records.map(item => item.totalTokens), 1)
+    const scaleMax = Math.ceil(highest / 10_000_000) * 10_000_000
+    const slot = innerWidth / Math.max(records.length, 1)
+    const barWidth = Math.min(39, slot * 0.54)
+    const latestIndex = records.length - 1
 
-    const grid = Array.from({ length: 5 }, (_, index) => {
-      const ratio = index / 4
-      const y = padding.top + chartHeight * ratio
-      const value = maxValue * (1 - ratio)
+    const grid = Array.from({ length: 4 }, (_, index) => {
+      const ratio = index / 3
+      const y = padding.top + innerHeight * ratio
+      const value = scaleMax * (1 - ratio)
       return `
-        <line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" class="chart-grid" />
-        <text x="${padding.left - 14}" y="${y + 4}" text-anchor="end" class="chart-axis">${compact.format(value)}</text>
+        <line x1="${padding.left}" y1="${y}" x2="${chartWidth - padding.right}" y2="${y}" class="chart-grid" />
+        <text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" class="chart-axis">${value === 0 ? '0' : `${Math.round(value / 10000)}万`}</text>
       `
     }).join('')
 
     const bars = records.map((item, index) => {
       const x = padding.left + slot * index + (slot - barWidth) / 2
-      const outputHeight = Math.max((item.outputTokens / maxValue) * chartHeight, 2)
-      const freshHeight = (item.freshInputTokens / maxValue) * chartHeight
-      const cacheHeight = (item.cachedInputTokens / maxValue) * chartHeight
-      const baseY = padding.top + chartHeight
-      const freshY = baseY - outputHeight - freshHeight
-      const cacheY = freshY - cacheHeight
-      const label = item.date.slice(5).replace('-', '/')
+      const baseY = padding.top + innerHeight
+      const totalHeight = Math.max((item.totalTokens / scaleMax) * innerHeight, 4)
+      const outputHeight = Math.max((item.outputTokens / item.totalTokens) * totalHeight, 2)
+      const freshHeight = Math.max((item.freshInputTokens / item.totalTokens) * totalHeight, 2)
+      const cacheHeight = Math.max(totalHeight - outputHeight - freshHeight, 1)
+      const topY = baseY - totalHeight
+      const freshY = topY + cacheHeight
+      const outputY = freshY + freshHeight
+      const shortDate = item.date.slice(5)
+      const roundedWan = Math.round(item.totalTokens / 100) / 100
+      const label = `${roundedWan.toFixed(2).replace(/\.00$/, '')}万`
+      const latestGuide = index === latestIndex
+        ? `<line x1="${x + barWidth / 2}" y1="${Math.max(topY - 34, 4)}" x2="${x + barWidth / 2}" y2="${topY - 4}" class="chart-latest-guide" />`
+        : ''
 
       return `
         <g class="chart-day" data-index="${index}" tabindex="0" role="button" aria-label="${item.date}，${full.format(item.totalTokens)} Token">
-          <rect x="${x}" y="${cacheY}" width="${barWidth}" height="${cacheHeight}" rx="5" class="bar-cache" />
+          ${latestGuide}
+          <text x="${x + barWidth / 2}" y="${Math.max(topY - 9, 13)}" text-anchor="middle" class="chart-value">${label}</text>
+          <rect x="${x}" y="${topY}" width="${barWidth}" height="${cacheHeight}" rx="2" class="bar-cache" />
           <rect x="${x}" y="${freshY}" width="${barWidth}" height="${freshHeight}" class="bar-fresh" />
-          <rect x="${x}" y="${baseY - outputHeight}" width="${barWidth}" height="${outputHeight}" rx="2" class="bar-output" />
-          <rect x="${x - slot * 0.2}" y="${padding.top}" width="${barWidth + slot * 0.4}" height="${chartHeight}" class="bar-hit" />
-          <text x="${x + barWidth / 2}" y="${height - 25}" text-anchor="middle" class="chart-date">${label}</text>
+          <rect x="${x}" y="${outputY}" width="${barWidth}" height="${outputHeight}" class="bar-output" />
+          <rect x="${x - slot * 0.22}" y="${padding.top}" width="${barWidth + slot * 0.44}" height="${innerHeight}" class="bar-hit" />
+          <text x="${x + barWidth / 2}" y="${chartHeight - 14}" text-anchor="middle" class="chart-date">${shortDate}</text>
         </g>
       `
     }).join('')
@@ -260,25 +265,11 @@ function initUsagePage() {
       <title>每日 Token 使用量柱状图</title>
       <desc>按日期展示新输入、缓存输入与输出 Token。</desc>
       ${grid}
+      <line x1="${padding.left}" y1="${padding.top + innerHeight}" x2="${chartWidth - padding.right}" y2="${padding.top + innerHeight}" class="chart-baseline" />
       ${bars}
     `
 
-    detailTable.innerHTML = records
-      .slice(-8)
-      .reverse()
-      .map(item => `
-        <tr>
-          <td>${item.date}</td>
-          <td>${compact.format(item.totalTokens)}</td>
-          <td>${compact.format(item.freshInputTokens)}</td>
-          <td>${compact.format(item.cachedInputTokens)}</td>
-          <td>${compact.format(item.outputTokens)}</td>
-        </tr>
-      `)
-      .join('')
-
-    const dayGroups = Array.from(chartSvg.querySelectorAll<SVGGElement>('[data-index]'))
-    dayGroups.forEach((group) => {
+    Array.from(chartSvg.querySelectorAll<SVGGElement>('[data-index]')).forEach((group) => {
       const index = Number(group.dataset.index)
       const item = records[index]
       const showTooltip = (event: Event) => {
@@ -295,17 +286,13 @@ function initUsagePage() {
         const x = 'clientX' in pointer && pointer.clientX
           ? pointer.clientX - chartRect.left
           : chartRect.width / 2
-        chartTooltip.style.left = `${Math.min(Math.max(x, 90), chartRect.width - 90)}px`
+        chartTooltip.style.left = `${Math.min(Math.max(x, 88), chartRect.width - 88)}px`
       }
       group.addEventListener('pointerenter', showTooltip)
       group.addEventListener('pointermove', showTooltip)
       group.addEventListener('focus', showTooltip)
-      group.addEventListener('pointerleave', () => {
-        chartTooltip.hidden = true
-      })
-      group.addEventListener('blur', () => {
-        chartTooltip.hidden = true
-      })
+      group.addEventListener('pointerleave', () => chartTooltip.hidden = true)
+      group.addEventListener('blur', () => chartTooltip.hidden = true)
     })
   }
 
@@ -316,6 +303,7 @@ function initUsagePage() {
     })
   })
 
+  page.dataset.initialized = 'true'
   render('all')
 }
 
@@ -324,263 +312,322 @@ initUsagePage()
 </script>
 
 <style>
-  .usage-page {
-    --usage-ink: oklch(var(--un-preset-theme-colors-primary));
-    --usage-muted: oklch(var(--un-preset-theme-colors-secondary));
-    --usage-surface: var(--editorial-surface);
-    --usage-surface-strong: var(--editorial-surface-strong);
-    --usage-accent: var(--editorial-accent);
-    --usage-accent-strong: var(--editorial-accent-strong);
-    --usage-rule: var(--editorial-rule);
-    max-width: 90rem;
-    margin: 0 auto;
-    overflow: clip;
-    color: var(--usage-ink);
+  :global(html:has(.usage-observatory)) {
+    background: #071117;
+    overflow-y: auto;
+    scrollbar-gutter: auto;
   }
 
-  .usage-page :global(*) {
-    box-sizing: border-box;
-  }
-
-  .usage-hero {
-    padding: clamp(4.5rem, 9vw, 8rem) 0 clamp(4rem, 8vw, 7rem);
-    border-bottom: 1px solid var(--usage-rule);
-  }
-
-  .usage-kicker,
-  .usage-section-heading > div > p,
-  .usage-latest > p {
-    margin: 0 0 1.1rem;
-    color: var(--usage-accent-strong);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-  }
-
-  .usage-hero-grid {
-    display: grid;
-    gap: 3rem;
-  }
-
-  .usage-hero h1 {
-    max-width: 13ch;
+  :global(body:has(.usage-observatory)) {
     margin: 0;
-    font-size: clamp(2.45rem, 6vw, 4.25rem);
-    font-weight: 500;
-    line-height: 1.02;
-    letter-spacing: -0.055em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #071117;
   }
 
-  .usage-intro {
-    max-width: 38rem;
-    margin: 2rem 0 0;
-    color: var(--usage-muted);
-    font-size: clamp(0.98rem, 1.6vw, 1.15rem);
-    line-height: 1.85;
+  .usage-observatory {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: visible;
+    isolation: isolate;
+    background: #071117;
+    color: #f1ead8;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  .usage-live {
-    display: flex;
-    gap: 0.85rem;
-    align-self: end;
-    padding: 1rem 1.1rem;
-    border: 1px solid var(--usage-rule);
-    border-radius: 0.9rem;
-    background: color-mix(in oklch, var(--usage-surface) 72%, transparent);
+  .usage-observatory-video,
+  .usage-observatory-scrim {
+    position: fixed;
+    z-index: -3;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  .usage-live-dot {
-    width: 0.55rem;
-    height: 0.55rem;
-    margin-top: 0.22rem;
-    border-radius: 50%;
-    background: var(--usage-accent-strong);
-    box-shadow: 0 0 1rem color-mix(in oklch, var(--usage-accent) 72%, transparent);
+  .usage-observatory-video {
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(0.82) contrast(1.08) brightness(0.82);
   }
 
-  .usage-live strong {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-  }
-
-  .usage-live p {
-    margin: 0.35rem 0 0;
-    color: var(--usage-muted);
-    font-size: 0.7rem;
-  }
-
-  .usage-summary {
-    display: grid;
-    gap: 0.75rem;
-    padding: clamp(3.5rem, 7vw, 6rem) 0;
-    border-bottom: 1px solid var(--usage-rule);
-  }
-
-  .usage-stat {
-    min-height: 11rem;
-    padding: 1.25rem;
-    border: 1px solid var(--usage-rule);
-    border-radius: 1rem;
-    background: color-mix(in oklch, var(--usage-surface) 55%, transparent);
-  }
-
-  .usage-stat--primary {
+  .usage-observatory-scrim {
+    z-index: -2;
     background:
-      radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--usage-accent) 24%, transparent), transparent 44%),
-      var(--usage-surface-strong);
+      linear-gradient(180deg, rgba(3, 11, 16, 0.64) 0%, rgba(3, 10, 14, 0.32) 42%, rgba(3, 10, 14, 0.72) 100%),
+      linear-gradient(90deg, rgba(3, 10, 14, 0.4) 0%, rgba(3, 10, 14, 0.08) 56%, rgba(3, 10, 14, 0.2) 100%);
   }
 
-  .usage-stat > span {
-    color: var(--usage-accent-strong);
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
+  .usage-observatory-content {
+    position: relative;
+    width: min(100% - 3rem, 85rem);
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
   }
 
-  .usage-stat strong {
-    display: block;
-    margin-top: 2.1rem;
-    font-size: clamp(2rem, 4vw, 3.25rem);
-    font-variant-numeric: tabular-nums;
-    font-weight: 400;
-    letter-spacing: -0.045em;
+  .usage-observatory-header {
+    position: absolute;
+  }
+
+  .usage-observatory-main {
+    padding: 6.9rem 0 1.2rem;
+  }
+
+  .usage-intro-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .usage-intro h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.7rem, 2.25vw, 2.15rem);
+    font-weight: 500;
     line-height: 1;
+    letter-spacing: -0.045em;
   }
 
-  .usage-stat p {
-    margin: 0.7rem 0 0;
-    color: var(--usage-muted);
-    font-size: 0.72rem;
+  .usage-intro p,
+  .usage-update {
+    margin: 0.65rem 0 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.84rem;
+    line-height: 1.45;
+    letter-spacing: 0.015em;
   }
 
-  .usage-chart-section {
-    padding: clamp(4.75rem, 9vw, 8rem) 0;
-    border-bottom: 1px solid var(--usage-rule);
+  .usage-update {
+    margin-top: 0.45rem;
+    text-align: right;
+    white-space: nowrap;
   }
 
-  .usage-section-heading {
+  .usage-update span {
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .usage-total {
+    margin-top: 2.55rem;
+  }
+
+  .usage-total > span {
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .usage-total strong {
+    display: block;
+    margin-top: 0.6rem;
+    color: #f4ead4;
+    font-size: clamp(1.65rem, 2.6vw, 2.45rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.07em;
+    text-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .usage-total p {
+    margin: 0.85rem 0 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
+  }
+
+  .usage-chart-panel {
+    margin-top: 3rem;
+    padding: 1.7rem 1.85rem 0.85rem;
+    border: 1px solid rgba(241, 234, 216, 0.56);
+    border-radius: 1rem;
+    background: rgba(4, 13, 18, 0.48);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .usage-chart-head {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: end;
+    gap: 2rem;
+    align-items: start;
     justify-content: space-between;
   }
 
-  .usage-section-heading h2 {
+  .usage-chart-head h2 {
     margin: 0;
-    font-size: clamp(1.8rem, 3.8vw, 3.4rem);
+    color: #fff;
+    font-size: 1.35rem;
     font-weight: 500;
     line-height: 1.1;
-    letter-spacing: -0.045em;
-  }
-
-  .usage-ranges {
-    display: inline-flex;
-    gap: 0.3rem;
-    padding: 0.3rem;
-    border: 1px solid var(--usage-rule);
-    border-radius: 999px;
-    background: color-mix(in oklch, var(--usage-surface) 70%, transparent);
-  }
-
-  .usage-ranges button {
-    min-width: 3.4rem;
-    padding: 0.55rem 0.8rem;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--usage-muted);
-    cursor: pointer;
-    font: inherit;
-    font-size: 0.7rem;
-    transition: color 180ms ease, background-color 180ms ease;
-  }
-
-  .usage-ranges button:hover,
-  .usage-ranges button:focus-visible,
-  .usage-ranges button.is-active {
-    background: var(--usage-surface-strong);
-    color: var(--usage-ink);
-  }
-
-  .usage-ranges button:focus-visible {
-    outline: 2px solid var(--usage-accent);
-    outline-offset: 0.15rem;
+    letter-spacing: -0.03em;
   }
 
   .usage-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.2rem;
-    margin-top: 2.4rem;
-    color: var(--usage-muted);
-    font-size: 0.7rem;
+    gap: 1.35rem;
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.74rem;
   }
 
   .usage-legend span {
     display: inline-flex;
-    gap: 0.45rem;
+    gap: 0.5rem;
     align-items: center;
   }
 
   .usage-legend i {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 0.15rem;
+    display: block;
+    width: 1.2rem;
+    height: 2px;
+    background: #f1ead8;
   }
 
-  .legend-fresh {
-    background: oklch(67% 0.065 350);
+  .usage-legend .legend-cache {
+    height: 1px;
+    background: repeating-linear-gradient(90deg, rgba(241, 234, 216, 0.78) 0 2px, transparent 2px 4px);
   }
 
-  .legend-cache {
-    background: oklch(43% 0.045 335);
+  .usage-legend .legend-output {
+    height: 1px;
+    background: rgba(241, 234, 216, 0.42);
   }
 
-  .legend-output {
-    background: oklch(84% 0.035 350);
+  .usage-chart-controls {
+    display: grid;
+    justify-items: end;
+  }
+
+  .usage-ranges {
+    display: flex;
+    gap: 1.7rem;
+  }
+
+  .usage-ranges button {
+    position: relative;
+    padding: 0.15rem 0 0.65rem;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.62);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    transition: color 180ms ease;
+  }
+
+  .usage-ranges button::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    opacity: 0;
+    transform: scaleX(0.45);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .usage-ranges button:hover,
+  .usage-ranges button:focus-visible,
+  .usage-ranges button.is-active {
+    color: #fff;
+  }
+
+  .usage-ranges button:hover::after,
+  .usage-ranges button:focus-visible::after,
+  .usage-ranges button.is-active::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .usage-ranges button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 0.25rem;
+  }
+
+  .usage-latest-callout {
+    margin: 1.25rem 0 0;
+    padding: 0.48rem 0.7rem;
+    border: 1px solid rgba(241, 234, 216, 0.36);
+    border-radius: 0.45rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .usage-latest-callout b {
+    margin: 0 0.25rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+  }
+
+  .usage-latest-callout strong {
+    color: #f1ead8;
+    font-weight: 500;
+  }
+
+  .usage-chart-scroll {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.26) transparent;
   }
 
   .usage-chart {
     position: relative;
-    margin-top: 1rem;
-    overflow: hidden;
-    border: 1px solid var(--usage-rule);
-    border-radius: 1.15rem;
-    background:
-      radial-gradient(circle at 82% 10%, color-mix(in oklch, var(--usage-accent) 12%, transparent), transparent 36%),
-      color-mix(in oklch, var(--usage-surface) 62%, transparent);
+    min-width: 48rem;
   }
 
   .usage-chart svg {
     display: block;
     width: 100%;
-    height: auto;
-    min-height: 20rem;
+    height: 18.8rem;
   }
 
   .usage-chart :global(.chart-grid) {
-    stroke: var(--usage-rule);
+    stroke: rgba(241, 234, 216, 0.16);
+    stroke-dasharray: 2 3;
+    stroke-width: 1;
+  }
+
+  .usage-chart :global(.chart-baseline) {
+    stroke: rgba(241, 234, 216, 0.55);
     stroke-width: 1;
   }
 
   .usage-chart :global(.chart-axis),
-  .usage-chart :global(.chart-date) {
-    fill: var(--usage-muted);
-    font-size: 12px;
-    opacity: 0.76;
+  .usage-chart :global(.chart-date),
+  .usage-chart :global(.chart-value) {
+    fill: rgba(255, 255, 255, 0.7);
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .usage-chart :global(.chart-value) {
+    fill: rgba(255, 255, 255, 0.9);
+    font-size: 10px;
   }
 
   .usage-chart :global(.bar-cache) {
-    fill: oklch(43% 0.045 335);
+    fill: rgba(234, 221, 190, 0.76);
+    stroke: rgba(255, 250, 236, 0.72);
+    stroke-width: 1;
   }
 
   .usage-chart :global(.bar-fresh) {
-    fill: oklch(67% 0.065 350);
+    fill: rgba(255, 247, 224, 0.94);
   }
 
   .usage-chart :global(.bar-output) {
-    fill: oklch(84% 0.035 350);
+    fill: rgba(30, 31, 29, 0.76);
   }
 
   .usage-chart :global(.bar-hit) {
@@ -594,195 +641,275 @@ initUsagePage()
 
   .usage-chart :global(.chart-day:hover .bar-cache),
   .usage-chart :global(.chart-day:focus .bar-cache) {
-    fill: oklch(50% 0.055 335);
+    fill: rgba(255, 239, 201, 0.92);
+  }
+
+  .usage-chart :global(.chart-latest-guide) {
+    stroke: rgba(241, 234, 216, 0.72);
+    stroke-dasharray: 2 2;
+    stroke-width: 1;
   }
 
   .usage-tooltip {
     position: absolute;
-    z-index: 3;
-    top: 1.1rem;
+    z-index: 4;
+    top: 0.2rem;
     display: grid;
-    min-width: 10rem;
-    gap: 0.25rem;
-    padding: 0.8rem 0.9rem;
-    border: 1px solid var(--usage-accent);
-    border-radius: 0.75rem;
-    background: color-mix(in oklch, var(--usage-surface-strong) 96%, transparent);
-    box-shadow: 0 1rem 2rem oklch(12% 0.02 335 / 0.18);
-    color: var(--usage-muted);
-    font-size: 0.68rem;
+    min-width: 9.5rem;
+    gap: 0.2rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid rgba(241, 234, 216, 0.5);
+    border-radius: 0.5rem;
+    background: rgba(4, 12, 17, 0.94);
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.66rem;
     pointer-events: none;
     transform: translateX(-50%);
   }
 
+  .usage-tooltip[hidden] {
+    display: none;
+  }
+
   .usage-tooltip strong {
     margin-bottom: 0.15rem;
-    color: var(--usage-ink);
+    color: #fff;
     font-weight: 500;
   }
 
-  .usage-detail-grid {
+  .usage-summary {
     display: grid;
-    gap: 1rem;
-    padding: clamp(4rem, 8vw, 7rem) 0;
-    border-bottom: 1px solid var(--usage-rule);
+    grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(11rem, 0.9fr);
+    margin-top: 1.65rem;
+    border-bottom: 1px solid rgba(241, 234, 216, 0.18);
   }
 
-  .usage-latest {
-    display: grid;
-    min-height: 13rem;
-    align-content: space-between;
-    padding: 1.35rem;
-    border: 1px solid var(--usage-rule);
-    border-radius: 1rem;
-    background: var(--usage-surface);
+  .usage-stat,
+  .usage-activity {
+    min-width: 0;
+    min-height: 4.9rem;
+    padding: 0.15rem 1.8rem 0.9rem;
+    border-right: 1px solid rgba(241, 234, 216, 0.38);
   }
 
-  .usage-latest strong {
-    font-size: clamp(1.9rem, 4vw, 3rem);
+  .usage-stat:first-child {
+    padding-left: 0;
+  }
+
+  .usage-stat > span {
+    display: block;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.76rem;
+  }
+
+  .usage-stat strong {
+    display: block;
+    margin-top: 0.48rem;
+    color: #f1ead8;
+    font-size: clamp(1.65rem, 2.6vw, 2.45rem);
     font-variant-numeric: tabular-nums;
     font-weight: 400;
-    letter-spacing: -0.04em;
+    line-height: 1;
+    letter-spacing: -0.045em;
   }
 
-  .usage-latest span {
-    color: var(--usage-muted);
-    font-size: 0.78rem;
+  .usage-activity {
+    display: grid;
+    gap: 0.7rem;
+    align-content: center;
+    padding-right: 0;
+    border-right: 0;
   }
 
-  .usage-table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--usage-rule);
-    border-radius: 1rem;
+  .usage-activity p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.77rem;
   }
 
-  .usage-table-wrap table {
-    width: 100%;
-    border-collapse: collapse;
+  .usage-activity strong {
+    color: #f1ead8;
+    font-size: 1rem;
     font-variant-numeric: tabular-nums;
-  }
-
-  .usage-table-wrap caption {
-    padding: 1rem 1.15rem;
-    border-bottom: 1px solid var(--usage-rule);
-    color: var(--usage-muted);
-    font-size: 0.72rem;
-    text-align: left;
-  }
-
-  .usage-table-wrap th,
-  .usage-table-wrap td {
-    padding: 0.9rem 1rem;
-    border-bottom: 1px solid var(--usage-rule);
-    white-space: nowrap;
-    font-size: 0.72rem;
-    text-align: right;
-  }
-
-  .usage-table-wrap th {
-    color: var(--usage-accent-strong);
     font-weight: 500;
-  }
-
-  .usage-table-wrap th:first-child,
-  .usage-table-wrap td:first-child {
-    text-align: left;
-  }
-
-  .usage-table-wrap td {
-    color: var(--usage-muted);
-  }
-
-  .usage-table-wrap tbody tr:last-child td {
-    border-bottom: 0;
   }
 
   .usage-note {
-    display: grid;
-    gap: 1rem;
-    padding: 2.5rem 0 3rem;
-  }
-
-  .usage-note > span {
-    color: var(--usage-accent-strong);
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    padding-top: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
     font-size: 0.68rem;
-    letter-spacing: 0.15em;
   }
 
   .usage-note p {
-    max-width: 52rem;
     margin: 0;
-    color: var(--usage-muted);
-    font-size: 0.72rem;
-    line-height: 1.8;
   }
 
   .usage-note code {
-    color: var(--usage-ink);
+    color: rgba(255, 255, 255, 0.65);
     font-family: inherit;
   }
 
-  @media (min-width: 768px) {
-    .usage-hero-grid {
-      grid-template-columns: minmax(24rem, 1fr) auto;
-      align-items: end;
+  @media (max-width: 900px) {
+    .usage-observatory-main {
+      padding-top: 8rem;
     }
 
     .usage-summary {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem 0;
     }
 
-    .usage-stat {
-      min-height: 13rem;
-      padding: 1.5rem;
+    .usage-stat:nth-child(2) {
+      border-right: 0;
     }
 
-    .usage-detail-grid {
-      grid-template-columns: minmax(15rem, 0.65fr) minmax(30rem, 1.35fr);
+    .usage-stat:nth-child(3) {
+      padding-left: 0;
+    }
+
+    .usage-activity {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 0.85rem 0;
+      border-top: 1px solid rgba(241, 234, 216, 0.26);
     }
   }
 
-  @media (min-width: 1100px) {
-    .usage-page {
-      padding-right: clamp(2rem, 4vw, 5rem);
-      padding-left: clamp(2rem, 4vw, 5rem);
+  @media (max-width: 767px) {
+    .usage-observatory-content {
+      width: calc(100% - 2rem);
     }
-  }
 
-  @media (max-width: 600px) {
-    .usage-hero h1 {
-      max-width: 12ch;
+    .usage-observatory-main {
+      padding-top: 9.7rem;
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+
+    .usage-intro-row {
+      display: block;
+    }
+
+    .usage-intro h1 {
+      font-size: 1.75rem;
+    }
+
+    .usage-intro p {
+      max-width: 18rem;
+      font-size: 0.76rem;
+    }
+
+    .usage-update {
+      margin-top: 1rem;
+      font-size: 0.68rem;
+      text-align: left;
+    }
+
+    .usage-update span {
+      font-size: 0.68rem;
+    }
+
+    .usage-total {
+      margin-top: 2rem;
+    }
+
+    .usage-total > span {
+      font-size: 0.85rem;
+    }
+
+    .usage-total strong {
+      margin-top: 0.5rem;
+    }
+
+    .usage-total p {
+      margin-top: 0.7rem;
+      font-size: 0.72rem;
+    }
+
+    .usage-chart-panel {
+      margin-top: 1.8rem;
+      padding: 1.15rem 1rem 0.7rem;
+      border-radius: 0.72rem;
+    }
+
+    .usage-chart-head {
+      display: block;
+    }
+
+    .usage-chart-head h2 {
+      font-size: 1.15rem;
+    }
+
+    .usage-legend {
+      gap: 0.9rem;
+      margin-top: 0.8rem;
+      font-size: 0.65rem;
+    }
+
+    .usage-chart-controls {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      margin-top: 1rem;
     }
 
     .usage-ranges {
-      width: 100%;
+      justify-self: start;
+      gap: 1.2rem;
     }
 
     .usage-ranges button {
-      flex: 1;
+      font-size: 0.72rem;
+    }
+
+    .usage-latest-callout {
+      margin: 0;
+      font-size: 0.62rem;
     }
 
     .usage-chart {
-      margin-right: -0.5rem;
-      margin-left: -0.5rem;
+      min-width: 45rem;
     }
 
     .usage-chart svg {
-      min-width: 44rem;
+      height: 15rem;
     }
 
-    .usage-chart {
-      overflow-x: auto;
+    .usage-summary {
+      margin-top: 1.4rem;
     }
 
-    .usage-tooltip {
-      position: sticky;
-      left: 50%;
+    .usage-stat,
+    .usage-activity {
+      min-height: 4.2rem;
+      padding-right: 1rem;
+      padding-left: 1rem;
+    }
+
+    .usage-stat:first-child,
+    .usage-stat:nth-child(3) {
+      padding-left: 0;
+    }
+
+    .usage-stat strong {
+      font-size: clamp(1.55rem, 8vw, 2rem);
+    }
+
+    .usage-activity p {
+      font-size: 0.68rem;
+    }
+
+    .usage-note {
+      align-items: flex-start;
+      font-size: 0.62rem;
+      line-height: 1.5;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .usage-ranges button {
+    .usage-ranges button,
+    .usage-ranges button::after {
       transition: none;
     }
   }

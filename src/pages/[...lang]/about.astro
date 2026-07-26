@@ -1,8 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content'
-import { allLocales } from '@/config'
-import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
+import { getPageInfo } from '@/utils/page'
+import '@/styles/about-cinematic.css'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -10,19 +12,109 @@ export async function getStaticPaths() {
   }))
 }
 
-const currentLang = getLangFromLocale(Astro.currentLocale)
-// Get about page content with different language
-const allAboutEntries = await getCollection('about')
-const aboutEntry = allAboutEntries.find(entry => entry.data.lang === currentLang)
-  ?? allAboutEntries.find(entry => entry.data.lang === '')
-const { Content } = aboutEntry ? await render(aboutEntry) : { Content: null }
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
+
+const writingThemes = [
+  {
+    icon: 'ph-code',
+    title: '技术',
+    description: '开发实践、工具探索与项目复盘',
+  },
+  {
+    icon: 'ph-book-open-text',
+    title: '阅读',
+    description: '书籍摘录、观点整理与延伸思考',
+  },
+  {
+    icon: 'ph-lightbulb-filament',
+    title: '思考',
+    description: '关于工作、成长与选择的片段',
+  },
+  {
+    icon: 'ph-leaf',
+    title: '生活',
+    description: '日常观察、经历与值得记住的时刻',
+  },
+]
 ---
 
-<Layout>
-  <!-- Decorative Line -->
-  <div class="uno-decorative-line" />
-  <!-- About Page Content -->
-  <div class="heti">
-    {Content && <Content />}
-  </div>
+<Layout
+  postTitle="关于"
+  postDescription="关于 yichu，以及这个用来记录技术、阅读、思考与生活的个人博客。"
+  immersive
+>
+  <article class="about-cinematic" aria-labelledby="about-title">
+    <video
+      class="about-cinematic-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="about-cinematic-scrim" aria-hidden="true"></div>
+
+    <div class="about-cinematic-content">
+      <header class="wandor-hero-header about-cinematic-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar variant="overlay" />
+        </div>
+      </header>
+
+      <main class="about-cinematic-main">
+        <section class="about-cinematic-hero" aria-labelledby="about-title">
+          <p class="about-cinematic-kicker">ABOUT THIS PLACE</p>
+          <h1 id="about-title">关于</h1>
+          <span class="about-cinematic-title-rule" aria-hidden="true"></span>
+
+          <div class="about-cinematic-intro">
+            <p class="about-cinematic-greeting">你好，我是 yichu。</p>
+            <p>这里是我的个人博客，用来记录技术实践、阅读笔记、日常思考，以及那些值得反复回看的片段。</p>
+            <p>我希望它保持简单、安静、可长期维护。所有文章都以 Markdown 保存在本地，并通过 GitHub Pages 发布。</p>
+          </div>
+        </section>
+
+        <section class="about-cinematic-details" aria-label="关于这个博客">
+          <div class="about-cinematic-story">
+            <p class="about-section-number">01</p>
+            <h2>关于这个博客</h2>
+            <div class="about-story-copy">
+              <p>它不是一份追逐更新频率的刊物，也不打算把每个答案都写成结论。</p>
+              <p>更像是一处安静的存档：把一路遇见的问题、读过的句子和当下的判断认真放下来，留给未来重新理解。</p>
+              <p>愿每一篇文章，都能在时间里留下一个清晰的坐标。</p>
+            </div>
+          </div>
+
+          <div class="about-cinematic-themes">
+            <p class="about-section-number">02</p>
+            <h2>我写些什么</h2>
+
+            <ol class="about-theme-list">
+              {writingThemes.map(theme => (
+                <li class="about-theme-item">
+                  <span class="about-theme-icon" aria-hidden="true">
+                    <i class:list={['ph', theme.icon]}></i>
+                  </span>
+                  <span class="about-theme-copy">
+                    <strong>{theme.title}</strong>
+                    <span>{theme.description}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      </main>
+
+      <footer class="about-cinematic-footer">
+        <nav aria-label="更多链接">
+          <a href={getLocalizedPath('/atom.xml')}>RSS</a>
+          <a href="https://github.com/d22818977" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+        <p>© 2026 yichu</p>
+      </footer>
+    </div>
+  </article>
 </Layout>

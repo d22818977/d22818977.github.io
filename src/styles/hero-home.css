@@ -1,0 +1,332 @@
+.hero-home-body {
+  margin: 0;
+  overflow: hidden;
+  background: #08151d;
+}
+
+.site-shell--hero-home,
+.hero-home-main {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+}
+
+.wandor-hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background: #0a1b23;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.wandor-hero-video,
+.wandor-hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wandor-hero-video {
+  z-index: -3;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.wandor-hero-scrim {
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(3, 12, 18, 0.62) 0, rgba(3, 12, 18, 0.16) 34rem, transparent 42rem),
+    linear-gradient(180deg, rgba(3, 12, 18, 0.02) 38%, rgba(3, 12, 18, 0.42) 100%),
+    linear-gradient(90deg, rgba(3, 12, 18, 0.08), transparent 42%, rgba(3, 12, 18, 0.08));
+}
+
+.wandor-hero-content {
+  position: relative;
+  width: min(100% - 3rem, 85rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+}
+
+.wandor-hero-header {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding-top: 2rem;
+}
+
+.wandor-wordmark {
+  grid-column: 1;
+  justify-self: start;
+  color: #fff;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.18);
+  transition: opacity 180ms ease;
+}
+
+.wandor-wordmark:hover,
+.wandor-wordmark:focus-visible {
+  opacity: 0.76;
+}
+
+.wandor-wordmark:focus-visible,
+.wandor-nav-shell .home-nav-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 0.45rem;
+}
+
+.wandor-nav-shell {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.wandor-nav-shell .home-navbar {
+  position: static;
+  width: auto;
+  margin: 0;
+  color: #fff;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wandor-nav-shell .home-navbar ul {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wandor-nav-shell .home-navbar li {
+  margin: 0;
+  padding: 0;
+}
+
+.wandor-nav-shell .home-nav-link {
+  position: relative;
+  display: inline-flex;
+  padding: 0.45rem 0;
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.wandor-nav-shell .home-nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background: currentColor;
+  content: '';
+  opacity: 0;
+  transform: scaleX(0.4);
+  transform-origin: center;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.wandor-nav-shell .home-nav-link:hover,
+.wandor-nav-shell .home-nav-link:focus-visible,
+.wandor-nav-shell .home-nav-link--active {
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.wandor-nav-shell .home-nav-link:hover::after,
+.wandor-nav-shell .home-nav-link:focus-visible::after,
+.wandor-nav-shell .home-nav-link--active::after {
+  opacity: 0.9;
+  transform: scaleX(1);
+}
+
+.wandor-hero-body {
+  --wandor-focus-width: min(46rem, 100%);
+
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7.5rem 0 2.5rem;
+  text-align: center;
+}
+
+.wandor-hero-copy {
+  position: relative;
+  top: -1.5rem;
+  display: grid;
+  width: var(--wandor-focus-width);
+  max-width: none;
+  gap: 1.35rem;
+  justify-items: center;
+  text-wrap: balance;
+  animation: wandor-rise 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.wandor-hero-copy h1 {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  color: #fff;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(2rem, 3.9vw, 3.2rem);
+  font-weight: 500;
+  line-height: 0.99;
+  letter-spacing: -0.055em;
+  text-shadow: 0 5px 34px rgba(0, 0, 0, 0.23);
+}
+
+.wandor-hero-copy p {
+  max-width: 42rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(0.95rem, 1.4vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0.015em;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wandor-hero-body .countdown-shell--glass {
+  width: var(--wandor-focus-width);
+  margin-top: calc(0.75rem + 10px);
+  animation: wandor-rise 800ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes wandor-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-home-body {
+    overflow: auto;
+  }
+
+  .wandor-hero-content {
+    width: calc(100% - 3rem);
+  }
+
+  .wandor-hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+  }
+
+  .wandor-wordmark {
+    align-self: flex-start;
+    font-size: 2rem;
+  }
+
+  .wandor-nav-shell {
+    width: 100%;
+  }
+
+  .wandor-nav-shell .home-navbar {
+    width: 100%;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  .wandor-nav-shell .home-navbar ul {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.65rem;
+  }
+
+  .wandor-nav-shell .home-nav-link {
+    padding: 0.35rem 0;
+  }
+
+  .wandor-hero-body {
+    --wandor-focus-width: 100%;
+
+    padding-top: 9.5rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .wandor-hero-copy {
+    top: -1rem;
+    gap: 1rem;
+  }
+
+  .wandor-hero-copy h1 {
+    max-width: none;
+    font-size: clamp(1.8rem, 8vw, 2.35rem);
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+  }
+
+  .wandor-hero-copy p {
+    max-width: 19rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .wandor-hero-body .countdown-shell--glass {
+    margin-top: calc(0.5rem + 10px);
+  }
+}
+
+@media (max-height: 720px) and (min-width: 768px) {
+  .wandor-hero-body {
+    justify-content: flex-end;
+    padding-top: 7rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .wandor-hero-copy {
+    gap: 0.8rem;
+  }
+
+  .wandor-hero-body .countdown-shell--glass {
+    margin-top: calc(0.75rem + 10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wandor-hero-copy,
+  .wandor-hero-body .countdown-shell--glass {
+    animation: none;
+  }
+
+  .wandor-wordmark,
+  .wandor-nav-shell .home-nav-link,
+  .wandor-nav-shell .home-nav-link::after {
+    transition: none;
+  }
+}

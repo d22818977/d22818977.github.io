@@ -90,6 +90,7 @@ export default defineConfig({
     },
   },
   vite: {
+    cacheDir: '.vite-cache',
     plugins: [
       {
         name: 'prefix-font-urls-with-base',

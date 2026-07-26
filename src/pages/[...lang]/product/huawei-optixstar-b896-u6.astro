@@ -1,0 +1,340 @@
+---
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+import { getPageInfo } from '@/utils/page'
+import '@/styles/product-detail.css'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const pageTitle = 'Huawei OptiXstar B896-U6'
+const pageDescription = '融合 FTTO 全光接入、Wi-Fi 7 无线覆盖与 NVR 视频存储的一体化网关。'
+
+const capabilities = [
+  {
+    index: '01',
+    label: '全光接入',
+    title: '光纤延伸到业务现场',
+    copy: '以 FTTO 架构承载园区连接，减少中间有源节点和冗余铜缆，让部署更清爽，也为后续扩展预留更长生命周期。',
+    image: '/images/product/feature-fiber.webp',
+    imageAlt: '光纤连接企业网络设备的特写',
+  },
+  {
+    index: '02',
+    label: '无线覆盖',
+    title: 'Wi-Fi 7 融入一体化网关',
+    copy: '无线接入能力直接融入融合网关，减少额外设备堆叠，为高密终端、办公协作和移动业务提供统一入口。',
+    image: '/images/product/feature-wifi.webp',
+    imageAlt: '具备连续无线覆盖的现代办公空间',
+  },
+  {
+    index: '03',
+    label: '视频存储',
+    title: 'NVR 与本地存储直接融合',
+    copy: '视频录像、硬盘存储与网络接入共享同一设备形态，简化摄像机回传、录像留存与日常维护之间的链路。',
+    image: '/images/product/feature-video.webp',
+    imageAlt: '视频安防监控摄像机与监控画面',
+  },
+  {
+    index: '04',
+    label: '弹性容量',
+    title: '4T 与 8T 两种存储配置',
+    copy: '根据门店、办公室与小型园区的视频留存需求选择对应容量，让部署规模更贴合实际，避免过度配置。',
+    image: '/images/product/feature-storage.webp',
+    imageAlt: '企业本地存储硬盘与设备仓',
+  },
+]
+
+const specs = [
+  ['产品型号', 'Huawei OptiXstar B896-U6', 'Wi-Fi 标准', 'Wi-Fi 7'],
+  ['接入方式', 'FTTO 全光接入', '视频能力', '融合 NVR'],
+  ['存储方案', '内置本地存储', '存储容量', '4T / 8T 可选'],
+  ['网络能力', '有线与无线统一承载', '适用场景', '门店、办公、小型园区'],
+]
+---
+
+<Layout postTitle={pageTitle} postDescription={pageDescription} immersive>
+  <article class="product-dossier" data-product-dossier>
+    <video
+      class="product-dossier-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+    ></video>
+    <div class="product-dossier-scrim" aria-hidden="true"></div>
+
+    <div class="product-dossier-content">
+      <header class="wandor-hero-header product-dossier-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar variant="overlay" />
+        </div>
+      </header>
+
+      <nav class="product-chapters" aria-label="产品详情章节">
+        <ol>
+          <li><a class="is-active" href="#overview" data-chapter-link><span>01</span><small>概览</small></a></li>
+          <li><a href="#integration" data-chapter-link><span>02</span><small>融合</small></a></li>
+          <li><a href="#capabilities" data-chapter-link><span>03</span><small>四项能力</small></a></li>
+          <li><a href="#signal-path" data-chapter-link><span>04</span><small>路径</small></a></li>
+          <li><a href="#specifications" data-chapter-link><span>05</span><small>参数</small></a></li>
+        </ol>
+      </nav>
+
+      <main class="product-dossier-main">
+        <section id="overview" class="product-overview" data-product-section>
+          <div class="product-overview-copy" data-reveal>
+            <p class="product-file-label">产品档案 01</p>
+            <p class="product-kicker">FIBER × VIDEO × WI-FI 7</p>
+            <h1>Huawei OptiXstar B896-U6</h1>
+            <p class="product-lead">把全光网络、无线覆盖与视频存储，收进同一台融合网关。</p>
+
+            <dl class="product-key-facts" aria-label="产品核心能力">
+              <div><dt>FTTO + NVR</dt><dd>网络与视频融合</dd></div>
+              <div><dt>Wi-Fi 7</dt><dd>新一代无线覆盖</dd></div>
+              <div><dt>4T / 8T</dt><dd>本地存储可选</dd></div>
+            </dl>
+          </div>
+
+          <figure class="product-overview-visual" data-reveal data-product-stage>
+            <img
+              src="/images/product/huawei-optixstar-b896-u6.webp"
+              width="2357"
+              height="2054"
+              alt="Huawei OptiXstar B896-U6 视频融合网关"
+              loading="eager"
+              fetchpriority="high"
+              data-product-image
+            />
+          </figure>
+        </section>
+
+        <section id="integration" class="dossier-section integration-section" data-product-section>
+          <header class="dossier-section-heading" data-reveal>
+            <p>02 / WHY B896-U6</p>
+            <h2>让网络与安防，<br />不再各自为战。</h2>
+          </header>
+
+          <div class="integration-layout">
+            <div class="integration-copy" data-reveal>
+              <p>过去，网络与安防各自成链。光网络、无线接入、录像与存储分散部署，布线复杂，入口也彼此割裂。</p>
+              <p>B896-U6 将 FTTO 接入、Wi-Fi 7 覆盖与 NVR 存储融合到一台设备中，让架构更短，管理更集中。</p>
+            </div>
+
+            <div class="deployment-compare" aria-label="传统部署与融合部署对比" data-reveal>
+              <div class="deployment-side deployment-side--before">
+                <p>传统方案</p>
+                <strong>4</strong>
+                <span>光猫 / 无线 AP / NVR / 硬盘存储</span>
+              </div>
+              <div class="deployment-connector" aria-hidden="true">→</div>
+              <div class="deployment-side deployment-side--after">
+                <p>B896-U6</p>
+                <strong>1</strong>
+                <span>一台设备 · 一套架构 · 集中管理</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="capabilities" class="dossier-section capabilities-section" data-product-section>
+          <header class="dossier-section-heading" data-reveal>
+            <p>03 / FOUR ROLES</p>
+            <h2>一台设备，四个角色。</h2>
+          </header>
+
+          <div class="capability-explorer" data-reveal>
+            <div class="capability-tabs" role="tablist" aria-label="产品核心能力">
+              {capabilities.map((item, index) => (
+                <button
+                  class:list={['capability-tab', index === 0 ? 'is-active' : '']}
+                  type="button"
+                  role="tab"
+                  aria-selected={index === 0 ? 'true' : 'false'}
+                  aria-controls="capability-panel"
+                  data-capability-tab
+                  data-index={item.index}
+                  data-label={item.label}
+                  data-title={item.title}
+                  data-copy={item.copy}
+                  data-image={item.image}
+                  data-image-alt={item.imageAlt}
+                >
+                  <span>{item.index}</span>
+                  <strong>{item.label}</strong>
+                  <small>{index === 0 ? '已展开' : '查看'}</small>
+                </button>
+              ))}
+            </div>
+
+            <div id="capability-panel" class="capability-panel" role="tabpanel" aria-live="polite">
+              <div class="capability-media">
+                <img
+                  src={capabilities[0].image}
+                  width="1600"
+                  height="900"
+                  alt={capabilities[0].imageAlt}
+                  loading="lazy"
+                  data-capability-image
+                />
+              </div>
+              <div class="capability-copy">
+                <p data-capability-index>01 / 04 · 全光接入</p>
+                <h3 data-capability-title>光纤延伸到业务现场</h3>
+                <p data-capability-copy>{capabilities[0].copy}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="signal-path" class="dossier-section signal-section" data-product-section>
+          <header class="dossier-section-heading" data-reveal>
+            <p>04 / SHORTER PATH</p>
+            <h2>从光纤到画面，一条更短的路径。</h2>
+          </header>
+
+          <ol class="signal-path" data-reveal>
+            <li><span>01</span><strong>全光接入</strong><small>FTTO 光纤直达</small></li>
+            <li><span>02</span><strong>融合网关</strong><small>B896-U6 集中承载</small></li>
+            <li><span>03</span><strong>视频存储</strong><small>NVR 本地留存</small></li>
+            <li><span>04</span><strong>画面访问</strong><small>随时查看现场</small></li>
+          </ol>
+        </section>
+
+        <section id="specifications" class="dossier-section specs-section" data-product-section>
+          <header class="dossier-section-heading" data-reveal>
+            <p>05 / SPECIFICATIONS</p>
+            <h2>关键参数</h2>
+          </header>
+
+          <div class="spec-table-wrap" data-reveal>
+            <table class="spec-table">
+              <tbody>
+                {specs.map(row => (
+                  <tr>
+                    <th scope="row">{row[0]}</th>
+                    <td>{row[1]}</td>
+                    <th scope="row">{row[2]}</th>
+                    <td>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p class="product-note">产品能力基于公开资料与设备外观信息整理；具体规格、接口及功能以实际供货配置为准。</p>
+        </section>
+      </main>
+    </div>
+  </article>
+</Layout>
+
+<script>
+function initProductDossier() {
+  const page = document.querySelector<HTMLElement>('[data-product-dossier]')
+  if (!page || page.dataset.initialized === 'true')
+    return
+
+  page.dataset.initialized = 'true'
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const syncScrollState = () => page.classList.toggle('is-scrolled', window.scrollY > 80)
+  syncScrollState()
+  window.addEventListener('scroll', syncScrollState, { passive: true })
+
+  const revealItems = Array.from(page.querySelectorAll<HTMLElement>('[data-reveal]'))
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealItems.forEach(item => item.classList.add('is-visible'))
+  }
+  else {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting)
+          return
+        entry.target.classList.add('is-visible')
+        revealObserver.unobserve(entry.target)
+      })
+    }, { root: null, rootMargin: '0px 0px -12% 0px', threshold: 0.1 })
+    revealItems.forEach(item => revealObserver.observe(item))
+  }
+
+  const tabs = Array.from(page.querySelectorAll<HTMLButtonElement>('[data-capability-tab]'))
+  const panelImage = page.querySelector<HTMLImageElement>('[data-capability-image]')
+  const panelIndex = page.querySelector<HTMLElement>('[data-capability-index]')
+  const panelTitle = page.querySelector<HTMLElement>('[data-capability-title]')
+  const panelCopy = page.querySelector<HTMLElement>('[data-capability-copy]')
+
+  tabs.forEach((tab) => {
+    if (tab.dataset.image)
+      new Image().src = tab.dataset.image
+
+    tab.addEventListener('click', () => {
+      tabs.forEach((item) => {
+        const active = item === tab
+        item.classList.toggle('is-active', active)
+        item.setAttribute('aria-selected', String(active))
+        const state = item.querySelector('small')
+        if (state)
+          state.textContent = active ? '已展开' : '查看'
+      })
+
+      if (panelIndex)
+        panelIndex.textContent = `${tab.dataset.index} / 04 · ${tab.dataset.label}`
+      if (panelTitle)
+        panelTitle.textContent = tab.dataset.title ?? ''
+      if (panelCopy)
+        panelCopy.textContent = tab.dataset.copy ?? ''
+
+      if (panelImage && tab.dataset.image) {
+        panelImage.classList.add('is-changing')
+        window.setTimeout(() => {
+          panelImage.src = tab.dataset.image ?? ''
+          panelImage.alt = tab.dataset.imageAlt ?? ''
+          panelImage.classList.remove('is-changing')
+        }, reduceMotion ? 0 : 140)
+      }
+    })
+  })
+
+  const chapterLinks = Array.from(page.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]'))
+  const sections = Array.from(page.querySelectorAll<HTMLElement>('[data-product-section]'))
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (!visible)
+        return
+      chapterLinks.forEach(link => link.classList.toggle('is-active', link.hash === `#${visible.target.id}`))
+    }, { root: null, rootMargin: '-24% 0px -58% 0px', threshold: [0.05, 0.2, 0.45] })
+    sections.forEach(section => sectionObserver.observe(section))
+  }
+
+  const stage = page.querySelector<HTMLElement>('[data-product-stage]')
+  const productImage = page.querySelector<HTMLElement>('[data-product-image]')
+  if (stage && productImage && !reduceMotion) {
+    stage.addEventListener('pointermove', (event) => {
+      const rect = stage.getBoundingClientRect()
+      const x = (event.clientX - rect.left) / rect.width - 0.5
+      const y = (event.clientY - rect.top) / rect.height - 0.5
+      productImage.style.transform = `perspective(900px) rotateX(${-y * 3}deg) rotateY(${x * 5}deg) translate3d(${x * 5}px, ${y * 5}px, 0)`
+    })
+    stage.addEventListener('pointerleave', () => {
+      productImage.style.transform = ''
+    })
+  }
+}
+
+document.addEventListener('astro:page-load', initProductDossier)
+initProductDossier()
+</script>

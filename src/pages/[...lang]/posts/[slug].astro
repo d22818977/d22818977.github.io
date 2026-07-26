@@ -2,16 +2,17 @@
 import type { CollectionEntry } from 'astro:content'
 import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
+import GoBackIcon from '@/assets/icons/go-back.svg'
 import Comment from '@/components/Comment/Index.astro'
-import PostDate from '@/components/PostDate.astro'
-import TagList from '@/components/TagList.astro'
-import BackButton from '@/components/Widgets/BackButton.astro'
+import Navbar from '@/components/Navbar.astro'
 import TOC from '@/components/Widgets/TOC.astro'
-import { allLocales } from '@/config'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getPostPath, getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
 import { getPostDescription } from '@/utils/description'
+import { getPageInfo } from '@/utils/page'
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<'posts'>[] = await getCollection('posts')
@@ -75,9 +76,23 @@ interface Props {
 
 const { post, supportedLangs } = Astro.props
 const currentLang = getLangFromLocale(Astro.currentLocale)
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const slug = post.data.abbrlink || post.id
 const description = getPostDescription(post, 'meta')
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
+
+const visiblePosts = (await getCollection('posts'))
+  .filter(item => import.meta.env.DEV || !item.data.draft)
+  .filter(item => item.data.lang === currentLang || item.data.lang === '')
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf())
+const currentPostIndex = visiblePosts.findIndex(item => (item.data.abbrlink || item.id) === slug)
+const nextPost = currentPostIndex >= 0 ? visiblePosts[currentPostIndex + 1] : undefined
+const nextPostSlug = nextPost ? nextPost.data.abbrlink || nextPost.id : undefined
+const primaryTag = post.data.tags?.[0]
+
+function formatCinematicDate(date: Date) {
+  return date.toISOString().split('T')[0].replaceAll('-', '.')
+}
 ---
 
 <Layout
@@ -85,52 +100,105 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postDescription={description}
   postSlug={post.id}
   supportedLangs={supportedLangs}
+  immersive
 >
-  <article class="post-article heti text-4 font-normal font-unified">
-    <header class="post-article-header">
-      <div class="post-title-row relative">
-        <h1 class="post-title">
+  <section class="post-cinematic" aria-labelledby="post-cinematic-title">
+    <video
+      class="post-cinematic-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="post-cinematic-scrim" aria-hidden="true"></div>
+
+    <div class="post-cinematic-top">
+      <header class="wandor-hero-header post-cinematic-site-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar variant="overlay" />
+        </div>
+      </header>
+
+      <header class="post-cinematic-hero">
+        <a class="post-cinematic-return" href={getLocalizedPath('/posts/')}>
+          <GoBackIcon aria-hidden="true" fill="currentColor" />
+          <span>返回文章</span>
+        </a>
+
+        <div
+          id="post-date"
+          class="post-cinematic-meta"
+          transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
+          data-disable-theme-toggle-transition
+        >
+          <time datetime={post.data.published.toISOString().split('T')[0]}>
+            {formatCinematicDate(post.data.published)}
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>{remarkPluginFrontmatter.minutes} min</span>
+          {primaryTag && (
+            <>
+              <span aria-hidden="true">·</span>
+              <a href={getTagPath(primaryTag, currentLang)}>{primaryTag}</a>
+            </>
+          )}
+        </div>
+
+        <h1 id="post-cinematic-title" class="post-cinematic-title">
           <span
-            class="post-title-text"
             transition:name={`post-${slug}${currentLang ? `-${currentLang}` : ''}`}
             data-disable-theme-toggle-transition
           >
             {post.data.title}
           </span>
         </h1>
-        <BackButton />
-      </div>
-
-      <div
-        id="post-date"
-        class="post-date block font-unified"
-        transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
-        data-disable-theme-toggle-transition
-      >
-        <PostDate
-          date={post.data.published}
-          updatedDate={post.data.updated}
-          minutes={remarkPluginFrontmatter.minutes}
-        />
-      </div>
-    </header>
-    <!-- TOC -->
-    {post.data.toc && <TOC headings={headings} />}
-    <!-- Content -->
-    <div id="post-content" class="post-content">
-      <Content />
-      <!-- Copyright -->
-      <div id="post-copyright" />
-      <!-- Tag List -->
-      {post.data.tags?.length > 0 && (
-        <div class="mt-12.6 uno-decorative-line" />
-        <TagList
-          tags={post.data.tags}
-          lang={currentLang}
-        />
-      )}
-      <!-- Comment -->
-      <Comment />
+      </header>
     </div>
-  </article>
+
+    <article class="post-paper heti font-normal font-unified" aria-labelledby="post-cinematic-title">
+      <div class="post-paper-inner">
+        <div class="post-reading-rail" aria-hidden="true">
+          <span></span>
+        </div>
+
+        <div id="post-content" class="post-content post-paper-content">
+          <Content />
+          <div id="post-copyright"></div>
+
+          <Comment />
+
+          <nav class="post-paper-navigation" aria-label="文章翻页">
+            <a class="post-paper-back" href={getLocalizedPath('/posts/')}>
+              <GoBackIcon aria-hidden="true" fill="currentColor" />
+              <span>返回文章列表</span>
+            </a>
+
+            {nextPost && nextPostSlug
+              ? (
+                  <a class="post-paper-next" href={getPostPath(nextPostSlug, currentLang)}>
+                    <span class="post-paper-next-label">下一篇</span>
+                    <span>{nextPost.data.title}</span>
+                    <GoBackIcon aria-hidden="true" fill="currentColor" />
+                  </a>
+                )
+              : (
+                  <span class="post-paper-next post-paper-next--empty">
+                    <span class="post-paper-next-label">下一篇</span>
+                    <span>暂无更多文章</span>
+                  </span>
+                )}
+          </nav>
+        </div>
+
+        {post.data.toc && headings.length > 0 && (
+          <aside class="post-paper-toc" aria-label="文章目录">
+            <TOC headings={headings} />
+          </aside>
+        )}
+      </div>
+    </article>
+  </section>
 </Layout>

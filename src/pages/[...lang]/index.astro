@@ -1,10 +1,10 @@
 ---
 import Countdown from '@/components/Countdown.astro'
-import PostList from '@/components/PostList.astro'
-import { allLocales } from '@/config'
-import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
-import { getPinnedPosts, getPostsByYear } from '@/utils/content'
+import { getPageInfo } from '@/utils/page'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -12,29 +12,48 @@ export async function getStaticPaths() {
   }))
 }
 
-const currentLang = getLangFromLocale(Astro.currentLocale)
-const pinnedPosts = await getPinnedPosts(currentLang)
-const postsByYear = await getPostsByYear(currentLang)
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
 ---
 
-<Layout>
-  <Countdown
-    label="翻过这座山，让他们听到你的故事"
-    target="2029-09-17T21:05:00+08:00"
-    targetLabel="2029 年 9 月 17 日 21:05 · 北京时间"
-  />
+<Layout
+  postTitle="翻过山，让他们听到你的故事"
+  postDescription="yichu 的个人博客，记录技术、阅读、思考与生活。"
+>
+  <section class="wandor-hero" aria-labelledby="wandor-hero-title">
+    <video
+      class="wandor-hero-video"
+      src={heroBackgroundVideoURL}
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="wandor-hero-scrim" aria-hidden="true"></div>
 
-  <!-- Pinned Posts -->
-  {pinnedPosts.length > 0 && (
-    <section class="home-posts-section">
-      <PostList posts={pinnedPosts} lang={currentLang} pinned={true} />
-    </section>
-  )}
+    <div class="wandor-hero-content">
+      <header class="wandor-hero-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell">
+          <Navbar />
+        </div>
+      </header>
 
-  <!-- Regular Posts -->
-  {Array.from(postsByYear.entries(), ([_year, posts]) => (
-    <section class="home-posts-section">
-      <PostList posts={posts} lang={currentLang} />
-    </section>
-  ))}
+      <div class="wandor-hero-body">
+        <div class="wandor-hero-copy">
+          <h1 id="wandor-hero-title">翻过山，让他们听到你的故事</h1>
+          <p>记录技术、阅读、思考与生活。时间向前，故事也在发生。</p>
+        </div>
+
+        <Countdown
+          label="翻过山，让他们听到你的故事"
+          target="2029-09-17T21:05:00+08:00"
+          targetLabel="2029 年 9 月 17 日 21:05 · 北京时间"
+          variant="glass"
+          showLabel={false}
+          footerText="Bravo!"
+        />
+      </div>
+    </div>
+  </section>
 </Layout>

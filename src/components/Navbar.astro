@@ -2,11 +2,16 @@
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, isHome, isPost, isTag, isAbout, isProduct, isUsage, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+interface Props {
+  variant?: 'default' | 'overlay'
+}
+
+const { variant = 'default' } = Astro.props
+const { currentLang, isHome, isPost, isAbout, isProduct, isUsage, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
-const isPostActive = isHome || isPost
-const isTagActive = isTag
+const isHomeActive = isHome
+const isPostActive = isPost
 const isAboutActive = isAbout
 const isProductActive = isProduct
 const isUsageActive = isUsage
@@ -20,21 +25,15 @@ function getNavItemClass(isActive: boolean) {
 const navItems = [
   {
     href: '/',
+    label: currentLang === 'zh-tw' ? '首頁' : currentLang === 'zh' ? '首页' : 'Home',
+    isActive: isHomeActive,
+    className: getNavItemClass(isHomeActive),
+  },
+  {
+    href: '/posts/',
     label: currentUI.posts,
     isActive: isPostActive,
     className: getNavItemClass(isPostActive),
-  },
-  {
-    href: '/tags/',
-    label: currentUI.tags,
-    isActive: isTagActive,
-    className: getNavItemClass(isTagActive),
-  },
-  {
-    href: '/about/',
-    label: currentUI.about,
-    isActive: isAboutActive,
-    className: getNavItemClass(isAboutActive),
   },
   {
     href: '/product/',
@@ -48,6 +47,12 @@ const navItems = [
     isActive: isUsageActive,
     className: getNavItemClass(isUsageActive),
   },
+  {
+    href: '/about/',
+    label: currentUI.about,
+    isActive: isAboutActive,
+    className: getNavItemClass(isAboutActive),
+  },
 ]
 ---
 
@@ -56,8 +61,8 @@ const navItems = [
   class:list={[
     'mb-10.5 text-3.6 font-semibold leading-2.45em font-navbar',
     'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)]) cjk:tracking-wide',
-    !isPost ? 'home-navbar' : '',
-    isPost ? 'post-navbar' : '',
+    !isPost || variant === 'overlay' ? 'home-navbar' : '',
+    isPost && variant !== 'overlay' ? 'post-navbar' : '',
   ]}
 >
   <ul>
