@@ -10,7 +10,7 @@ html:has(.product-dossier) {
 body.hero-home-body:has(.product-dossier) {
   overflow-x: hidden;
   overflow-y: auto;
-  background: #061118;
+  background: #0b1e27;
 }
 
 html:has(.product-dossier)::-webkit-scrollbar,
@@ -19,10 +19,10 @@ html:has(.product-dossier)::-webkit-scrollbar,
 }
 
 .product-dossier {
-  --dossier-line: rgba(255, 255, 255, 0.2);
-  --dossier-line-strong: rgba(255, 255, 255, 0.48);
-  --dossier-muted: rgba(255, 255, 255, 0.62);
-  --dossier-soft: rgba(255, 255, 255, 0.08);
+  --dossier-line: rgba(255, 255, 255, 0.28);
+  --dossier-line-strong: rgba(255, 255, 255, 0.58);
+  --dossier-muted: rgba(255, 255, 255, 0.72);
+  --dossier-soft: rgba(255, 255, 255, 0.11);
 
   position: relative;
   width: 100%;
@@ -30,7 +30,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   min-height: 100dvh;
   overflow: visible;
   isolation: isolate;
-  background: #061118;
+  background: #0b1e27;
   color: #fff;
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -53,14 +53,14 @@ html:has(.product-dossier)::-webkit-scrollbar,
 .product-dossier-video {
   z-index: -3;
   object-fit: cover;
-  filter: saturate(0.86) contrast(1.06) brightness(0.78);
+  filter: saturate(0.92) contrast(1.03) brightness(0.93);
 }
 
 .product-dossier-scrim {
   z-index: -2;
   background:
-    linear-gradient(180deg, rgba(2, 8, 12, 0.5) 0, rgba(2, 8, 12, 0.28) 26rem, rgba(2, 8, 12, 0.82) 61rem, rgba(2, 8, 12, 0.95) 100%),
-    linear-gradient(90deg, rgba(2, 8, 12, 0.42), transparent 42%, rgba(2, 8, 12, 0.2));
+    linear-gradient(180deg, rgba(2, 8, 12, 0.38) 0, rgba(2, 8, 12, 0.18) 26rem, rgba(2, 8, 12, 0.66) 61rem, rgba(2, 8, 12, 0.82) 100%),
+    linear-gradient(90deg, rgba(2, 8, 12, 0.3), transparent 42%, rgba(2, 8, 12, 0.12));
 }
 
 .product-dossier-content {
@@ -86,18 +86,18 @@ html:has(.product-dossier)::-webkit-scrollbar,
   position: absolute;
   z-index: -1;
   inset: 0 -2rem -1.5rem;
-  background: linear-gradient(180deg, rgba(2, 8, 12, 0.86), rgba(2, 8, 12, 0));
+  background: linear-gradient(180deg, rgba(7, 23, 30, 0.76), rgba(7, 23, 30, 0));
   content: '';
   pointer-events: none;
   transition: background 220ms ease;
 }
 
 .product-dossier.is-scrolled .product-dossier-header::before {
-  background: linear-gradient(180deg, rgba(2, 8, 12, 0.97) 0, rgba(2, 8, 12, 0.86) 62%, rgba(2, 8, 12, 0) 100%);
+  background: linear-gradient(180deg, rgba(7, 23, 30, 0.96) 0, rgba(7, 23, 30, 0.82) 62%, rgba(7, 23, 30, 0) 100%);
 }
 
 .product-dossier.is-scrolled .product-dossier-header {
-  background: rgba(2, 8, 12, 0.985);
+  background: rgba(7, 23, 30, 0.96);
 }
 
 .product-chapters {
@@ -131,7 +131,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   display: grid;
   gap: 0.25rem;
   padding-right: 1.4rem;
-  color: rgba(255, 255, 255, 0.46);
+  color: rgba(255, 255, 255, 0.58);
   text-decoration: none;
   transition: color 180ms ease, transform 180ms ease;
 }
@@ -145,7 +145,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   height: 0.45rem;
   border: 1px solid rgba(255, 255, 255, 0.68);
   border-radius: 50%;
-  background: #071117;
+  background: #0d2029;
   content: '';
   opacity: 0;
   transition: opacity 180ms ease, background-color 180ms ease;
@@ -386,7 +386,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   grid-template-columns: 13.5rem minmax(0, 1fr);
   margin-top: 3rem;
   border: 1px solid var(--dossier-line);
-  background: rgba(3, 9, 13, 0.36);
+  background: rgba(12, 32, 42, 0.55);
   box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.16);
 }
 
@@ -405,7 +405,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   border: 0;
   border-bottom: 1px solid var(--dossier-line);
   background: transparent;
-  color: rgba(255, 255, 255, 0.58);
+  color: rgba(255, 255, 255, 0.68);
   text-align: left;
   cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease;
@@ -417,7 +417,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
 
 .capability-tab:hover,
 .capability-tab.is-active {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.11);
   color: #fff;
 }
 
@@ -451,7 +451,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.76) saturate(0.72);
+  filter: brightness(0.88) saturate(0.82);
   transition: opacity 180ms ease, transform 500ms ease;
 }
 
@@ -517,7 +517,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   height: 0.72rem;
   border: 2px solid rgba(255, 255, 255, 0.92);
   border-radius: 50%;
-  background: #0b1418;
+  background: #112832;
   content: '';
 }
 
@@ -542,7 +542,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
   margin-top: 3rem;
   overflow: hidden;
   border: 1px solid var(--dossier-line);
-  background: rgba(3, 9, 13, 0.34);
+  background: rgba(12, 32, 42, 0.52);
 }
 
 .spec-table {
@@ -674,7 +674,7 @@ html:has(.product-dossier)::-webkit-scrollbar,
 
   .product-dossier-header::before {
     inset: 0 -1rem -0.75rem;
-    background: linear-gradient(180deg, rgba(2, 8, 12, 0.96), rgba(2, 8, 12, 0.72) 72%, rgba(2, 8, 12, 0));
+    background: linear-gradient(180deg, rgba(7, 23, 30, 0.94), rgba(7, 23, 30, 0.66) 72%, rgba(7, 23, 30, 0));
   }
 
   .product-chapters {
@@ -683,12 +683,12 @@ html:has(.product-dossier)::-webkit-scrollbar,
     left: 1rem;
     width: auto;
     padding: 0.6rem 0 0.7rem;
-    background: linear-gradient(180deg, rgba(2, 8, 12, 0.74), rgba(2, 8, 12, 0));
+    background: linear-gradient(180deg, rgba(7, 23, 30, 0.66), rgba(7, 23, 30, 0));
     transition: background 220ms ease;
   }
 
   .product-dossier.is-scrolled .product-chapters {
-    background: rgba(2, 8, 12, 0.96);
+    background: rgba(7, 23, 30, 0.94);
   }
 
   .product-chapters::after {
