@@ -239,8 +239,8 @@ function initUsagePage() {
       const freshHeight = Math.max((item.freshInputTokens / item.totalTokens) * totalHeight, 2)
       const cacheHeight = Math.max(totalHeight - outputHeight - freshHeight, 1)
       const topY = baseY - totalHeight
-      const freshY = topY + cacheHeight
-      const outputY = freshY + freshHeight
+      const cacheY = topY + freshHeight
+      const outputY = cacheY + cacheHeight
       const shortDate = item.date.slice(5)
       const roundedWan = Math.round(item.totalTokens / 100) / 100
       const label = `${roundedWan.toFixed(2).replace(/\.00$/, '')}万`
@@ -252,8 +252,8 @@ function initUsagePage() {
         <g class="chart-day" data-index="${index}" tabindex="0" role="button" aria-label="${item.date}，${full.format(item.totalTokens)} Token">
           ${latestGuide}
           <text x="${x + barWidth / 2}" y="${Math.max(topY - 9, 13)}" text-anchor="middle" class="chart-value">${label}</text>
-          <rect x="${x}" y="${topY}" width="${barWidth}" height="${cacheHeight}" rx="2" class="bar-cache" />
-          <rect x="${x}" y="${freshY}" width="${barWidth}" height="${freshHeight}" class="bar-fresh" />
+          <rect x="${x}" y="${topY}" width="${barWidth}" height="${freshHeight}" rx="2" class="bar-fresh" />
+          <rect x="${x}" y="${cacheY}" width="${barWidth}" height="${cacheHeight}" class="bar-cache" />
           <rect x="${x}" y="${outputY}" width="${barWidth}" height="${outputHeight}" class="bar-output" />
           <rect x="${x - slot * 0.22}" y="${padding.top}" width="${barWidth + slot * 0.44}" height="${innerHeight}" class="bar-hit" />
           <text x="${x + barWidth / 2}" y="${chartHeight - 14}" text-anchor="middle" class="chart-date">${shortDate}</text>
@@ -443,6 +443,11 @@ initUsagePage()
   }
 
   .usage-chart-panel {
+    --usage-bar-fresh: rgba(255, 247, 224, 0.96);
+    --usage-bar-cache: rgba(190, 209, 201, 0.88);
+    --usage-bar-cache-border: rgba(229, 239, 235, 0.7);
+    --usage-bar-output: rgba(203, 164, 112, 0.92);
+
     margin-top: 3rem;
     padding: 1.7rem 1.85rem 0.85rem;
     border: 1px solid rgba(241, 234, 216, 0.56);
@@ -484,19 +489,20 @@ initUsagePage()
 
   .usage-legend i {
     display: block;
-    width: 1.2rem;
-    height: 2px;
-    background: #f1ead8;
+    width: 0.9rem;
+    height: 0.55rem;
+    border-radius: 2px;
+    background: var(--usage-bar-fresh);
   }
 
   .usage-legend .legend-cache {
-    height: 1px;
-    background: repeating-linear-gradient(90deg, rgba(241, 234, 216, 0.78) 0 2px, transparent 2px 4px);
+    border: 1px solid var(--usage-bar-cache-border);
+    background: var(--usage-bar-cache);
   }
 
   .usage-legend .legend-output {
-    height: 1px;
-    background: rgba(241, 234, 216, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: var(--usage-bar-output);
   }
 
   .usage-chart-controls {
@@ -506,11 +512,15 @@ initUsagePage()
 
   .usage-ranges {
     display: flex;
+    flex-wrap: nowrap;
     gap: 1.7rem;
   }
 
   .usage-ranges button {
     position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
     padding: 0.15rem 0 0.65rem;
     border: 0;
     background: transparent;
@@ -518,6 +528,7 @@ initUsagePage()
     cursor: pointer;
     font: inherit;
     font-size: 0.82rem;
+    white-space: nowrap;
     transition: color 180ms ease;
   }
 
@@ -617,17 +628,17 @@ initUsagePage()
   }
 
   .usage-chart :global(.bar-cache) {
-    fill: rgba(234, 221, 190, 0.76);
-    stroke: rgba(255, 250, 236, 0.72);
+    fill: var(--usage-bar-cache);
+    stroke: var(--usage-bar-cache-border);
     stroke-width: 1;
   }
 
   .usage-chart :global(.bar-fresh) {
-    fill: rgba(255, 247, 224, 0.94);
+    fill: var(--usage-bar-fresh);
   }
 
   .usage-chart :global(.bar-output) {
-    fill: rgba(30, 31, 29, 0.76);
+    fill: var(--usage-bar-output);
   }
 
   .usage-chart :global(.bar-hit) {
@@ -641,7 +652,7 @@ initUsagePage()
 
   .usage-chart :global(.chart-day:hover .bar-cache),
   .usage-chart :global(.chart-day:focus .bar-cache) {
-    fill: rgba(255, 239, 201, 0.92);
+    fill: rgba(216, 229, 223, 0.94);
   }
 
   .usage-chart :global(.chart-latest-guide) {
