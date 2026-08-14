@@ -53,3 +53,49 @@
 - Astro 静态生产构建：7 个页面生成成功。
 
 final result: passed
+
+---
+
+# Design QA — 欧洲旅行手记
+
+## Reference and implementation
+
+- Reference: `/Users/yichu/.codex/generated_images/019f56f5-3498-7841-83c3-368ba7c37346/exec-b5c90bbe-8041-4052-a477-274c3ff98491.png`
+- Local route: `http://127.0.0.1:4326/memoir/`
+- Desktop capture: `/private/tmp/yichu-memoir-desktop-final.png` at 1440 × 1000
+- Mobile capture: `/private/tmp/yichu-memoir-mobile-final.png` at 390 × 844
+- Combined reference comparison: `/private/tmp/yichu-memoir-compare-final.png`
+
+## Fidelity review
+
+- Layout: passed. The warm paper surface, centered vertical timeline, alternating desktop composition, serif hierarchy, restrained gold rules, and footer treatment follow the selected Renaissance direction.
+- Typography: passed. Chinese display and body text preserve a literary serif tone; the existing site wordmark and navigation typography remain consistent with the rest of the blog.
+- Color: passed. Ivory, umber, muted brown, and antique gold remain readable and materially brighter than the earlier dark direction.
+- Imagery: passed. Four real raster travel scenes are present, consistently cropped, equal in displayed height, and clipped to the same corner radius.
+- Responsive behavior: passed. At 390 × 844 the timeline becomes a left rail and all entries become one-column units without horizontal overflow.
+- Motion: passed. Scroll reveals are subtle, the first entry is visible on initial load, hover zoom stays inside the rounded frame, and reduced-motion users receive static content.
+
+## Issues found and resolved
+
+1. P1 — First timeline item remained transparent on the initial desktop viewport because the observer activation area was too narrow. Adjusted the observer root margin so the first entry is visible without scrolling.
+2. P2 — Rounded corners were provided only by the figure mask. Added the same inherited radius to each image so the image element and its visual frame agree at desktop and mobile breakpoints.
+3. P2 — Full-page animated screenshot stitching was unreliable during the first QA pass. Rechecked the design with stable viewport captures at top and mid-page states, plus a combined reference/prototype image.
+
+## Measurements and states
+
+- Desktop photos: 616 × 384 px, 14 px radius, four equal frames.
+- Mobile photos: 329 × 220 px, 10 px radius, four equal frames.
+- Horizontal overflow: 0 px at both tested viewports.
+- Active navigation: `旅记` exposes `aria-current="page"`.
+- Images: all four decoded successfully with non-zero natural dimensions.
+
+## Interaction and accessibility checks
+
+- `首页` navigation opens `/` and browser back returns to `/memoir/`.
+- The back-to-top control moves the page from the bottom to `#memoir-top` with scroll position 0.
+- Navigation, wordmark, and back-to-top controls are semantic links with visible focus styles.
+- All four images have descriptive Chinese alt text.
+- Motion is disabled under `prefers-reduced-motion: reduce`.
+- Browser console: no warnings or errors during desktop, mobile, navigation, and back-to-top checks.
+
+final result: passed
