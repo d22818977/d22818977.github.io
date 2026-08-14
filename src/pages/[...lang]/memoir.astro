@@ -1,0 +1,133 @@
+---
+import Navbar from '@/components/Navbar.astro'
+import { allLocales, base } from '@/config'
+import { getLangRouteParam } from '@/i18n/lang'
+import Layout from '@/layouts/Layout.astro'
+import { getPageInfo } from '@/utils/page'
+import '@/styles/memoir.css'
+
+export async function getStaticPaths() {
+  return allLocales.map(lang => ({
+    params: { lang: getLangRouteParam(lang) },
+  }))
+}
+
+const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
+
+const memories = [
+  {
+    date: '2022.10',
+    city: 'Krakow, Poland',
+    image: `${base}/images/memoir/krakow-2022.webp`,
+    width: 1252,
+    height: 1670,
+    alt: '克拉科夫街头的红砖哥特式建筑与骑车人',
+    caption: '克拉科夫：外派后的第一次出游',
+    detail: '波兰国庆节我和老胡、刚烈一起去了克拉科夫两日游，去了大名鼎鼎的盐矿，原本还要去辛德勒的工厂，但那天不营业就没有去成了。晚餐吃了牛排，金刚同学推荐的，相当之美味，牛排和前菜的煎鱿鱼都非常好吃，以至于外派3年吃过N家牛排后，克拉科夫的那一家仍然是我心中牛排的No.1。',
+  },
+]
+---
+
+<Layout
+  postTitle="欧洲外派手记"
+  postDescription="把外派3年的回忆做成相册"
+  immersive
+>
+  <article id="memoir-top" class="memoir-page" aria-labelledby="memoir-title">
+    <div class="memoir-shell">
+      <header class="wandor-hero-header memoir-header">
+        <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
+        <div class="wandor-nav-shell memoir-nav-shell">
+          <Navbar variant="overlay" />
+        </div>
+      </header>
+
+      <main class="memoir-main">
+        <header class="memoir-intro">
+          <p class="memoir-kicker">EUROPE · AN EXPAT MEMOIR</p>
+          <h1 id="memoir-title">欧洲外派手记</h1>
+          <p>把外派3年的回忆做成相册</p>
+          <span class="memoir-intro-rule" aria-hidden="true"></span>
+        </header>
+
+        <ol class="memoir-timeline" aria-label="欧洲外派时间轴">
+          {memories.map((memory, index) => (
+            <li class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']} data-memory>
+              <figure class="memoir-photo-wrap" data-reveal>
+                <img
+                  src={memory.image}
+                  alt={memory.alt}
+                  width={memory.width}
+                  height={memory.height}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </figure>
+
+              <span class="memoir-node" aria-hidden="true"></span>
+
+              <div class="memoir-copy" data-reveal>
+                <p class="memoir-meta">
+                  <time>{memory.date}</time>
+                  <span aria-hidden="true">·</span>
+                  <strong>{memory.city}</strong>
+                </p>
+                <h2>{memory.caption}</h2>
+                <p class="memoir-detail">{memory.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <footer class="memoir-footer">
+          <a class="memoir-back-to-top" href="#memoir-top" aria-label="回到页面顶部">
+            <i class="ph ph-arrow-up" aria-hidden="true"></i>
+          </a>
+          <p>旅程会结束，但记得一直都在。</p>
+          <div class="memoir-footer-meta">
+            <a class="memoir-footer-wordmark" href={getLocalizedPath('/')}>yichu</a>
+            <span>© 2026 yichu</span>
+            <span>记录技术、阅读、思考与生活。</span>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </article>
+</Layout>
+
+<script>
+  function initMemoirPage() {
+    const page = document.querySelector<HTMLElement>('.memoir-page')
+    if (!page || page.dataset.enhanced === 'true')
+      return
+
+    page.dataset.enhanced = 'true'
+    document.documentElement.classList.add('memoir-enhanced')
+
+    const memories = [...page.querySelectorAll<HTMLElement>('[data-memory]')]
+    if (!('IntersectionObserver' in window)) {
+      memories.forEach(memory => memory.classList.add('is-visible'))
+      return
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting)
+          return
+
+        const memory = entry.target as HTMLElement
+        memory.classList.add('is-visible')
+        memories.forEach(item => item.classList.toggle('is-active', item === memory))
+      })
+    }, {
+      rootMargin: '-10% 0px -20%',
+      threshold: 0.18,
+    })
+
+    memories.forEach(memory => observer.observe(memory))
+  }
+
+  document.addEventListener('astro:page-load', initMemoirPage)
+  initMemoirPage()
+</script>

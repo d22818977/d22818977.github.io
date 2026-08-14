@@ -1,0 +1,425 @@
+@import url('https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css');
+
+body.hero-home-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #f5eedf;
+}
+
+.memoir-page {
+  --memoir-paper: #f5eedf;
+  --memoir-ink: #4d321f;
+  --memoir-muted: #765d46;
+  --memoir-gold: #b88a39;
+  --memoir-line: rgba(160, 113, 47, 0.48);
+
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--memoir-ink);
+  background-color: var(--memoir-paper);
+  background-image: url('/images/memoir/paper-texture.webp');
+  background-repeat: repeat;
+  background-size: 48rem 48rem;
+  font-family: 'EarlySummer', 'Noto Serif SC', 'Songti SC', serif;
+}
+
+.memoir-shell {
+  width: min(calc(100% - 4rem), 80rem);
+  margin: 0 auto;
+}
+
+.memoir-header {
+  position: relative;
+  padding-top: 2rem;
+}
+
+.memoir-page .wandor-wordmark {
+  color: var(--memoir-ink);
+  text-shadow: none;
+}
+
+.memoir-page .wandor-wordmark:focus-visible,
+.memoir-page .wandor-nav-shell .home-nav-link:focus-visible {
+  outline-color: var(--memoir-gold);
+}
+
+.memoir-page .wandor-nav-shell .home-navbar {
+  color: var(--memoir-ink);
+}
+
+.memoir-page .wandor-nav-shell .home-nav-link {
+  color: rgba(77, 50, 31, 0.72);
+}
+
+.memoir-page .wandor-nav-shell .home-nav-link:hover,
+.memoir-page .wandor-nav-shell .home-nav-link:focus-visible,
+.memoir-page .wandor-nav-shell .home-nav-link--active {
+  color: var(--memoir-ink);
+}
+
+.memoir-main {
+  padding: clamp(7rem, 12vw, 10.5rem) 0 3rem;
+}
+
+.memoir-intro {
+  max-width: 36rem;
+  margin-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.memoir-kicker {
+  margin: 0 0 1.15rem;
+  color: var(--memoir-gold);
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+}
+
+.memoir-intro h1 {
+  margin: 0;
+  color: var(--memoir-ink);
+  font-size: clamp(2.2rem, 4vw, 3.55rem);
+  font-weight: 560;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.memoir-intro > p:not(.memoir-kicker) {
+  margin: 1rem 0 0;
+  color: var(--memoir-muted);
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.75;
+}
+
+.memoir-intro-rule {
+  display: block;
+  width: min(18rem, 72%);
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--memoir-line);
+}
+
+.memoir-timeline {
+  position: relative;
+  display: grid;
+  gap: clamp(3rem, 5vw, 5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.memoir-timeline::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--memoir-line);
+  content: '';
+  transform: translateX(-0.5px);
+}
+
+.memoir-memory {
+  position: relative;
+  display: grid;
+  min-height: 24rem;
+  grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr);
+  align-items: center;
+}
+
+.memoir-photo-wrap,
+.memoir-copy,
+.memoir-node {
+  grid-row: 1;
+}
+
+.memoir-photo-wrap {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 0.875rem;
+  background: #e8dcc7;
+}
+
+.memoir-photo-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1), filter 350ms ease;
+}
+
+.memoir-photo-wrap:hover img {
+  transform: scale(1.018);
+}
+
+.memoir-node {
+  z-index: 2;
+  width: 0.72rem;
+  height: 0.72rem;
+  grid-column: 2;
+  justify-self: center;
+  border: 3px solid var(--memoir-paper);
+  border-radius: 50%;
+  background: var(--memoir-gold);
+  box-shadow: 0 0 0 1px rgba(151, 105, 40, 0.24);
+  transition: box-shadow 300ms ease, transform 300ms ease;
+}
+
+.memoir-memory.is-active .memoir-node {
+  box-shadow: 0 0 0 1px rgba(151, 105, 40, 0.3), 0 0 1.5rem rgba(184, 138, 57, 0.44);
+  transform: scale(1.16);
+}
+
+.memoir-memory--right .memoir-photo-wrap,
+.memoir-memory--left .memoir-copy {
+  grid-column: 3;
+}
+
+.memoir-memory--right .memoir-copy,
+.memoir-memory--left .memoir-photo-wrap {
+  grid-column: 1;
+}
+
+.memoir-copy {
+  width: 100%;
+  padding: 0;
+}
+
+.memoir-memory--right .memoir-copy {
+  justify-self: start;
+}
+
+.memoir-memory--left .memoir-copy {
+  justify-self: end;
+}
+
+.memoir-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.72rem;
+  border-bottom: 1px solid var(--memoir-line);
+  color: var(--memoir-ink);
+  font-family: 'STIX', 'Times New Roman', serif;
+  font-size: 1.08rem;
+  letter-spacing: 0.025em;
+}
+
+.memoir-meta strong {
+  font-family: 'EarlySummer', 'Noto Serif SC', 'Songti SC', serif;
+  font-weight: 560;
+}
+
+.memoir-copy h2 {
+  margin: 0;
+  color: var(--memoir-ink);
+  font-size: clamp(1.2rem, 1.65vw, 1.48rem);
+  font-weight: 520;
+  line-height: 1.75;
+  letter-spacing: -0.018em;
+}
+
+.memoir-detail {
+  margin: 0.8rem 0 0;
+  color: var(--memoir-muted);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.memoir-enhanced .memoir-memory [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 700ms ease, transform 850ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.memoir-enhanced .memoir-memory .memoir-copy[data-reveal] {
+  transition-delay: 90ms;
+}
+
+.memoir-enhanced .memoir-memory.is-visible [data-reveal] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.memoir-footer {
+  padding: clamp(5rem, 9vw, 8rem) 0 1rem;
+  text-align: center;
+}
+
+.memoir-back-to-top {
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid var(--memoir-line);
+  border-radius: 50%;
+  color: var(--memoir-ink);
+  font-size: 1.15rem;
+  text-decoration: none;
+  transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.memoir-back-to-top:hover,
+.memoir-back-to-top:focus-visible {
+  border-color: var(--memoir-gold);
+  color: var(--memoir-gold);
+  transform: translateY(-2px);
+}
+
+.memoir-back-to-top:focus-visible {
+  outline: 2px solid var(--memoir-gold);
+  outline-offset: 0.35rem;
+}
+
+.memoir-footer > p {
+  margin: 1.15rem 0 3.5rem;
+  color: var(--memoir-muted);
+  font-size: 0.95rem;
+}
+
+.memoir-footer-meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 1rem;
+  color: rgba(77, 50, 31, 0.58);
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+}
+
+.memoir-footer-meta > :last-child {
+  justify-self: end;
+}
+
+.memoir-footer-wordmark {
+  justify-self: start;
+  color: var(--memoir-ink);
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 1.6rem;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .memoir-shell {
+    width: min(calc(100% - 2rem), 35rem);
+  }
+
+  .memoir-header {
+    gap: 1.15rem;
+    padding-top: max(1.35rem, env(safe-area-inset-top));
+  }
+
+  .memoir-page .wandor-wordmark {
+    font-size: 2rem;
+  }
+
+  .memoir-page .wandor-nav-shell .home-navbar {
+    font-size: 0.68rem;
+    letter-spacing: 0.025em;
+  }
+
+  .memoir-page .wandor-nav-shell .home-navbar ul {
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    justify-content: space-between;
+    gap: 0.45rem;
+  }
+
+  .memoir-main {
+    padding-top: 6.75rem;
+  }
+
+  .memoir-intro {
+    margin-bottom: 4.5rem;
+  }
+
+  .memoir-intro h1 {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .memoir-timeline {
+    gap: 4.25rem;
+  }
+
+  .memoir-timeline::before {
+    left: 0.42rem;
+  }
+
+  .memoir-memory {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 1.8rem;
+  }
+
+  .memoir-node {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.08rem;
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  .memoir-photo-wrap {
+    order: 1;
+    border-radius: 0.625rem;
+  }
+
+  .memoir-photo-wrap img {
+    height: auto;
+  }
+
+  .memoir-copy {
+    width: 100%;
+    order: 2;
+    padding: 1.35rem 0 0;
+  }
+
+  .memoir-meta {
+    width: min(14rem, 82%);
+    margin-bottom: 0.9rem;
+    font-size: 1rem;
+  }
+
+  .memoir-copy h2 {
+    font-size: 1.18rem;
+    line-height: 1.68;
+  }
+
+  .memoir-detail {
+    font-size: 0.96rem;
+    line-height: 1.82;
+  }
+
+  .memoir-footer {
+    padding-top: 5rem;
+  }
+
+  .memoir-footer-meta {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.65rem;
+  }
+
+  .memoir-footer-meta > :last-child,
+  .memoir-footer-wordmark {
+    justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memoir-photo-wrap img,
+  .memoir-node,
+  .memoir-back-to-top,
+  .memoir-enhanced .memoir-memory [data-reveal] {
+    transition: none;
+  }
+
+  .memoir-enhanced .memoir-memory [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

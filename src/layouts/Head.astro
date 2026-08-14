@@ -13,7 +13,7 @@ interface Props {
 
 // Props and Language
 const { postTitle, postDescription, postSlug } = Astro.props
-const { currentLang, isHome, isPost } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isMemoir } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 const lang = currentLang === defaultLocale ? '' : `${currentLang}/`
 
@@ -26,7 +26,7 @@ const { google = '', bing = '', yandex = '', baidu = '' } = verification
 const { customGoogleAnalyticsJS = '', customUmamiAnalyticsJS = '' } = themeConfig.preload ?? {}
 
 // Site Metadata
-const metaTheme = isHome || isPost ? '#08151d' : defaultMode === 'dark' ? darkMode : lightMode
+const metaTheme = isMemoir ? '#f5eedf' : isHome || isPost ? '#08151d' : defaultMode === 'dark' ? darkMode : lightMode
 const siteTitle = i18nTitle ? currentUI.title : title
 const siteSubtitle = i18nTitle ? currentUI.subtitle : subtitle
 const siteDescription = i18nTitle ? currentUI.description : description

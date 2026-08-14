@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { variant = 'default' } = Astro.props
-const { currentLang, isHome, isPost, isAbout, isProduct, isUsage, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isAbout, isProduct, isUsage, isMemoir, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 const isHomeActive = isHome
@@ -15,6 +15,7 @@ const isPostActive = isPost
 const isAboutActive = isAbout
 const isProductActive = isProduct
 const isUsageActive = isUsage
+const isMemoirActive = isMemoir
 
 function getNavItemClass(isActive: boolean) {
   return isActive
@@ -34,6 +35,12 @@ const navItems = [
     label: currentUI.posts,
     isActive: isPostActive,
     className: getNavItemClass(isPostActive),
+  },
+  {
+    href: '/memoir/',
+    label: currentLang === 'zh-tw' ? '旅記' : currentLang === 'zh' ? '旅记' : 'Memoir',
+    isActive: isMemoirActive,
+    className: getNavItemClass(isMemoirActive),
   },
   {
     href: '/product/',
