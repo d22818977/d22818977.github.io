@@ -58,12 +58,18 @@ body.hero-home-body {
 }
 
 .memoir-main {
-  padding: clamp(7rem, 12vw, 10.5rem) 0 3rem;
+  padding: clamp(2.25rem, 3vw, 3rem) 0 3rem;
 }
 
 .memoir-intro {
-  max-width: 36rem;
+  width: 100%;
   margin-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.memoir-kicker,
+.memoir-intro h1,
+.memoir-intro > p:not(.memoir-kicker) {
+  max-width: 36rem;
 }
 
 .memoir-kicker {
@@ -93,7 +99,7 @@ body.hero-home-body {
 
 .memoir-intro-rule {
   display: block;
-  width: min(18rem, 72%);
+  width: 100%;
   margin-top: 1.75rem;
   border-top: 1px solid var(--memoir-line);
 }
@@ -328,7 +334,7 @@ body.hero-home-body {
   }
 
   .memoir-main {
-    padding-top: 6.75rem;
+    padding-top: 2rem;
   }
 
   .memoir-intro {
@@ -337,6 +343,10 @@ body.hero-home-body {
 
   .memoir-intro h1 {
     font-size: clamp(2rem, 10vw, 2.65rem);
+  }
+
+  .memoir-intro-rule {
+    width: 82%;
   }
 
   .memoir-timeline {
