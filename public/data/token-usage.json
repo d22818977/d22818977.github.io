@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-14T17:15:28.386Z",
+  "generatedAt": "2026-08-16T08:33:02.980Z",
   "timezone": "Asia/Shanghai",
   "source": "Local Codex session token_count events",
   "notice": "Figures reflect locally retained Codex session logs and may differ from provider billing records.",
   "privacy": "Only numeric token totals, dates, and session counts are exported. Conversation content is excluded.",
   "summary": {
-    "sessionCount": 25,
-    "activeDays": 20,
-    "inputTokens": 480593384,
-    "cachedInputTokens": 453726720,
+    "sessionCount": 29,
+    "activeDays": 21,
+    "inputTokens": 551562158,
+    "cachedInputTokens": 521148544,
     "cacheWriteInputTokens": 0,
-    "freshInputTokens": 26866664,
-    "outputTokens": 1136537,
-    "reasoningTokens": 358060,
-    "totalTokens": 481729921,
-    "cacheHitRate": 0.9440968916875476
+    "freshInputTokens": 30413614,
+    "outputTokens": 1307348,
+    "reasoningTokens": 413107,
+    "totalTokens": 552869506,
+    "cacheHitRate": 0.944859135894526
   },
   "daily": [
     {
@@ -210,13 +210,23 @@
     },
     {
       "date": "2026-08-15",
-      "inputTokens": 15254147,
-      "cachedInputTokens": 14484992,
+      "inputTokens": 37570327,
+      "cachedInputTokens": 35620992,
       "cacheWriteInputTokens": 0,
-      "freshInputTokens": 769155,
-      "outputTokens": 28892,
-      "reasoningTokens": 10541,
-      "totalTokens": 15283039
+      "freshInputTokens": 1949335,
+      "outputTokens": 68603,
+      "reasoningTokens": 24328,
+      "totalTokens": 37638930
+    },
+    {
+      "date": "2026-08-16",
+      "inputTokens": 48652594,
+      "cachedInputTokens": 46285824,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 2366770,
+      "outputTokens": 131100,
+      "reasoningTokens": 41260,
+      "totalTokens": 48783694
     }
   ]
 }
