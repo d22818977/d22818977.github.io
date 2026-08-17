@@ -1,4 +1,5 @@
 ---
+import CinematicBackground from '@/components/CinematicBackground.astro'
 import Navbar from '@/components/Navbar.astro'
 import { allLocales, base } from '@/config'
 import { getLangRouteParam } from '@/i18n/lang'
@@ -36,7 +37,7 @@ const memories = [
     detail: '第一次出差：东欧小国摩尔多瓦，第一次出差，见识了堪比小时候青镇基建水平的国家首都...',
   },
   {
-    date: '2022.10',
+    date: '2022.11',
     city: 'Krakow, Poland',
     image: `${base}/images/memoir/krakow-2022.webp`,
     width: 1252,
@@ -44,6 +45,26 @@ const memories = [
     alt: '克拉科夫街头的红砖哥特式建筑与骑车人',
     caption: '克拉科夫：外派后的第一次出游',
     detail: '波兰国庆节我和老胡、刚烈一起去了克拉科夫两日游，去了大名鼎鼎的盐矿，原本还要去辛德勒的工厂，但那天不营业就没有去成了。晚餐吃了牛排，金刚同学推荐的，相当之美味，牛排和前菜的煎鱿鱼都非常好吃，以至于外派3年吃过N家牛排后，克拉科夫的那一家仍然是我心中牛排的No.1。',
+  },
+  {
+    date: '2022.11',
+    city: 'Warsaw, Poland',
+    image: `${base}/images/memoir/warsaw-first-weekend-2022.webp`,
+    width: 2400,
+    height: 1800,
+    alt: '华沙秋日公园里阳光穿过树林与满地落叶',
+    caption: '华沙：第一个周末',
+    detail: '外派后的第一个周末，在地图上搜了一个附近的公园去逛逛，很干净也很安静，让人放松，阳光很好，天气凉凉的，是我最喜欢的那种，就是手机信号不太，微信视频电话画面非常糊通话也非常卡，但透过糊成渣的画面，媳妇儿还是看出了华沙的干净平静，还有很多美女，哈哈。',
+  },
+  {
+    date: '2022.10',
+    city: 'Warsaw, Poland',
+    image: `${base}/images/memoir/warsaw-arrival-2022.webp`,
+    width: 3024,
+    height: 4032,
+    alt: '华沙办公园区内华为与育碧标志同框的街景',
+    caption: '外派落地',
+    detail: '到华沙是周日接近中午的时候，约了中国人的出租车一路到了提前订好的公寓，之后去了办公楼下，看到公司居然和UBISOFT在同一栋楼里，还挺新鲜。',
   },
 ]
 ---
@@ -54,6 +75,10 @@ const memories = [
   immersive
 >
   <article id="memoir-top" class="memoir-page" aria-labelledby="memoir-title">
+    <div class="memoir-hero-scene" aria-hidden="true">
+      <CinematicBackground />
+    </div>
+
     <div class="memoir-shell">
       <header class="wandor-hero-header memoir-header">
         <a class="wandor-wordmark" href={getLocalizedPath('/')} aria-label="yichu 首页">yichu</a>
@@ -73,7 +98,11 @@ const memories = [
         <ol class="memoir-timeline" aria-label="欧洲外派时间轴">
           {memories.map((memory, index) => (
             <li class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']} data-memory>
-              <figure class="memoir-photo-wrap" data-reveal>
+              <figure
+                class="memoir-photo-wrap"
+                data-reveal
+                style={`--memoir-photo-ratio: ${memory.width} / ${memory.height};`}
+              >
                 <img
                   src={memory.image}
                   alt={memory.alt}
@@ -126,6 +155,32 @@ const memories = [
     document.documentElement.classList.add('memoir-enhanced')
 
     const memories = [...page.querySelectorAll<HTMLElement>('[data-memory]')]
+
+    const updateCopyOffset = (memory: HTMLElement, photoHeight: number) =>
+      memory.style.setProperty('--memoir-copy-offset', `${photoHeight / 3}px`)
+
+    if ('ResizeObserver' in window) {
+      const copyOffsetObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => {
+          const photo = entry.target as HTMLElement
+          const memory = photo.closest<HTMLElement>('[data-memory]')
+          if (memory)
+            updateCopyOffset(memory, photo.getBoundingClientRect().height)
+        })
+      })
+
+      memories.forEach((memory) => {
+        const photo = memory.querySelector<HTMLElement>('.memoir-photo-wrap')
+        if (!photo)
+          return
+
+        updateCopyOffset(memory, photo.getBoundingClientRect().height)
+        copyOffsetObserver.observe(photo)
+      })
+
+      document.addEventListener('astro:before-swap', () => copyOffsetObserver.disconnect(), { once: true })
+    }
+
     if (!('IntersectionObserver' in window)) {
       memories.forEach(memory => memory.classList.add('is-visible'))
       return

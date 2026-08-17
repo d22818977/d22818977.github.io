@@ -1,0 +1,21 @@
+---
+import { heroBackgroundImageURL } from '@/config'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<img
+  class={className}
+  src={heroBackgroundImageURL}
+  alt=""
+  width="1672"
+  height="941"
+  loading="eager"
+  fetchpriority="high"
+  decoding="async"
+  aria-hidden="true"
+/>
