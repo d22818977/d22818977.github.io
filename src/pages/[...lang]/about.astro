@@ -1,6 +1,7 @@
 ---
+import CinematicBackground from '@/components/CinematicBackground.astro'
 import Navbar from '@/components/Navbar.astro'
-import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { allLocales } from '@/config'
 import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 import { getPageInfo } from '@/utils/page'
@@ -44,15 +45,7 @@ const writingThemes = [
   immersive
 >
   <article class="about-cinematic" aria-labelledby="about-title">
-    <video
-      class="about-cinematic-video"
-      src={heroBackgroundVideoURL}
-      autoplay
-      loop
-      muted
-      playsinline
-      aria-hidden="true"
-    ></video>
+    <CinematicBackground class="about-cinematic-video" />
     <div class="about-cinematic-scrim" aria-hidden="true"></div>
 
     <div class="about-cinematic-content">

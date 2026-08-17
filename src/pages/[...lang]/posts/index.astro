@@ -1,7 +1,8 @@
 ---
 import GoBackIcon from '@/assets/icons/go-back.svg'
+import CinematicBackground from '@/components/CinematicBackground.astro'
 import Navbar from '@/components/Navbar.astro'
-import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { allLocales } from '@/config'
 import { getLangRouteParam } from '@/i18n/lang'
 import { getPostPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
@@ -32,15 +33,7 @@ function formatMonthDay(date: Date) {
   immersive
 >
   <section class="article-index wandor-hero" aria-labelledby="article-index-title">
-    <video
-      class="wandor-hero-video"
-      src={heroBackgroundVideoURL}
-      autoplay
-      loop
-      muted
-      playsinline
-      aria-hidden="true"
-    ></video>
+    <CinematicBackground class="wandor-hero-video" />
     <div class="wandor-hero-scrim article-index-scrim" aria-hidden="true"></div>
 
     <div class="wandor-hero-content article-index-content">

@@ -17,6 +17,10 @@ function setupOverlay() {
 
 // Clean up zoom state
 function cleanupZoom() {
+  document.body.style.overflow = ''
+  originalImg?.classList.remove('zoom-source-hidden')
+  zoomedImg?.remove()
+  overlay?.remove()
   overlay = null
   zoomedImg = null
   originalImg = null
@@ -46,6 +50,7 @@ function zoomIn(img: HTMLImageElement) {
 
   // Add to DOM and show
   document.body.appendChild(zoomedImg)
+  originalImg.classList.add('zoom-source-hidden')
   overlay.style.display = 'block'
   overlay.focus()
 
@@ -99,6 +104,7 @@ function zoomOut() {
     }
 
     // Restore focus
+    originalImg?.classList.remove('zoom-source-hidden')
     originalImg?.focus()
     originalImg = null
   }

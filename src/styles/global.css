@@ -70,6 +70,9 @@ h4:hover .heading-anchor-link svg:hover {
 .zoom-img {
   --at-apply: 'fixed z-1000 cursor-zoom-out transition-transform duration-300';
 }
+.zoom-source-hidden {
+  visibility: hidden;
+}
 
 /* Code Copy Button >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 .code-copy-button {

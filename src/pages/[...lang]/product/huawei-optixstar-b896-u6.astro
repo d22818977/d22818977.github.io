@@ -1,6 +1,7 @@
 ---
+import CinematicBackground from '@/components/CinematicBackground.astro'
 import Navbar from '@/components/Navbar.astro'
-import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { allLocales } from '@/config'
 import { getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 import { getPageInfo } from '@/utils/page'
@@ -61,16 +62,7 @@ const specs = [
 
 <Layout postTitle={pageTitle} postDescription={pageDescription} immersive>
   <article class="product-dossier" data-product-dossier>
-    <video
-      class="product-dossier-video"
-      src={heroBackgroundVideoURL}
-      autoplay
-      loop
-      muted
-      playsinline
-      preload="metadata"
-      aria-hidden="true"
-    ></video>
+    <CinematicBackground class="product-dossier-video" />
     <div class="product-dossier-scrim" aria-hidden="true"></div>
 
     <div class="product-dossier-content">

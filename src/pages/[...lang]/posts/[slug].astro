@@ -3,10 +3,11 @@ import type { CollectionEntry } from 'astro:content'
 import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
 import GoBackIcon from '@/assets/icons/go-back.svg'
+import CinematicBackground from '@/components/CinematicBackground.astro'
 import Comment from '@/components/Comment/Index.astro'
 import Navbar from '@/components/Navbar.astro'
 import TOC from '@/components/Widgets/TOC.astro'
-import { allLocales, heroBackgroundVideoURL } from '@/config'
+import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { getPostPath, getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
@@ -103,15 +104,7 @@ function formatCinematicDate(date: Date) {
   immersive
 >
   <section class="post-cinematic" aria-labelledby="post-cinematic-title">
-    <video
-      class="post-cinematic-video"
-      src={heroBackgroundVideoURL}
-      autoplay
-      loop
-      muted
-      playsinline
-      aria-hidden="true"
-    ></video>
+    <CinematicBackground class="post-cinematic-video" />
     <div class="post-cinematic-scrim" aria-hidden="true"></div>
 
     <div class="post-cinematic-top">

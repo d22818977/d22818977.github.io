@@ -56,9 +56,50 @@ final result: passed
 
 ---
 
-# Design QA — 欧洲旅行手记
+## Design QA — 赛博记忆白色悬浮相框
 
-## Reference and implementation
+### Source visual truth and rendered evidence
+
+- Selected visual target: `/Users/yichu/.codex/generated_images/019f56f5-3498-7841-83c3-368ba7c37346/exec-89ee3b21-e3e1-4faa-8822-168e154782ae.png`（1487 × 1058）。
+- Original unframed footprint reference: `/Users/yichu/Documents/Codex/2026-07-12/quiet-pages-sites-project-appgprj-6a527368bf98819188a272c7d26ff905-3/outputs/memoir-copy-one-third-alignment.png`。
+- Desktop implementation: `/Users/yichu/Documents/Codex/2026-07-12/quiet-pages-sites-project-appgprj-6a527368bf98819188a272c7d26ff905-3/outputs/memoir-frame-desktop.png`（1429 × 1016 browser-rendered pixels; 1440 × 1024 CSS viewport; device pixel ratio 1）。
+- Mobile implementation: `/Users/yichu/Documents/Codex/2026-07-12/quiet-pages-sites-project-appgprj-6a527368bf98819188a272c7d26ff905-3/outputs/memoir-frame-mobile.png`（379 × 820 browser-rendered pixels; 390 × 844 CSS viewport; device pixel ratio 1）。
+- Normalized full-view comparison: `/Users/yichu/Documents/Codex/2026-07-12/quiet-pages-sites-project-appgprj-6a527368bf98819188a272c7d26ff905-3/outputs/memoir-frame-qa-full.png`。The source was normalized to 1429 × 1016 before comparison.
+- Focused photo-and-copy comparison: `/Users/yichu/Documents/Codex/2026-07-12/quiet-pages-sites-project-appgprj-6a527368bf98819188a272c7d26ff905-3/outputs/memoir-frame-qa-focus.png`。
+- State: `/memoir/` initial desktop viewport with the first entry revealed; mobile initial and first-entry scrolled states; image zoom opened and closed.
+
+### Findings
+
+- No actionable P0 / P1 / P2 mismatch remains.
+- Fonts and typography: existing Renaissance serif hierarchy and site wordmark are unchanged. The entry copy retains its current sizes, weights, wrapping, and line height.
+- Spacing and layout rhythm: the desktop frame’s outer box is 556 × 741.33 px, matching the former photo footprint instead of expanding it. The first frame begins inside the cream content area and does not cross the hero boundary. All three desktop copy blocks start at exactly one third of their matching frame height (`0.33333`).
+- Colors and visual tokens: the frame uses warm matte white, a restrained neutral-brown shadow, and the existing cream paper / umber / antique-gold palette.
+- Image quality and asset fidelity: each image keeps its full natural ratio with `object-fit: contain`; there is no crop, stretch, zoom, or recoloring. At the 1280 px verification viewport, the first image renders at 532.5 × 710.01 px inside its fixed outer frame and retains its 3024 × 4032 natural dimensions. Its measured top and bottom insets are both 9.33 px, while the left and right insets are both 7 px; the thinner frame visibly moves the photograph upward without introducing a third background color.
+- Copy and content: dates, locations, titles, and body copy are unchanged.
+- Responsive behavior: at 390 × 844 the first frame remains 318.20 × 424.27 px, the image is complete at approximately 306.20 × 408.27 px, and the thinner insets remain symmetrical by axis (8 px top/bottom and 6 px left/right). Page scroll width remains below the viewport width. On mobile the copy intentionally follows the image as a single-column reading flow.
+- Accessibility and interaction: all image alt text remains intact. Image zoom opens centered at 390 × 527.79 px, closes without leaving a ghost image, and the console reports no warnings or errors.
+
+### Comparison history
+
+1. The first visual revision let the white frame extend beyond the previous photo footprint. The frame was changed to consume space inside the original aspect-ratio box.
+2. The next revision still touched the upper section boundary. A dedicated top inset was added to the timeline so the complete framed unit stays inside the cream content section.
+3. Resize measurement originally used the content box, which would exclude the new internal frame padding. It now measures the outer border box, keeping every desktop text block at the requested one-third position.
+4. Final desktop, mobile, zoom interaction, lint, type/content, and production-build checks passed. No P0 / P1 / P2 fixes remain.
+
+### Engineering verification
+
+- Astro check: 0 errors, 0 warnings, 0 hints across 66 files.
+- Targeted ESLint: passed.
+- Production build: 13 pages generated successfully.
+- `git diff --check`: passed.
+
+final result: passed
+
+---
+
+## Design QA — 欧洲旅行手记
+
+### Reference and implementation
 
 - Reference: `/Users/yichu/.codex/generated_images/019f56f5-3498-7841-83c3-368ba7c37346/exec-b5c90bbe-8041-4052-a477-274c3ff98491.png`
 - Local route: `http://127.0.0.1:4326/memoir/`
@@ -66,7 +107,7 @@ final result: passed
 - Mobile capture: `/private/tmp/yichu-memoir-mobile-final.png` at 390 × 844
 - Combined reference comparison: `/private/tmp/yichu-memoir-compare-final.png`
 
-## Fidelity review
+### Fidelity review
 
 - Layout: passed. The warm paper surface, centered vertical timeline, alternating desktop composition, serif hierarchy, restrained gold rules, and footer treatment follow the selected Renaissance direction.
 - Typography: passed. Chinese display and body text preserve a literary serif tone; the existing site wordmark and navigation typography remain consistent with the rest of the blog.
@@ -75,13 +116,13 @@ final result: passed
 - Responsive behavior: passed. At 390 × 844 the timeline becomes a left rail and all entries become one-column units without horizontal overflow.
 - Motion: passed. Scroll reveals are subtle, the first entry is visible on initial load, hover zoom stays inside the rounded frame, and reduced-motion users receive static content.
 
-## Issues found and resolved
+### Issues found and resolved
 
 1. P1 — First timeline item remained transparent on the initial desktop viewport because the observer activation area was too narrow. Adjusted the observer root margin so the first entry is visible without scrolling.
 2. P2 — Rounded corners were provided only by the figure mask. Added the same inherited radius to each image so the image element and its visual frame agree at desktop and mobile breakpoints.
 3. P2 — Full-page animated screenshot stitching was unreliable during the first QA pass. Rechecked the design with stable viewport captures at top and mid-page states, plus a combined reference/prototype image.
 
-## Measurements and states
+### Measurements and states
 
 - Desktop photos: 616 × 384 px, 14 px radius, four equal frames.
 - Mobile photos: 329 × 220 px, 10 px radius, four equal frames.
@@ -89,7 +130,7 @@ final result: passed
 - Active navigation: `旅记` exposes `aria-current="page"`.
 - Images: all four decoded successfully with non-zero natural dimensions.
 
-## Interaction and accessibility checks
+### Interaction and accessibility checks
 
 - `首页` navigation opens `/` and browser back returns to `/memoir/`.
 - The back-to-top control moves the page from the bottom to `#memoir-top` with scroll position 0.
