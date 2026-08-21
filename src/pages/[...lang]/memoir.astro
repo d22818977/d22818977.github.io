@@ -15,7 +15,19 @@ export async function getStaticPaths() {
 
 const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
 
-const memories = [
+interface Memory {
+  date: string
+  city: string
+  image: string
+  width: number
+  height: number
+  alt: string
+  caption: string
+  detail: string
+  copyOffsetRatio?: number
+}
+
+const memories: Memory[] = [
   {
     date: '2023.01',
     city: 'Warsaw, Poland',
@@ -55,6 +67,7 @@ const memories = [
     alt: '华沙秋日公园里阳光穿过树林与满地落叶',
     caption: '华沙：第一个周末',
     detail: '外派后的第一个周末，在地图上搜了一个附近的公园去逛逛，很干净也很安静，让人放松，阳光很好，天气凉凉的，是我最喜欢的那种，就是手机信号不太，微信视频电话画面非常糊通话也非常卡，但透过糊成渣的画面，媳妇儿还是看出了华沙的干净平静，还有很多美女，哈哈。',
+    copyOffsetRatio: 1 / 5,
   },
   {
     date: '2022.10',
@@ -97,7 +110,11 @@ const memories = [
 
         <ol class="memoir-timeline" aria-label="欧洲外派时间轴">
           {memories.map((memory, index) => (
-            <li class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']} data-memory>
+            <li
+              class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']}
+              data-memory
+              data-copy-offset-ratio={memory.copyOffsetRatio}
+            >
               <figure
                 class="memoir-photo-wrap"
                 data-reveal
@@ -156,8 +173,11 @@ const memories = [
 
     const memories = [...page.querySelectorAll<HTMLElement>('[data-memory]')]
 
-    const updateCopyOffset = (memory: HTMLElement, photoHeight: number) =>
-      memory.style.setProperty('--memoir-copy-offset', `${photoHeight / 3}px`)
+    const updateCopyOffset = (memory: HTMLElement, photoHeight: number) => {
+      const configuredRatio = Number.parseFloat(memory.dataset.copyOffsetRatio ?? '')
+      const ratio = Number.isFinite(configuredRatio) ? configuredRatio : 1 / 3
+      memory.style.setProperty('--memoir-copy-offset', `${photoHeight * ratio}px`)
+    }
 
     if ('ResizeObserver' in window) {
       const copyOffsetObserver = new ResizeObserver((entries) => {
