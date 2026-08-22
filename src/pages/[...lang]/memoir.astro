@@ -35,8 +35,18 @@ const memories: Memory[] = [
     width: 3024,
     height: 4032,
     alt: '华沙夜晚路灯下被风吹动的漫天大雪',
-    caption: '华沙：瓢泼大雪',
+    caption: '瓢泼大雪',
     detail: '外派第一年冬天，华沙下了很多场雪，但气温其实没有很低，比西安稍冷。晚上下班回家，遇上大雪天，地上的积雪被风一吹，就像白色的沙子一样在流动。华沙的主路永远看不到积雪，因为下雪的当天/夜就被全部清理掉了。',
+  },
+  {
+    date: '2022.12',
+    city: 'Warsaw, Poland',
+    image: `${base}/images/memoir/warsaw-new-year-2022.webp`,
+    width: 4032,
+    height: 3024,
+    alt: '华沙老城广场跨年前夕的人群、圣诞树与夜景',
+    caption: '外派后的第一次跨年',
+    detail: '来到欧洲后的第一次跨年夜，和地区部同事一起到老城广场看0点的跨年烟花。差不多23点开始人流就陆陆续续的在老城扎堆儿了，说实话可能大半个华沙的人都来了。烟花其实一般（尤其是后来对比了伦敦的跨年烟花），但氛围很棒，倒计时和欢呼，还有啤酒...结束散场之后我们挤上蔡书记的单排座A5回家，凌晨1点的Obrzezna很安静，几乎没有行人，但不会让人觉得需要警惕或者提心吊胆，甚至有跨年蹦迪的声音从小区楼里传出来给我助助兴。',
   },
   {
     date: '2022.12',
@@ -45,7 +55,7 @@ const memories: Memory[] = [
     width: 3024,
     height: 4032,
     alt: '基希讷乌夜色下悬挂摩尔多瓦国旗的拱门与街道行人',
-    caption: '摩尔多瓦：第一次出差',
+    caption: '外派后的第一次出差',
     detail: '第一次出差：东欧小国摩尔多瓦，第一次出差，见识了堪比小时候青镇基建水平的国家首都...',
   },
   {
@@ -55,7 +65,7 @@ const memories: Memory[] = [
     width: 1252,
     height: 1670,
     alt: '克拉科夫街头的红砖哥特式建筑与骑车人',
-    caption: '克拉科夫：外派后的第一次出游',
+    caption: '外派后的第一次出游',
     detail: '波兰国庆节我和老胡、刚烈一起去了克拉科夫两日游，去了大名鼎鼎的盐矿，原本还要去辛德勒的工厂，但那天不营业就没有去成了。晚餐吃了牛排，金刚同学推荐的，相当之美味，牛排和前菜的煎鱿鱼都非常好吃，以至于外派3年吃过N家牛排后，克拉科夫的那一家仍然是我心中牛排的No.1。',
   },
   {
@@ -65,9 +75,8 @@ const memories: Memory[] = [
     width: 2400,
     height: 1800,
     alt: '华沙秋日公园里阳光穿过树林与满地落叶',
-    caption: '华沙：第一个周末',
+    caption: '外派后的第一个周末',
     detail: '外派后的第一个周末，在地图上搜了一个附近的公园去逛逛，很干净也很安静，让人放松，阳光很好，天气凉凉的，是我最喜欢的那种，就是手机信号不太，微信视频电话画面非常糊通话也非常卡，但透过糊成渣的画面，媳妇儿还是看出了华沙的干净平静，还有很多美女，哈哈。',
-    copyOffsetRatio: 1 / 5,
   },
   {
     date: '2022.10',
@@ -80,6 +89,10 @@ const memories: Memory[] = [
     detail: '到华沙是周日接近中午的时候，约了中国人的出租车一路到了提前订好的公寓，之后去了办公楼下，看到公司居然和UBISOFT在同一栋楼里，还挺新鲜。',
   },
 ]
+
+function getCopyOffsetRatio(memory: Memory) {
+  return memory.copyOffsetRatio ?? (memory.width > memory.height ? 1 / 5 : undefined)
+}
 ---
 
 <Layout
@@ -113,7 +126,7 @@ const memories: Memory[] = [
             <li
               class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']}
               data-memory
-              data-copy-offset-ratio={memory.copyOffsetRatio}
+              data-copy-offset-ratio={getCopyOffsetRatio(memory)}
             >
               <figure
                 class="memoir-photo-wrap"
