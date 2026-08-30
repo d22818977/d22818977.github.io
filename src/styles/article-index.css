@@ -33,6 +33,13 @@ html:has(.article-index)::-webkit-scrollbar,
   padding-top: clamp(9.75rem, 16vh, 12rem);
 }
 
+@media (min-width: 768px) {
+  .article-index {
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
 .article-index-intro {
   width: max-content;
   max-width: 100%;
