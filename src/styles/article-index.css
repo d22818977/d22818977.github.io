@@ -1,10 +1,12 @@
 .article-index,
+.article-index-content,
 html:has(.article-index) {
   scrollbar-width: none;
 }
 
 html:has(.article-index)::-webkit-scrollbar,
-.article-index::-webkit-scrollbar {
+.article-index::-webkit-scrollbar,
+.article-index-content::-webkit-scrollbar {
   display: none;
 }
 
@@ -37,6 +39,12 @@ html:has(.article-index)::-webkit-scrollbar,
   .article-index {
     height: 100vh;
     height: 100dvh;
+    overflow-y: hidden;
+  }
+
+  .article-index-content {
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
