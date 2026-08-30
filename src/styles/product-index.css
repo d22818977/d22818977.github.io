@@ -1,10 +1,12 @@
 .product-index,
+.product-index-content,
 html:has(.product-index) {
   scrollbar-width: none;
 }
 
 html:has(.product-index)::-webkit-scrollbar,
-.product-index::-webkit-scrollbar {
+.product-index::-webkit-scrollbar,
+.product-index-content::-webkit-scrollbar {
   display: none;
 }
 
@@ -31,6 +33,19 @@ html:has(.product-index)::-webkit-scrollbar,
   width: min(100% - 12rem, 68.75rem);
   margin: 0 auto;
   padding-top: clamp(9.75rem, 18.5vh, 11.9rem);
+}
+
+@media (min-width: 768px) {
+  .product-index {
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: hidden;
+  }
+
+  .product-index-content {
+    height: 100%;
+    overflow-y: auto;
+  }
 }
 
 .product-index-intro {
@@ -236,7 +251,7 @@ html:has(.product-index)::-webkit-scrollbar,
 
 .product-timeline-end {
   position: absolute;
-  bottom: -10.85rem;
+  bottom: -10.8rem;
   left: 4.25rem;
   width: 1.7rem;
   height: 1.7rem;
