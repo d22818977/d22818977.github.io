@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-12T07:49:35.996Z",
+  "generatedAt": "2026-09-30T15:30:35.274Z",
   "timezone": "Asia/Shanghai",
   "source": "Local Codex session token_count events",
   "notice": "Figures reflect locally retained Codex session logs and may differ from provider billing records.",
   "privacy": "Only numeric token totals, dates, and session counts are exported. Conversation content is excluded.",
   "summary": {
-    "sessionCount": 74,
-    "activeDays": 38,
-    "inputTokens": 756649447,
-    "cachedInputTokens": 714282240,
+    "sessionCount": 97,
+    "activeDays": 55,
+    "inputTokens": 830833030,
+    "cachedInputTokens": 783063040,
     "cacheWriteInputTokens": 0,
-    "freshInputTokens": 42367207,
-    "outputTokens": 1910710,
-    "reasoningTokens": 605311,
-    "totalTokens": 758560157,
-    "cacheHitRate": 0.9440068222239777
+    "freshInputTokens": 47769990,
+    "outputTokens": 2101504,
+    "reasoningTokens": 671877,
+    "totalTokens": 832934534,
+    "cacheHitRate": 0.9425035015760026
   },
   "daily": [
     {
@@ -390,13 +390,183 @@
     },
     {
       "date": "2026-09-12",
-      "inputTokens": 18994722,
-      "cachedInputTokens": 17515392,
+      "inputTokens": 32330849,
+      "cachedInputTokens": 30308352,
       "cacheWriteInputTokens": 0,
-      "freshInputTokens": 1479330,
-      "outputTokens": 67547,
-      "reasoningTokens": 23734,
-      "totalTokens": 19062269
+      "freshInputTokens": 2022497,
+      "outputTokens": 103003,
+      "reasoningTokens": 37296,
+      "totalTokens": 32433852
+    },
+    {
+      "date": "2026-09-13",
+      "inputTokens": 34060383,
+      "cachedInputTokens": 32648320,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 1412063,
+      "outputTokens": 82049,
+      "reasoningTokens": 26962,
+      "totalTokens": 34142432
+    },
+    {
+      "date": "2026-09-14",
+      "inputTokens": 10455286,
+      "cachedInputTokens": 9984256,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 471030,
+      "outputTokens": 22764,
+      "reasoningTokens": 8927,
+      "totalTokens": 10478050
+    },
+    {
+      "date": "2026-09-15",
+      "inputTokens": 105446,
+      "cachedInputTokens": 46336,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 59110,
+      "outputTokens": 1135,
+      "reasoningTokens": 686,
+      "totalTokens": 106581
+    },
+    {
+      "date": "2026-09-17",
+      "inputTokens": 250514,
+      "cachedInputTokens": 111232,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 139282,
+      "outputTokens": 1462,
+      "reasoningTokens": 622,
+      "totalTokens": 251976
+    },
+    {
+      "date": "2026-09-18",
+      "inputTokens": 157491,
+      "cachedInputTokens": 64512,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 92979,
+      "outputTokens": 531,
+      "reasoningTokens": 73,
+      "totalTokens": 158022
+    },
+    {
+      "date": "2026-09-19",
+      "inputTokens": 6521821,
+      "cachedInputTokens": 6224640,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 297181,
+      "outputTokens": 18226,
+      "reasoningTokens": 9659,
+      "totalTokens": 6540047
+    },
+    {
+      "date": "2026-09-20",
+      "inputTokens": 457613,
+      "cachedInputTokens": 218240,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 239373,
+      "outputTokens": 632,
+      "reasoningTokens": 175,
+      "totalTokens": 458245
+    },
+    {
+      "date": "2026-09-21",
+      "inputTokens": 463808,
+      "cachedInputTokens": 223616,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 240192,
+      "outputTokens": 987,
+      "reasoningTokens": 393,
+      "totalTokens": 464795
+    },
+    {
+      "date": "2026-09-22",
+      "inputTokens": 470457,
+      "cachedInputTokens": 207232,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 263225,
+      "outputTokens": 935,
+      "reasoningTokens": 474,
+      "totalTokens": 471392
+    },
+    {
+      "date": "2026-09-23",
+      "inputTokens": 476878,
+      "cachedInputTokens": 209408,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 267470,
+      "outputTokens": 486,
+      "reasoningTokens": 33,
+      "totalTokens": 477364
+    },
+    {
+      "date": "2026-09-24",
+      "inputTokens": 4325294,
+      "cachedInputTokens": 3943168,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 382126,
+      "outputTokens": 15785,
+      "reasoningTokens": 1852,
+      "totalTokens": 4341079
+    },
+    {
+      "date": "2026-09-25",
+      "inputTokens": 466478,
+      "cachedInputTokens": 225280,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 241198,
+      "outputTokens": 582,
+      "reasoningTokens": 132,
+      "totalTokens": 467060
+    },
+    {
+      "date": "2026-09-26",
+      "inputTokens": 290795,
+      "cachedInputTokens": 41728,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 249067,
+      "outputTokens": 520,
+      "reasoningTokens": 70,
+      "totalTokens": 291315
+    },
+    {
+      "date": "2026-09-27",
+      "inputTokens": 1604284,
+      "cachedInputTokens": 1445504,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 158780,
+      "outputTokens": 5437,
+      "reasoningTokens": 1558,
+      "totalTokens": 1609721
+    },
+    {
+      "date": "2026-09-28",
+      "inputTokens": 162761,
+      "cachedInputTokens": 146432,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 16329,
+      "outputTokens": 898,
+      "reasoningTokens": 38,
+      "totalTokens": 163659
+    },
+    {
+      "date": "2026-09-29",
+      "inputTokens": 239044,
+      "cachedInputTokens": 180096,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 58948,
+      "outputTokens": 1803,
+      "reasoningTokens": 987,
+      "totalTokens": 240847
+    },
+    {
+      "date": "2026-09-30",
+      "inputTokens": 339103,
+      "cachedInputTokens": 67840,
+      "cacheWriteInputTokens": 0,
+      "freshInputTokens": 271263,
+      "outputTokens": 1106,
+      "reasoningTokens": 363,
+      "totalTokens": 340209
     }
   ]
 }
