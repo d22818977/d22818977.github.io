@@ -15,6 +15,9 @@ export async function getStaticPaths() {
 
 const { getLocalizedPath } = getPageInfo(Astro.url.pathname)
 
+const pageTitle = '赛博手记2069'
+const pageDescription = '为防止记忆丢失而设的赛博记忆备份'
+
 interface Memory {
   date: string
   city: string
@@ -136,8 +139,8 @@ function getCopyOffsetRatio(memory: Memory) {
 ---
 
 <Layout
-  postTitle="欧洲外派手记"
-  postDescription="把外派3年的回忆做成相册"
+  postTitle={pageTitle}
+  postDescription={pageDescription}
   immersive
 >
   <article id="memoir-top" class="memoir-page" aria-labelledby="memoir-title">
@@ -155,13 +158,13 @@ function getCopyOffsetRatio(memory: Memory) {
 
       <main class="memoir-main">
         <header class="memoir-intro">
-          <p class="memoir-kicker">EUROPE · AN EXPAT MEMOIR</p>
-          <h1 id="memoir-title">欧洲外派手记</h1>
-          <p>把外派3年的回忆做成相册</p>
+          <p class="memoir-kicker">A DIGITAL BACKUP · SO MEMORIES WON’T FADE</p>
+          <h1 id="memoir-title">{pageTitle}</h1>
+          <p>{pageDescription}</p>
           <span class="memoir-intro-rule" aria-hidden="true"></span>
         </header>
 
-        <ol class="memoir-timeline" aria-label="欧洲外派时间轴">
+        <ol class="memoir-timeline" aria-label="赛博手记2069回忆时间轴">
           {memories.map((memory, index) => (
             <li
               class:list={['memoir-memory', index % 2 === 0 ? 'memoir-memory--right' : 'memoir-memory--left']}
